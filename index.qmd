@@ -1,0 +1,55 @@
+---
+title: "GREGonBoard"
+format: html
+---
+
+# Welcome
+
+Whether you are a passionate data scientist, stakeholder, clinician, epidemiologist, patient or regulator, we welcome you on board to the GREG project! The GREG project creates, tests, and shares practical, evidence-based guidance and tools to help generate and use Real-World Evidence (RWE). By improving how RWE informs the development and evaluation of medicines, medical devices, and drug-device combinations, GREG supports better decision-making for regulators and Health Technology Assessment (HTA) bodies.
+
+Every one has their role on GREG. In this tutorial, we will go through the main steps from study planning to study execution and report. Each section will have a brief summary of what will be explained on it. Feel free to only go through those lessons that are relevant for your work!
+
+## Course structure
+
+1.  Foundations:
+    i.  The OHDSI journey
+    ii. The OMOP CDM
+    iii. Why do we need GREG?\
+2.  Study planning:
+    i.  Design of a study outline (and template)
+    ii. Design of a study protocol (and template)\
+3.  Feasibility assessment:
+    i.  Standard procedure
+    ii. Required documents (and template)\
+4.  Study design and execution:
+    i.  The webtool ATLAS
+    ii. Phenotyping
+    iii. Diagnostic tools
+    iv. Incidence-prevalence study
+    v.  Characterisation study
+    vi. Drug utilisation study
+    vii. Effectiveness study\
+5.  Study reporting:
+    i.  How to write a study report? (and template)
+
+## What to expect?
+
+You will find a combination of theory, bibliographic/webographic sources, some examples, including R snippets, and short exercises.
+
+::: callout-note
+A single study is followed throughout the course: "Use of GLP-1 receptor agonists and risk of acute pancreatitis in type 2 diabetes patients"
+:::
+
+## Getting started
+
+Navigate using the sidebar. You can change from light to dark mode using the top right button next to the search bar. You will be able to copy code snippets, and for interactive exercises, to edit and execute code online. Please, refrain from using AI to solve the exercises. Relevant sources will be available to do the exercises.
+
+## Contact information
+
+May you have any suggestions, doubts or inquiries please refer to:
+
+> **Aida Perramon Malavez**
+>
+> a.perramonmalavez\@erasmusmc.nl
+>
+> Postdoctoral Researcher and GREGonBoard developer

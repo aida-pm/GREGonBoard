@@ -1,0 +1,39 @@
+---
+title: "OMOP CDM"
+format: html
+---
+
+## Learning objectives
+
+- Understand why OMOP CDM exists
+- Understand OHDSI ecosystem components
+- Identify key CDM tables
+
+## OMOP CDM overview
+
+The OMOP Common Data Model standardises healthcare data...
+
+```{r}
+library(dplyr)
+```
+
+## OHDSI ecosystem
+
+Key components:
+
+- ATLAS (study design tool)
+- HADES (R packages)
+- OHDSI community tools
+
+[![Figure. The OMOP CDM 5.4 table structure, including all variables available.](/images/omop-cdm-structure.jpg){fig-alt="This image depicts the structure of an OMOP CDM 5.4 database, we can see the clinical data tables, health system tables, health economics tables, standardized derived elements tables, metadata tables and vocabulary tables."}](https://ohdsi.github.io/CommonDataModel/cdm54erd.html)
+
+::: callout-tip
+OMOP standardisation enables reproducible observational research across institutions.
+:::
+
+Key tables
+
+- PERSON
+- CONDITION_OCCURRENCE
+- DRUG_EXPOSURE
+- OBSERVATION_PERIOD

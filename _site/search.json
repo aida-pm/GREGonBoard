@@ -1,0 +1,208 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "GREGonBoard",
+    "section": "",
+    "text": "Whether you are a passionate data scientist, stakeholder, clinician, epidemiologist, patient or regulator, we welcome you on board to the GREG project! The GREG project creates, tests, and shares practical, evidence-based guidance and tools to help generate and use Real-World Evidence (RWE). By improving how RWE informs the development and evaluation of medicines, medical devices, and drug-device combinations, GREG supports better decision-making for regulators and Health Technology Assessment (HTA) bodies.\nEvery one has their role on GREG. In this tutorial, we will go through the main steps from study planning to study execution and report. Each section will have a brief summary of what will be explained on it. Feel free to only go through those lessons that are relevant for your work!\n\n\n\nFoundations:\n\nThe OHDSI journey\nThe OMOP CDM\nWhy do we need GREG?\n\n\nStudy planning:\n\nDesign of a study outline (and template)\nDesign of a study protocol (and template)\n\n\nFeasibility assessment:\n\nStandard procedure\nRequired documents (and template)\n\n\nStudy design and execution:\n\nThe webtool ATLAS\nPhenotyping\nDiagnostic tools\nIncidence-prevalence study\nCharacterisation study\nDrug utilisation study\nEffectiveness study\n\n\nStudy reporting:\n\nHow to write a study report? (and template)\n\n\n\n\n\nYou will find a combination of theory, bibliographic/webographic sources, some examples, including R snippets, and short exercises.\n\n\n\n\n\n\nNote\n\n\n\nA single study is followed throughout the course: “Use of GLP-1 receptor agonists and risk of acute pancreatitis in type 2 diabetes patients”\n\n\n\n\n\nNavigate using the sidebar. You can change from light to dark mode using the top right button next to the search bar. You will be able to copy code snippets, and for interactive exercises, to edit and execute code online. Please, refrain from using AI to solve the exercises. Relevant sources will be available to do the exercises.\n\n\n\nMay you have any suggestions, doubts or inquiries please refer to:\n\nAida Perramon Malavez\na.perramonmalavez@erasmusmc.nl\nPostdoctoral Researcher and GREGonBoard developer",
+    "crumbs": [
+      "Home",
+      "GREGonBoard"
+    ]
+  },
+  {
+    "objectID": "index.html#course-structure",
+    "href": "index.html#course-structure",
+    "title": "GREGonBoard",
+    "section": "",
+    "text": "Foundations:\n\nThe OHDSI journey\nThe OMOP CDM\nWhy do we need GREG?\n\n\nStudy planning:\n\nDesign of a study outline (and template)\nDesign of a study protocol (and template)\n\n\nFeasibility assessment:\n\nStandard procedure\nRequired documents (and template)\n\n\nStudy design and execution:\n\nThe webtool ATLAS\nPhenotyping\nDiagnostic tools\nIncidence-prevalence study\nCharacterisation study\nDrug utilisation study\nEffectiveness study\n\n\nStudy reporting:\n\nHow to write a study report? (and template)",
+    "crumbs": [
+      "Home",
+      "GREGonBoard"
+    ]
+  },
+  {
+    "objectID": "index.html#what-to-expect",
+    "href": "index.html#what-to-expect",
+    "title": "GREGonBoard",
+    "section": "",
+    "text": "You will find a combination of theory, bibliographic/webographic sources, some examples, including R snippets, and short exercises.\n\n\n\n\n\n\nNote\n\n\n\nA single study is followed throughout the course: “Use of GLP-1 receptor agonists and risk of acute pancreatitis in type 2 diabetes patients”",
+    "crumbs": [
+      "Home",
+      "GREGonBoard"
+    ]
+  },
+  {
+    "objectID": "index.html#getting-started",
+    "href": "index.html#getting-started",
+    "title": "GREGonBoard",
+    "section": "",
+    "text": "Navigate using the sidebar. You can change from light to dark mode using the top right button next to the search bar. You will be able to copy code snippets, and for interactive exercises, to edit and execute code online. Please, refrain from using AI to solve the exercises. Relevant sources will be available to do the exercises.",
+    "crumbs": [
+      "Home",
+      "GREGonBoard"
+    ]
+  },
+  {
+    "objectID": "index.html#contact-information",
+    "href": "index.html#contact-information",
+    "title": "GREGonBoard",
+    "section": "",
+    "text": "May you have any suggestions, doubts or inquiries please refer to:\n\nAida Perramon Malavez\na.perramonmalavez@erasmusmc.nl\nPostdoctoral Researcher and GREGonBoard developer",
+    "crumbs": [
+      "Home",
+      "GREGonBoard"
+    ]
+  },
+  {
+    "objectID": "chapters/OMOPCDM.html",
+    "href": "chapters/OMOPCDM.html",
+    "title": "OMOP CDM",
+    "section": "",
+    "text": "Understand why OMOP CDM exists\nUnderstand OHDSI ecosystem components\nIdentify key CDM tables",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OMOP CDM"
+    ]
+  },
+  {
+    "objectID": "chapters/OMOPCDM.html#learning-objectives",
+    "href": "chapters/OMOPCDM.html#learning-objectives",
+    "title": "OMOP CDM",
+    "section": "",
+    "text": "Understand why OMOP CDM exists\nUnderstand OHDSI ecosystem components\nIdentify key CDM tables",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OMOP CDM"
+    ]
+  },
+  {
+    "objectID": "chapters/OMOPCDM.html#omop-cdm-overview",
+    "href": "chapters/OMOPCDM.html#omop-cdm-overview",
+    "title": "OMOP CDM",
+    "section": "2 OMOP CDM overview",
+    "text": "2 OMOP CDM overview\nThe OMOP Common Data Model standardises healthcare data…\n\n\nCode\nlibrary(dplyr)\n\n\nWarning: package 'dplyr' was built under R version 4.5.3\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OMOP CDM"
+    ]
+  },
+  {
+    "objectID": "chapters/OMOPCDM.html#ohdsi-ecosystem",
+    "href": "chapters/OMOPCDM.html#ohdsi-ecosystem",
+    "title": "OMOP CDM",
+    "section": "3 OHDSI ecosystem",
+    "text": "3 OHDSI ecosystem\nKey components:\n\nATLAS (study design tool)\nHADES (R packages)\nOHDSI community tools\n\n\n\n\nFigure. The OMOP CDM 5.4 table structure, including all variables available.\n\n\n\n\n\n\n\n\nTip\n\n\n\nOMOP standardisation enables reproducible observational research across institutions.\n\n\nKey tables\n\nPERSON\nCONDITION_OCCURRENCE\nDRUG_EXPOSURE\nOBSERVATION_PERIOD",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OMOP CDM"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n\nCode\n1 + 1\n\n\n[1] 2"
+  },
+  {
+    "objectID": "chapters/OHDSI.html",
+    "href": "chapters/OHDSI.html",
+    "title": "OHDSI Journey",
+    "section": "",
+    "text": "Understand why OMOP CDM exists\nUnderstand OHDSI ecosystem components\nIdentify key CDM tables",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OHDSI Journey"
+    ]
+  },
+  {
+    "objectID": "chapters/OHDSI.html#learning-objectives",
+    "href": "chapters/OHDSI.html#learning-objectives",
+    "title": "OHDSI Journey",
+    "section": "",
+    "text": "Understand why OMOP CDM exists\nUnderstand OHDSI ecosystem components\nIdentify key CDM tables",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OHDSI Journey"
+    ]
+  },
+  {
+    "objectID": "chapters/OHDSI.html#omop-cdm-overview",
+    "href": "chapters/OHDSI.html#omop-cdm-overview",
+    "title": "OHDSI Journey",
+    "section": "2 OMOP CDM overview",
+    "text": "2 OMOP CDM overview\nThe OMOP Common Data Model standardises healthcare data…\n\n\nCode\nlibrary(dplyr)\n\n\nWarning: package 'dplyr' was built under R version 4.5.3\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OHDSI Journey"
+    ]
+  },
+  {
+    "objectID": "chapters/OHDSI.html#ohdsi-ecosystem",
+    "href": "chapters/OHDSI.html#ohdsi-ecosystem",
+    "title": "OHDSI Journey",
+    "section": "3 OHDSI ecosystem",
+    "text": "3 OHDSI ecosystem\nKey components:\n\nATLAS (study design tool)\nHADES (R packages)\nOHDSI community tools\n\n\n\n\n\n\n\nTip\n\n\n\nOMOP standardisation enables reproducible observational research across institutions.\n\n\nKey tables\n\nPERSON\nCONDITION_OCCURRENCE\nDRUG_EXPOSURE\nOBSERVATION_PERIOD",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "OHDSI Journey"
+    ]
+  },
+  {
+    "objectID": "chapters/WhyGREG.html",
+    "href": "chapters/WhyGREG.html",
+    "title": "Why GREG?",
+    "section": "",
+    "text": "Understand why OMOP CDM exists\nUnderstand OHDSI ecosystem components\nIdentify key CDM tables",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Why GREG?"
+    ]
+  },
+  {
+    "objectID": "chapters/WhyGREG.html#learning-objectives",
+    "href": "chapters/WhyGREG.html#learning-objectives",
+    "title": "Why GREG?",
+    "section": "",
+    "text": "Understand why OMOP CDM exists\nUnderstand OHDSI ecosystem components\nIdentify key CDM tables",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Why GREG?"
+    ]
+  },
+  {
+    "objectID": "chapters/WhyGREG.html#omop-cdm-overview",
+    "href": "chapters/WhyGREG.html#omop-cdm-overview",
+    "title": "Why GREG?",
+    "section": "2 OMOP CDM overview",
+    "text": "2 OMOP CDM overview\nThe OMOP Common Data Model standardises healthcare data…\n\n\nCode\nlibrary(dplyr)\n\n\nWarning: package 'dplyr' was built under R version 4.5.3\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Why GREG?"
+    ]
+  },
+  {
+    "objectID": "chapters/WhyGREG.html#ohdsi-ecosystem",
+    "href": "chapters/WhyGREG.html#ohdsi-ecosystem",
+    "title": "Why GREG?",
+    "section": "3 OHDSI ecosystem",
+    "text": "3 OHDSI ecosystem\nKey components:\n\nATLAS (study design tool)\nHADES (R packages)\nOHDSI community tools\n\n\n\n\n\n\n\nTip\n\n\n\nOMOP standardisation enables reproducible observational research across institutions.\n\n\nKey tables\n\nPERSON\nCONDITION_OCCURRENCE\nDRUG_EXPOSURE\nOBSERVATION_PERIOD",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Why GREG?"
+    ]
+  }
+]

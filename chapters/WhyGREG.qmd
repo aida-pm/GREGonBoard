@@ -1,0 +1,37 @@
+---
+title: "Why GREG?"
+format: html
+---
+
+## Learning objectives
+
+- Understand why OMOP CDM exists
+- Understand OHDSI ecosystem components
+- Identify key CDM tables
+
+## OMOP CDM overview
+
+The OMOP Common Data Model standardises healthcare data...
+
+```{r}
+library(dplyr)
+```
+
+## OHDSI ecosystem
+
+Key components:
+
+- ATLAS (study design tool)
+- HADES (R packages)
+- OHDSI community tools
+
+::: callout-tip
+OMOP standardisation enables reproducible observational research across institutions.
+:::
+
+Key tables
+
+- PERSON
+- CONDITION_OCCURRENCE
+- DRUG_EXPOSURE
+- OBSERVATION_PERIOD

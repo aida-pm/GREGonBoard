@@ -1,0 +1,272 @@
+/* ============================================================
+   GREGonBoard — Quarto Theme (United + Lux override)
+============================================================ */
+
+/*-- scss:defaults --*/
+
+// -------------------------------------------------------------
+// Brand palette
+// -------------------------------------------------------------
+$primary:   #9C0754;  // burgundy
+$accent:    #EB6E07;  // orange
+$secondary: #111111;
+
+$success:   #2E7D32;
+$warning:   #E69F00;
+$danger:    #C0392B;
+
+$note: #55D0F2;
+$tip: #97F40B;
+// Typography
+$font-family-monospace: "JetBrains Mono", SFMono-Regular, Consolas, "Liberation Mono", monospace !default;
+
+$link-color: $primary;
+
+
+/* ============================================================
+   BASE LAYOUT
+============================================================ */
+
+body.quarto-light {
+  background-color: #FAFCFD;
+  color: $secondary;
+}
+
+body.quarto-dark {
+  background-color: #292029;
+  color: #E8D9E1;
+}
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+
+.navbar {
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Optional logo slot (right side) */
+.navbar .navbar-nav:last-child .nav-link {
+  background-image: url("images/ihi-greg-logo.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 120px;
+  height: 36px;
+  text-indent: -9999px;
+}
+
+/* ============================================================
+   TYPOGRAPHY / HEADINGS
+============================================================ */
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  color: $primary !important;
+  font-weight: 600 !important;
+}
+
+/* Dark mode headings */
+body.quarto-dark .content h1,
+body.quarto-dark .content h2,
+body.quarto-dark .content h3,
+body.quarto-dark .content h4,
+body.quarto-dark .content h5,
+body.quarto-dark .content h6 {
+  color: lighten($primary, 18%) !important;
+}
+
+/* Slightly smaller, modern hierarchy */
+main.content h1 { font-size: 2.0rem !important; }  
+main.content h2 { font-size: 1.55rem !important; }
+main.content h3 { font-size: 1.25rem !important; }
+main.content h4 { font-size: 1.05rem !important; }
+main.content h5 { font-size: 0.95rem !important; }
+main.content h6 { font-size: 0.9rem !important; }
+
+/* Section numbers */
+.header-section-number {
+  color: darken($primary, 6%) !important;
+  font-weight: 700;
+}
+
+body.quarto-dark .header-section-number {
+  color: lighten($primary, 22%) !important;
+}
+.header-section-number::after {
+  content: ".";
+}
+/* ============================================================
+   SIDEBAR
+============================================================ */
+
+body.quarto-light #quarto-sidebar,
+body.quarto-light .sidebar.sidebar-navigation {
+  background-color: #fff;
+  border-right: 1px solid rgba(0,0,0,.08);
+}
+
+body.quarto-dark #quarto-sidebar,
+body.quarto-dark .sidebar.sidebar-navigation {
+  background-color: #292029;
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+
+/* Section headers */
+.sidebar-section .sidebar-item-text {
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  opacity: .55;
+}
+
+/* Links */
+.sidebar-item-text.sidebar-link:hover {
+  background-color: rgba($accent,.08);
+}
+
+.sidebar-item-text.sidebar-link.active {
+  color: $primary;
+  background-color: rgba($primary,.08);
+  border-left: 3px solid $primary;
+}
+
+/* Dark mode sidebar active */
+body.quarto-dark .sidebar-item-text.sidebar-link.active {
+  color: lighten($accent, 12%);
+  background-color: rgba($accent,.14);
+}
+
+/* ============================================================
+   TOC
+============================================================ */
+
+#TOC .active,
+#TOC a:hover {
+  color: $primary;
+}
+
+/* ============================================================
+   CODE
+============================================================ */
+
+pre, code {
+  font-family: $font-family-monospace;
+}
+
+div.sourceCode, pre.sourceCode {
+  border: 1px solid rgba(0,0,0,.12);
+  background-color: #fff;
+}
+
+body.quarto-dark div.sourceCode,
+body.quarto-dark pre.sourceCode {
+  background-color: #614053;
+  border-color: rgba(255,255,255,.08);
+}
+
+/* inline code */
+code:not(.sourceCode) {
+  padding: .15em .4em;
+  font-size: .92em;
+  background-color: rgba($primary,.08);
+  color: darken($primary,6%);
+}
+
+/* copy button */
+.code-copy-button {
+  color: $accent;
+}
+
+/* ============================================================
+   CALLOUTS
+============================================================ */
+
+.callout {
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+/* NOTE = ORANGE */
+.callout-note {
+  border-left: 5px solid $note !important;
+}
+.callout-note .callout-header {
+  background: rgba($note,.12) !important;
+}
+
+/* TIP = BURGUNDY / PINK */
+.callout-tip {
+  border-left: 5px solid $tip !important;
+}
+.callout-tip .callout-header {
+  background: rgba($tip,.10) !important;
+}
+
+/* DARK MODE */
+body.quarto-dark .callout-note {
+  background: rgba($accent,.10);
+}
+body.quarto-dark .callout-tip {
+  background: rgba($primary,.12);
+}
+
+/* other callouts */
+.callout-warning { border-left: 5px solid $warning; }
+.callout-important { border-left: 5px solid $danger; }
+.callout-caution { border-left: 5px solid darken($warning,10%); }
+
+/* ============================================================
+   CUSTOM BOXES
+============================================================ */
+
+.objectives {
+  border-left: 5px solid $primary;
+  background: rgba($primary,.05);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.exercise {
+  border-left: 5px solid $accent;
+  background: rgba($accent,.05);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+body.quarto-dark .objectives,
+body.quarto-dark .exercise {
+  background: rgba(255,255,255,.03);
+}
+
+/* ============================================================
+   TABLES
+============================================================ */
+
+.table thead th {
+  background: rgba($primary,.06);
+  border-bottom: 2px solid rgba($primary,.2);
+  color: $secondary;
+}
+
+body.quarto-dark .table thead th {
+  background: rgba($accent,.12);
+  color: #E8D9E1;
+}
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+
+main {
+  max-width: 900px;
+}

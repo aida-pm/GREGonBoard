@@ -1,0 +1,66 @@
+project:
+  type: website
+  output-dir: docs
+  
+filters:
+  - shinylive
+website:
+  title: "GREGonBoard"
+  #site-url: https://onboardingGREG.eu
+  
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: Home
+        href: index.qmd
+
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - index.qmd
+
+      - section: "Foundations"
+        contents:
+          - chapters/OHDSI.qmd
+          - chapters/OMOPCDM.qmd
+          - chapters/WhyGREG.qmd
+
+      - section: "Planning a study"
+        contents:
+          - chapters/study_outline.qmd
+          - chapters/study_protocol.qmd
+          
+      - section: "Feasibility assessment"
+        contents:
+          - chapters/standard_procedure.qmd
+          - chapters/required_documents.qmd
+
+      - section: "Design & Execution"
+        contents:
+          - chapters/atlas.qmd
+          - chapters/phenotyping.qmd
+          - chapters/diagnostics.qmd
+          - chapters/incidenceprevalence.qmd
+          - chapters/characterisation.qmd
+          - chapters/drugutilisation.qmd
+          - chapters/effectiveness.qmd
+
+      - section: "Reporting a study"
+        contents:
+          - chapters/study_report.qmd
+
+format:
+  html:
+    theme:
+      light: [united, styles.scss]
+      dark: [darkly, styles.scss]
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-copy: true
+    code-fold: show
+    smooth-scroll: true
+    
+editor: visual
