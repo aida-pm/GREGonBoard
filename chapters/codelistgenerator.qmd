@@ -4,42 +4,47 @@ title: "Codelist Generator"
 
 ```{r setup, include=FALSE}
 library(webexercises)
-install.packages("CohortConstructor")
+install.packages("CodelistGenerator")
 install.packages("omock")
 library(CohortConstructor)
 library(omock)
 ```
 
-## What is a cohort in OMOP?
+## What is a concept set OMOP?
 
-A cohort is the fundamental unit of analysis in OMOP observational research. Formally, a cohort is a set of persons who satisfy one or more inclusion criteria for a duration of time. In OMOP, every cohort is stored as a table with exactly four columns:
+A concept set is the fundamental vocabulary unit of any OMOP study. At its most basic, it is a named collection of **standard concept IDs** grouped together because they collectively represent a single clinical idea relevant to your research question. A concept set is not a list of ICD-10 codes, SNOMED terms, or RxNorm strings: it is a list of OMOP *standard* concept IDs, which are the normalised, source-agnostic representations that the ETL process maps all original source codes into.
 
-| Column | Description |
-|----|----|
-| `cohort_definition_id` | Integer identifying which cohort definition this row belongs to |
-| `subject_id` | The `person_id` of the patient |
-| `cohort_start_date` | The date the patient enters the cohort (Day 0 / index date) |
-| `cohort_end_date` | The date the patient exits the cohort |
-
-This simple structure is powerful: one patient can appear multiple times (e.g. multiple treatment episodes), and one table can hold many different cohort definitions simultaneously.
-
-::: callout-note
-## Two ways to build cohorts
-
-**ATLAS**: graphical interface, produces CIRCE-BE JSON → SQL. Best for sharing definitions across a network via JSON export.
-
-**CohortConstructor (R)**: programmatic pipeline using `dplyr`-style syntax. Best for complex multi-step cohort logic, sensitivity analyses, and automated pipelines.
-
-Both produce the same four-column cohort table. They are complementary, not competing.
+::: callout-important
+This distinction is critical! If your study site records a diagnosis using ICD-10 code E11.9 (*Type 2 diabetes mellitus without complications*), and another site uses the Read code C10F, both are (or should be) mapped during the ETL to the same OMOP standard concept ID for type 2 diabetes mellitus (SNOMED 201826). A concept set defined using that standard ID will therefore capture patients from both sites identically, regardless of the original coding system used!
 :::
+
+In practice, a concept set rarely consists of a single concept ID, not even multiple concept IDs from the same domain, like we saw in the [Phenotyping](phenotyping.qmd) and [ATLAS](atlas.qmd) sections. A concept set that is too broad will capture false-positive patients; one that is too narrow will miss true cases. Both forms of misclassification bias the results in different directions depending on the study design.
+
+You can build concept sets with the [CodelistGenerator](https://darwin-eu.github.io/CodelistGenerator/) package or with [ATLAS](atlas.qmd).
+
+> **In our example study:**
+>
+> [Objectives (as in [Study Protocol](study_protocol.qmd))]{.underline}
+>
+> > - Calculate the yearly prevalence and incidence proportion and density of GLP-1 receptor agonists given as a treatment to type 2 diabetes patients.
+> >
+> > - Characterise the users of each GLP-1 receptor agonists, including sociodemographic, clinical and large-scale characteristics.
+> >
+> > - Define the mean duration of treatment and treatment patterns, including switches, for patients with type 2 diabetes exposed to GLP-1 receptor agonists.
+> >
+> > - Assess the comparative safety of the different GLP-1 receptor agonists against acute pancreatitis outcomes.
+>
+> We need several concept sets: one concept set per each of the five **GLP-1 receptor agonist** agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The **type 2 diabetes mellitus** concept set, in which we must include the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. And finally, the **acute pancreatitis** concept set, which must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding).
 
 ------------------------------------------------------------------------
 
 ## Setup
 
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset.
+
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(CDMConnector)
-library(CohortConstructor)
+library(CodelistGenerator)
 library(omopgenerics)
 library(omock)
 library(dplyr)
@@ -51,232 +56,78 @@ cdm <- omock::mockCdmReference() |>
   omock::mockConditionOccurrence() |>
   omock::mockDrugExposure() |>
   omock::mockDeath()
+
+# With Eunomia
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "cg_") # change the prefix at your convenience
 ```
 
-------------------------------------------------------------------------
+## Example pipeline
 
-## Building a cohort from concept sets
-
-The most common starting point is `conceptCohort()`: define a cohort by the presence of a concept (or concept set) in a given domain table.
-
-```{r concept-cohort, eval=FALSE}
-# Define concept sets as named lists of concept IDs
-glp1_concepts <- list(
-  semaglutide  = c(2200644),   # RxNorm ingredient
-  liraglutide  = c(1474828),
-  dulaglutide  = c(1551099),
-  exenatide    = c(1544838),
-  tirzepatide  = c(37003518)
-)
-
-t2dm_concepts <- list(
-  type2_diabetes = c(201826)   # SNOMED concept + descendants via ATLAS
-)
-
-ap_concepts <- list(
-  acute_pancreatitis = c(197456)  # SNOMED
-)
-
-# Build drug exposure cohorts (one per GLP-1 agent)
-cdm <- CohortConstructor::conceptCohort(
-  cdm         = cdm,
-  conceptSet  = glp1_concepts,
-  name        = "glp1_cohorts",   # name of the cohort table in the CDM
-  domain      = "drug"            # look in drug_exposure
-)
-
-# Build condition cohorts
-cdm <- CohortConstructor::conceptCohort(
-  cdm         = cdm,
-  conceptSet  = t2dm_concepts,
-  name        = "t2dm_cohort",
-  domain      = "condition"
-)
-
-cdm <- CohortConstructor::conceptCohort(
-  cdm         = cdm,
-  conceptSet  = ap_concepts,
-  name        = "ap_cohort",
-  domain      = "condition"
-)
-```
-
-> **Our study:** We create five separate exposure cohorts, one per GLP-1 RA ingredient. The `conceptCohort()` function creates one cohort entry per drug exposure episode per patient. The next steps will apply the new-user and other inclusion criteria.
-
-------------------------------------------------------------------------
-
-## Applying inclusion criteria with `requireIsFirstEntry()`
-
-The **new-user design** requires that patients have no prior use of any GLP-1 RA before their index date. We implement this in two steps: first restricting to first entry per person, then requiring no prior exposure.
-
-```{r first-entry, eval=FALSE}
-# Keep only the first exposure episode per patient
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireIsFirstEntry()
-```
+In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its[reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).
 
 ::: callout-tip
-## Why first entry only?
-
-Without this restriction, a patient prescribed semaglutide three times would contribute three index dates. This creates immortal time bias and violates the new-user design assumption. Always apply `requireIsFirstEntry()` before any other temporal criteria.
+Always check the [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) of a package because there is where you will see all available functions of the package and really understand all its potential!
 :::
 
-------------------------------------------------------------------------
+```{r cg, eval=FALSE}
 
-## Requiring prior observation (washout window)
+semaglutide <- getDrugIngredientCodes(cdm = cdm,
+                                      doseForm = NULL, # Do you want a specific Dose Form?
+                                      doseUnit = NULL, # Do you want a specific Dose Unit?
+                                      routeCategory = NULL, # Do you want a specific route?
+                                      ingredientRange = c(1, Inf), # Do you want a specific combination of drugs or only single ingredients?
+                                      name = "semaglutide")
 
-Patients must have sufficient prior observation in the database to apply the washout period and measure baseline covariates:
-
-```{r prior-obs, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireObservationBeforeDrug(
-    days = 365    # at least 365 days prior observation
-  )
-```
-
-------------------------------------------------------------------------
-
-## Requiring no prior exposure (washout)
-
-```{r washout, eval=FALSE}
-# Restrict to patients with no prior GLP-1 RA in 365 days before index
-# This is the core of the new-user design
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requirePriorDrugWashout(
-    days = 365
-  )
-```
-
-------------------------------------------------------------------------
-
-## Requiring presence in another cohort (population criterion)
-
-Patients must have a T2DM diagnosis on or before the index date:
-
-```{r require-cohort, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireCohortIntersect(
-    cohortTable      = "t2dm_cohort",
-    cohortId         = 1,
-    window           = c(-Inf, 0),   # any time before or on index date
-    intersections    = c(1, Inf),    # at least 1 intersection required
-    name             = "glp1_cohorts"
-  )
-```
-
-------------------------------------------------------------------------
-
-## Restricting to a study period
-
-```{r date-restrict, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireInDateRange(
-    dateRange = as.Date(c("2023-01-01", "2024-12-31"))
-  )
-```
-
-------------------------------------------------------------------------
-
-## Age restriction
-
-```{r age-restrict, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireAge(
-    ageRange = list(c(18, 150))   # adults only
-  )
-```
-
-------------------------------------------------------------------------
-
-## Putting the full pipeline together
-
-```{r full-pipeline, eval=FALSE}
-# Full new-user cohort pipeline for GLP-1 RA agents
-cdm <- CohortConstructor::conceptCohort(
-  cdm        = cdm,
-  conceptSet = glp1_concepts,
-  name       = "glp1_cohorts",
-  domain     = "drug"
-) 
-
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  requireIsFirstEntry()             |>
-  requireObservationBeforeDrug(days = 365) |>
-  requirePriorDrugWashout(days = 365)      |>
-  requireCohortIntersect(
-    cohortTable   = "t2dm_cohort",
-    cohortId      = 1,
-    window        = c(-Inf, 0),
-    intersections = c(1, Inf),
-    name          = "glp1_cohorts"
-  ) |>
-  requireAge(ageRange = list(c(18, 150))) |>
-  requireInDateRange(
-    dateRange = as.Date(c("2023-01-01", "2024-12-31"))
-  )
-```
-
-------------------------------------------------------------------------
-
-## Checking cohort counts and attrition
-
-After building the cohort, always inspect the attrition table — it shows how many patients were excluded at each step, which is essential for transparency and for detecting logic errors.
-
-```{r attrition, eval=FALSE}
-library(CohortCharacteristics)
-
-# Cohort counts
-attrition_result <- summariseCohortAttrition(cdm$glp1_cohorts)
-
-# Visualise as a table
-tableCohortAttrition(attrition_result)
-
-# Visualise as a flowchart (for one cohort)
-attrition_result |>
-  filter(group_level == "semaglutide") |>
-  plotCohortAttrition()
-```
-
-> **Our study:** A well-specified attrition table for the semaglutide cohort might look like this:
->
-> | Step                          | Remaining N |
-> |-------------------------------|-------------|
-> | Initial drug exposure records | 45,210      |
-> | First entry per person        | 12,847      |
-> | ≥ 365 days prior observation  | 11,203      |
-> | No prior GLP-1 RA (washout)   | 9,841       |
-> | T2DM diagnosis before index   | 8,654       |
-> | Age ≥ 18                      | 8,640       |
-> | Index date 2023–2024          | 6,112       |
->
-> If the washout step removes more than 60% of patients, this is worth investigating — it may indicate that your concept set is too broad and is capturing repeat prescriptions of the same episode, or that the database has many prevalent users.
-
-```{r q1, echo=FALSE, results='asis'}
-cat(
-  "**Quick check:** Your attrition table shows 10,000 patients after `requireIsFirstEntry()`",
-  "but only 200 after `requirePriorDrugWashout(days = 365)`. What does this most likely indicate?\n\n",
-  mcq(c(
-    "The drug is rarely prescribed in this database",
-    answer = "Most drug users in this database are prevalent users, not new users — they had prior prescriptions in the year before their first entry",
-    "The washout period is too short",
-    "There is a bug in the CohortConstructor code"
-  )), "\n\n"
+t2dm <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition", # add appropriate domains
+  includeDescendants = TRUE, # To add descendants or not is your choice!
+  includeAncestor = FALSE,
+  keywords = c("type 2 diabetis mellitus", "T2DM")
 )
+
+acute_pancreatitis <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition", # add appropriate domains
+  includeDescendants = FALSE, # To add descendants or not is your choice!
+  includeAncestor = FALSE,
+  keywords = c("Acute pancreatitis")
+)
+
 ```
 
-`r hide("Explanation")` When the vast majority of patients are excluded by the washout criterion, it means most patients who appear in the database with this drug already had prior exposure — i.e. they are **prevalent users**. This is common for drugs that have been on the market for many years (like liraglutide since 2009 or exenatide since 2006). The new-user design deliberately excludes these patients to avoid prevalent-user bias, but it does reduce your study population substantially. This is a design trade-off, not a bug. `r unhide()`
+::: callout-warning
+**Always review** with a pharmacist/clinician/other professionals the concept sets that CodelistGenerator produced to make sure that your final list actually covers everything that is needed to define the concepts that you are trying to capture!
+:::
 
-------------------------------------------------------------------------
+Are you able to do the concept sets with R for our example study by yourself?
 
-## Exporting cohort definitions
+```{r, results='asis', echo = FALSE}
+opts <- c(
+  "No, because we are defining conditions.",
+  answer = "It is not necessary, but we might make a more complete definition if we include other concepts like drug exposures or measurements that might be related to the conditions.",
+  "Yes, we should always include all domains because that is the way to make the most complete definition of all concepts."
+)
+
+cat("Do we need to include other domains in the T2DM or acute pancreatitis conditions concept sets?", longmcq(opts))
+```
+
+## Exporting codelists
 
 ```{r export, eval=FALSE}
-# Export cohort table to a local file for sharing or archiving
-cohort_data <- cdm$glp1_cohorts |> collect()
-write.csv(cohort_data, "results/glp1_cohorts.csv", row.names = FALSE)
+# Export your codelists following this command
+directory <- "path_to_your_desired_directory"
+exportCodelist(semaglutide, directory, type = "csv")
+exportCodelist(t2dm, directory, type = "csv")
+exportCodelist(acute_pancreatitis, directory, type = "csv")
 
 # Disconnect
-CDMConnector::cdmDisconnect(cdm)
+dbDisconnect(con)
 ```
 
 ## References

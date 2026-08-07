@@ -5,6 +5,8 @@ format: html
 
 ## Doing a study report
 
-1.  First of all, go back to your study outline. You do not start from scratch!
+1.  First of all, go back to your study protocol. You do not start from scratch! The protocol is the basis to the study report.
 
-2.  Find [here](../templates/study_report_template.docx) the template of the study protocol. You should fill in this template and submit it to GREG for feedback.
+2.  Find [here](../templates/study_report_template.docx) the template of the study report. You should fill in this template and submit it to GREG for feedback.
+
+In summary, you need to extend your study protocol including the results from your study. You should include the tables and plots that can be extracted from your `summarised_result` object for each pertinent part of the study.

@@ -522,7 +522,7 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-a-cohort-in-omop" id="toc-what-is-a-cohort-in-omop" class="nav-link active" data-scroll-target="#what-is-a-cohort-in-omop"><span class="header-section-number">1</span> What is a cohort in OMOP?</a></li>
+  <li><a href="#what-is-a-concept-set-omop" id="toc-what-is-a-concept-set-omop" class="nav-link active" data-scroll-target="#what-is-a-concept-set-omop"><span class="header-section-number">1</span> What is a concept set OMOP?</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
   <li><a href="#building-a-cohort-from-concept-sets" id="toc-building-a-cohort-from-concept-sets" class="nav-link" data-scroll-target="#building-a-cohort-from-concept-sets"><span class="header-section-number">3</span> Building a cohort from concept sets</a></li>
   <li><a href="#applying-inclusion-criteria-with-requireisfirstentry" id="toc-applying-inclusion-criteria-with-requireisfirstentry" class="nav-link" data-scroll-target="#applying-inclusion-criteria-with-requireisfirstentry"><span class="header-section-number">4</span> Applying inclusion criteria with <code>requireIsFirstEntry()</code></a></li>
@@ -561,40 +561,26 @@ div.csl-indent {
 </header>
 
 
-<section id="what-is-a-cohort-in-omop" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="what-is-a-cohort-in-omop"><span class="header-section-number">1</span> What is a cohort in OMOP?</h2>
-<p>A cohort is the fundamental unit of analysis in OMOP observational research. Formally, a cohort is a set of persons who satisfy one or more inclusion criteria for a duration of time. In OMOP, every cohort is stored as a table with exactly four columns:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Column</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>cohort_definition_id</code></td>
-<td>Integer identifying which cohort definition this row belongs to</td>
-</tr>
-<tr class="even">
-<td><code>subject_id</code></td>
-<td>The <code>person_id</code> of the patient</td>
-</tr>
-<tr class="odd">
-<td><code>cohort_start_date</code></td>
-<td>The date the patient enters the cohort (Day 0 / index date)</td>
-</tr>
-<tr class="even">
-<td><code>cohort_end_date</code></td>
-<td>The date the patient exits the cohort</td>
-</tr>
-</tbody>
-</table>
-<p>This simple structure is powerful: one patient can appear multiple times (e.g.&nbsp;multiple treatment episodes), and one table can hold many different cohort definitions simultaneously.</p>
+<section id="what-is-a-concept-set-omop" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-a-concept-set-omop"><span class="header-section-number">1</span> What is a concept set OMOP?</h2>
+<p>A concept set is the fundamental vocabulary unit of any OMOP study. At its most basic, it is a named collection of <strong>standard concept IDs</strong> grouped together because they collectively represent a single clinical idea relevant to your research question. A concept set is not a list of ICD-10 codes, SNOMED terms, or RxNorm strings: it is a list of OMOP <em>standard</em> concept IDs, which are the normalised, source-agnostic representations that the ETL process maps all original source codes into.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This distinction is critical! If your study site records a diagnosis using ICD-10 code E11.9 (<em>Type 2 diabetes mellitus without complications</em>), and another site uses the Read code C10F, both are (or should be) mapped during the ETL to the same OMOP standard concept ID for type 2 diabetes mellitus (SNOMED 201826). A concept set defined using that standard ID will therefore capture patients from both sites identically, regardless of the original coding system used!</p>
+</div>
+</div>
+<p>In practice, a concept set rarely consists of a single concept ID, not even multiple concept IDs from the same domain, like we saw in the <a href="../chapters/phenotyping.html">Phenotyping</a> and <a href="../chapters/atlas.html">ATLAS</a> sections. A concept set that is too broad will capture false-positive patients; one that is too narrow will miss true cases. Both forms of misclassification bias the results in different directions depending on the study design.</p>
+<blockquote class="blockquote">
+<p><strong>Our study:</strong> We need three concept sets before we can build a single cohort. The <strong>GLP-1 receptor agonist</strong> concept set must capture all five agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The <strong>type 2 diabetes mellitus</strong> concept set must use the SNOMED hierarchy carefully — including the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. The <strong>acute pancreatitis</strong> concept set must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding), a trade-off that is especially consequential for a rare outcome where false positives directly distort the hazard ratio estimate.</p>
+</blockquote>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
