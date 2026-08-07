@@ -11,26 +11,47 @@ Every one has their role on GREG. In this tutorial, we will go through the main 
 
 ## Course structure
 
-1.  Foundations:
-    i.  The OHDSI journey
-    ii. The OMOP CDM
-    iii. Why do we need GREG?\
-2.  Study planning:
-    i.  Design of a study outline (and template)
-    ii. Design of a study protocol (and template)\
-3.  Feasibility assessment:
-    i.  Standard procedure
-    ii. Required documents (and template)\
-4.  Study design and execution:
-    i.  The webtool ATLAS
-    ii. Phenotyping
-    iii. Diagnostic tools
-    iv. Incidence-prevalence study
-    v.  Characterisation study
-    vi. Drug utilisation study
-    vii. Effectiveness study\
-5.  Study reporting:
-    i.  How to write a study report? (and template)
+::: {.callout-note icon="false"}
+## 1. Foundations
+
+- [The OHDSI journey](chapters/OHDSI.qmd)
+- [The OMOP CDM](chapters/OMOPCDM.qmd)
+- [Why do we need GREG?](chapters/WhyGREG.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 2. Study planning
+
+- [Design of a study outline](chapters/study_outline.qmd) (with template)
+- [Design of a study protocol](chapters/study_protocol.qmd) (with template)
+:::
+
+::: {.callout-note icon="false"}
+## 3. Feasibility assessment
+
+- [Standard procedure](chapters/standard_procedure.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 4. Study design & execution
+
+- [Phenotyping](chapters/phenotyping.qmd)
+- [The webtool ATLAS](chapters/atlas.qmd)
+- [CDM using R](chapters/using_R.qmd)
+- [Codelists generation](chapters/codelistgenerator.qmd)
+- [Cohort construction](chapters/cohortconstruction.qmd)
+- [Diagnostic tools](chapters/diagnostics.qmd)
+- [Incidence & prevalence study](chapters/incidenceprevalence.qmd)
+- [Characterisation study](chapters/characterisation.qmd)
+- [Drug utilisation study](chapters/drugutilisation.qmd)
+- [Effectiveness study](chapters/effectiveness.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 5. Study reporting
+
+- [How to write a study report](chapters/study_report.qmd) (with template)
+:::
 
 ## What to expect?
 

@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -77,6 +112,7 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -367,12 +403,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Standard Procedure</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/required_documents.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Documents</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -388,6 +418,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/using_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDM using R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -423,7 +459,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Effectiveness</span></a>
+ <span class="menu-text">From description to causal inference</span></a>
   </div>
 </li>
       </ul>
@@ -450,8 +486,21 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-a-drug-utilisation-study" id="toc-what-is-a-drug-utilisation-study" class="nav-link active" data-scroll-target="#what-is-a-drug-utilisation-study"><span class="header-section-number">1</span> What is a drug utilisation study?</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
+  <li><a href="#step-1-create-a-drug-cohort" id="toc-step-1-create-a-drug-cohort" class="nav-link" data-scroll-target="#step-1-create-a-drug-cohort"><span class="header-section-number">3</span> Step 1: Create a drug cohort</a></li>
+  <li><a href="#step-2-treatment-duration-and-exposure" id="toc-step-2-treatment-duration-and-exposure" class="nav-link" data-scroll-target="#step-2-treatment-duration-and-exposure"><span class="header-section-number">4</span> Step 2: Treatment duration and exposure</a></li>
+  <li><a href="#step-3-indications-for-use" id="toc-step-3-indications-for-use" class="nav-link" data-scroll-target="#step-3-indications-for-use"><span class="header-section-number">5</span> Step 3: Indications for use</a></li>
+  <li><a href="#step-4-treatment-adherence" id="toc-step-4-treatment-adherence" class="nav-link" data-scroll-target="#step-4-treatment-adherence"><span class="header-section-number">6</span> Step 4: Treatment adherence</a></li>
+  <li><a href="#step-5-treatment-switching-and-restart" id="toc-step-5-treatment-switching-and-restart" class="nav-link" data-scroll-target="#step-5-treatment-switching-and-restart"><span class="header-section-number">7</span> Step 5: Treatment switching and restart</a></li>
+  <li><a href="#combine-and-share-results" id="toc-combine-and-share-results" class="nav-link" data-scroll-target="#combine-and-share-results"><span class="header-section-number">8</span> Combine and share results</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -476,10 +525,513 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="what-is-a-drug-utilisation-study" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-a-drug-utilisation-study"><span class="header-section-number">1</span> What is a drug utilisation study?</h2>
+<p>A drug utilisation study (DUS) describes <em>how</em> a drug is used in clinical practice — who receives it, at what dose, for how long, for what indications, and in what combinations. The World Health Organization defines drug utilisation as “the marketing, distribution, prescription and use of drugs in a society, with special emphasis on the resulting medical, social and economic consequences.”</p>
+<p>DUS are not causal analyses. They do not estimate the effect of a drug on an outcome. Their purpose is to characterise real-world prescribing patterns, and they are a key regulatory tool: the EMA and national competent authorities regularly commission DUS as post-authorisation safety studies (PASS) to monitor whether a drug is being used as intended.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>When is a DUS required?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Under EU Regulation 536/2014 and Directive 2001/83/EC, a marketing authorisation holder may be required to conduct a DUS as part of a Risk Management Plan (RMP) or as a post-authorisation obligation. DARWIN EU® has delivered multiple DUS across its network for EMA-mandated studies, all using the OMOP CDM and the <code>DrugUtilisation</code> package.</p>
+</div>
+</div>
+<p>Key questions a DUS answers:</p>
+<ul>
+<li>Who is initiating the drug (demographics, comorbidities)?</li>
+<li>What are the treatment patterns (dose, duration, adherence, switching)?</li>
+<li>What are the indications for use?</li>
+<li>Is the drug being used off-label?</li>
+<li>What are co-prescriptions and concomitant medications?</li>
+</ul>
+<hr>
+</section>
+<section id="setup" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="setup"><span class="header-section-number">2</span> Setup</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DrugUtilisation)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortCharacteristics)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CDMConnector)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omopgenerics)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Synthetic CDM</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">mockDrugUtilisation</span>(<span class="at">numberIndividual =</span> <span class="dv">500</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="step-1-create-a-drug-cohort" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="step-1-create-a-drug-cohort"><span class="header-section-number">3</span> Step 1: Create a drug cohort</h2>
+<p>The <code>DrugUtilisation</code> package provides <code>generateIngredientCohortSet()</code> as its primary cohort creation function. It creates drug era cohorts, collapsing consecutive prescription records with gaps below a specified threshold.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a cohort of acetaminophen users</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (proxy for our GLP-1 RA cohort in the real study)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">generateIngredientCohortSet</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm        =</span> cdm,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">name       =</span> <span class="st">"dus_cohort"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ingredient =</span> <span class="st">"acetaminophen"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">gapEra     =</span> <span class="dv">30</span>    <span class="co"># collapse records with &lt;30-day gaps into one era</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Restrict to first episode (new-user design)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>dus_cohort <span class="ot">&lt;-</span> cdm<span class="sc">$</span>dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requireIsFirstDrugEntry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requireObservationBeforeDrug</span>(<span class="at">days =</span> <span class="dv">365</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cohortCount</span>(cdm<span class="sc">$</span>dus_cohort)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  cohort_definition_id number_records number_subjects
+                 &lt;int&gt;          &lt;int&gt;           &lt;int&gt;
+1                    1            168             168</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study — creating GLP-1 RA drug cohorts:</strong> In the real analysis, we use a gap era of 30 days for once-weekly agents (semaglutide, dulaglutide, tirzepatide) and 7 days for twice-daily agents (exenatide immediate release). This reflects the expected prescription patterns and avoids artificially splitting continuous treatment episodes due to minor dispensing gaps.</p>
+</blockquote>
+<p><strong>Quick check:</strong> What does <code>gapEra = 30</code> mean in <code>generateIngredientCohortSet()</code>?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">Patients must have 30 days of observation before the drug start</option><option value="answer">Drug exposure records with fewer than 30 days between the end of one record and the start of the next are collapsed into a single continuous era</option><option value="">The drug cohort is restricted to the first 30 days of treatment</option><option value="">Only prescriptions lasting at least 30 days are included</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p><code>gapEra</code> controls the <strong>era collapsing</strong> logic. In claims or dispensing data, a patient on a once-weekly drug might have their 4-week prescription record end on day 28 and the next refill start on day 30 — a 2-day gap. Without era collapsing, these would appear as two separate drug eras (treatment discontinuation + restart). With <code>gapEra = 30</code>, gaps of fewer than 30 days are bridged, producing one continuous treatment era. The appropriate gap depends on the drug’s dosing frequency and the data source’s dispensing patterns.</p>
+</div>
+<hr>
+</section>
+<section id="step-2-treatment-duration-and-exposure" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="step-2-treatment-duration-and-exposure"><span class="header-section-number">4</span> Step 2: Treatment duration and exposure</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>du_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseDrugUtilisation</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ingredientConceptId =</span> <span class="dv">1125315</span>,  <span class="co"># acetaminophen</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">gapEra              =</span> <span class="dv">30</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimates           =</span> <span class="fu">c</span>(<span class="st">"q25"</span>, <span class="st">"median"</span>, <span class="st">"q75"</span>, <span class="st">"mean"</span>, <span class="st">"sd"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>du_result <span class="sc">|&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable_name <span class="sc">%in%</span> <span class="fu">c</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"days prescribed"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"days exposed"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"number eras"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"initial daily dose milligram"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable_name, estimate_name, estimate_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 3
+   variable_name                estimate_name estimate_value  
+   &lt;chr&gt;                        &lt;chr&gt;         &lt;chr&gt;           
+ 1 number eras                  q25           1               
+ 2 number eras                  median        1               
+ 3 number eras                  q75           1               
+ 4 number eras                  mean          1               
+ 5 number eras                  sd            0               
+ 6 days exposed                 q25           196             
+ 7 days exposed                 median        638             
+ 8 days exposed                 q75           1940            
+ 9 days exposed                 mean          1532.95238095238
+10 days exposed                 sd            2209.88135213934
+11 days prescribed              q25           196             
+12 days prescribed              median        730             
+13 days prescribed              q75           2149            
+14 days prescribed              mean          1792.53571428571
+15 days prescribed              sd            2913.32814988228
+16 initial daily dose milligram q25           11.3759027474363
+17 initial daily dose milligram median        48.6877536314332
+18 initial daily dose milligram q75           267.533164260632
+19 initial daily dose milligram mean          800.483780163272
+20 initial daily dose milligram sd            3583.74625049001</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study — treatment duration metrics to report:</strong></p>
+<p>For each GLP-1 RA agent, report:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Clinical interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Days prescribed (median, IQR)</td>
+<td>The duration of the prescribed course — often longer than actual use</td>
+</tr>
+<tr class="even">
+<td>Days exposed (median, IQR)</td>
+<td>The duration of actual drug supply based on dispensing records</td>
+</tr>
+<tr class="odd">
+<td>Number of drug eras</td>
+<td>Whether patients have multiple treatment episodes (treatment restarts)</td>
+</tr>
+<tr class="even">
+<td>Initial daily dose (mg)</td>
+<td>Whether patients are initiated at the recommended starting dose</td>
+</tr>
+<tr class="odd">
+<td>Cumulative dose (mg)</td>
+<td>Total drug exposure over the follow-up period</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr>
+</section>
+<section id="step-3-indications-for-use" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="step-3-indications-for-use"><span class="header-section-number">5</span> Step 3: Indications for use</h2>
+<p>What conditions were patients treated for? This is especially relevant for GLP-1 RAs, which are licensed for T2DM and obesity but increasingly used off-label.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define indication cohorts</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>indications <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">headache  =</span> <span class="dv">378253</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">influenza =</span> <span class="dv">4266367</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> CDMConnector<span class="sc">::</span><span class="fu">generateConceptCohortSet</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm        =</span> cdm,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet =</span> indications,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">name       =</span> <span class="st">"indications_cohort"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>indication_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseIndication</span>(</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">indicationCohortName    =</span> <span class="st">"indications_cohort"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">unknownIndicationTable  =</span> <span class="st">"condition_occurrence"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">indicationWindow        =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">30</span>, <span class="dv">0</span>))</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>indication_result <span class="sc">|&gt;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(estimate_name <span class="sc">==</span> <span class="st">"percentage"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable_level, estimate_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  variable_level         estimate_value
+  &lt;chr&gt;                  &lt;chr&gt;         
+1 headache               22.61905      
+2 influenza              19.64286      
+3 headache and influenza 7.73810       
+4 unknown                0.59524       
+5 none                   49.40476      
+6 not in observation     0             </code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study — indication analysis:</strong> For GLP-1 RAs, define indication cohorts for:</p>
+<ul>
+<li><strong>Type 2 diabetes mellitus</strong> (primary licensed indication)</li>
+<li><strong>Obesity / overweight</strong> (licensed for semaglutide/tirzepatide in higher doses)</li>
+<li><strong>Cardiovascular disease</strong> (licensed for some agents with demonstrated CV benefit)</li>
+<li><strong>No identifiable coded indication</strong> (potential off-label use)</li>
+</ul>
+<p>A high proportion of “no identifiable coded indication” may reflect coding limitations rather than true off-label use — many GPs do not re-code T2DM at every prescribing event.</p>
+</blockquote>
+<hr>
+</section>
+<section id="step-4-treatment-adherence" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="step-4-treatment-adherence"><span class="header-section-number">6</span> Step 4: Treatment adherence</h2>
+<p>Proportion of Days Covered (PDC) is the standard measure of medication adherence in claims data. PDC ≥ 80% is the conventional threshold for “adherent.”</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarise treatment adherence</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>adherence_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseTreatmentAdherence</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">followUpDays =</span> <span class="dv">365</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>adherence_result <span class="sc">|&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable_name <span class="sc">==</span> <span class="st">"Proportion of patients covered"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(estimate_name, estimate_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="step-5-treatment-switching-and-restart" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="step-5-treatment-switching-and-restart"><span class="header-section-number">7</span> Step 5: Treatment switching and restart</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define comparator drug cohorts</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">generateIngredientCohortSet</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm        =</span> cdm,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">name       =</span> <span class="st">"comparator_drugs"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ingredient =</span> <span class="fu">c</span>(<span class="st">"ibuprofen"</span>, <span class="st">"naproxen"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarise switching after treatment discontinuation</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>switch_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseDrugRestart</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">switchCohortTable =</span> <span class="st">"comparator_drugs"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">followUpDays      =</span> <span class="dv">365</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>switch_result <span class="sc">|&gt;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"restart"</span>, <span class="st">"switch"</span>, <span class="st">"discontinue"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable_name, estimate_name, estimate_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study — treatment switching:</strong> For GLP-1 RA DUS, switching is particularly clinically relevant: patients may switch between agents due to tolerability (nausea is common with all GLP-1 RAs), formulary changes, or lack of glycaemic response. A high rate of early switching (within 90 days) to a different GLP-1 RA would be a DUS finding worth reporting to regulators, as it might indicate a population-level tolerability pattern not captured in clinical trials.</p>
+</blockquote>
+<hr>
+</section>
+<section id="combine-and-share-results" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="combine-and-share-results"><span class="header-section-number">8</span> Combine and share results</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all_results &lt;- omopgenerics::bind(</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   du_result,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   indication_result</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ) |&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   omopgenerics::suppress(minCellCount = 5)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(all_results, "results/drug_utilisation.csv", row.names = FALSE)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>Quick check:</strong> Your DUS shows that 35% of semaglutide users have no coded T2DM or obesity diagnosis in the 30 days before initiation. Does this mean 35% are receiving the drug off-label?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>Not necessarily. In routine clinical databases, many patients with chronic conditions like T2DM do not have their diagnosis re-coded at every GP visit or prescription event. The absence of a recent coded diagnosis in the 30-day window does not mean the diagnosis is absent — it may simply not have been recorded recently. Looking at a wider window (e.g.&nbsp;any T2DM code ever in the patient’s history) typically reveals a much higher proportion with documented indication. The “no identifiable coded indication” category in a DUS is therefore best interpreted as a lower bound on true off-label use, not as the actual off-label rate.</p>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

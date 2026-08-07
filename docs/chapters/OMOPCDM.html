@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -112,6 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -402,12 +368,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Standard Procedure</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/required_documents.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Documents</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -421,14 +381,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phenotyping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Phenotyping</span></a>
+  <a href="../chapters/using_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDM using R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/codelistgenerator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Codelist Generator</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/cohortconstruction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cohort Construction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -458,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Effectiveness</span></a>
+ <span class="menu-text">Estimating effectiveness</span></a>
   </div>
 </li>
       </ul>
@@ -490,9 +468,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">1</span> Learning objectives</a></li>
-  <li><a href="#omop-cdm-overview" id="toc-omop-cdm-overview" class="nav-link" data-scroll-target="#omop-cdm-overview"><span class="header-section-number">2</span> OMOP CDM overview</a></li>
-  <li><a href="#ohdsi-ecosystem" id="toc-ohdsi-ecosystem" class="nav-link" data-scroll-target="#ohdsi-ecosystem"><span class="header-section-number">3</span> OHDSI ecosystem</a></li>
+  <li><a href="#omop-cdm" id="toc-omop-cdm" class="nav-link active" data-scroll-target="#omop-cdm"><span class="header-section-number">1</span> OMOP CDM</a>
+  <ul class="collapse">
+  <li><a href="#mapping" id="toc-mapping" class="nav-link" data-scroll-target="#mapping"><span class="header-section-number">1.1</span> Mapping</a></li>
+  </ul></li>
+  <li><a href="#structure" id="toc-structure" class="nav-link" data-scroll-target="#structure"><span class="header-section-number">2</span> Structure</a></li>
+  <li><a href="#why-studies-with-observational-data-are-important" id="toc-why-studies-with-observational-data-are-important" class="nav-link" data-scroll-target="#why-studies-with-observational-data-are-important"><span class="header-section-number">3</span> Why studies with observational data are important?</a></li>
   </ul>
 </nav>
     </div>
@@ -519,80 +500,299 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="learning-objectives" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1</span> Learning objectives</h2>
+<section id="omop-cdm" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="omop-cdm"><span class="header-section-number">1</span> OMOP CDM</h2>
+<p>Whenever you go to the doctor, or have any medical consultation, the medical professional attending you enters your data in an electronic platform. Think of it as that they will fill in an excel file and upload it to the computer, and then the computer distributes the data to the appropriate table segregated by type. For example, the doctor might enter “Anne Marie Smith, 46 years old, female, consultation because of respiratory symptoms, fever, flu diagnosis”. Then, your name changes into an anonymized number that represents you without personal information, a “<code>person_id</code>”, and your sociodemographic information (age, sex) will go to the sociodemographic table linked to your <code>person_id</code>. Your clinical information (fever, flu diagnosis) will go to the clinical table linked to your hash, and like this with all the different information that the doctor might add. This set of variables that construct your medical records, are what we call <strong>Electronic Healthcare Records</strong> <strong>(EHR)</strong> and are the basis of observational medical research.</p>
+<p>These data, however, are rarely structured and each healthcare provider might collect it differently. Therefore, when doing a collaborative study, data scientists often encounter difficulties leading with data, since they have to treat differently every site, with independent data pre-processing and analysis pipelines, what makes the study advance slowly and prompt to errors. Imagine your high-school class and that every other classmate would speak a language different to yours; communication and collaboration would not be fluid, right? At one point, researchers from around the world decided that it was worth investing in creating a common language to allow for a more open, reproducible and collaborative science. Nevertheless, like it has happened in human history with languages, several options were raised. English, esperanto, interlingua… In EHR, this translates to OMOP CDM, Sentinel CDM, PCORNet CDM… But we will focus on the language developed by OHDSI and that is accepted by the European Medicaments Agency (EMA): OMOP CDM.</p>
+<p>Aligned to the languages example, there is no gold standard CDM, no “better” model. Each one of them is useful and necessary on their own. What differs is, mostly, the dictionary used to map the data. There are some words that have no direct translation to other languages. For example, in Spanish the term “sobremesa” refers to the time spent talking after eating while you are still sitting around the table, and it can extend from 30 minutes to several hours. This term has no translation in English. The same can happen in CDMs. The OMOP CDM uses the standard language SNOMED for most concepts, except for medicines which standard notation is in RxNorm. Other CDMs might use different standards, like using ICD-10 codes to describe diagnoses. The same disease might be diagnosed differently using ICD-10 codes and SNOMED codes, since they have different words for the same concept.</p>
+<section id="mapping" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="mapping"><span class="header-section-number">1.1</span> Mapping</h3>
+<p>Oftentimes, being specific with your mapping is difficult, since the source data (EHR) might have granular information like “Heart failure of the left atrium with ejection fraction of 20%” but your SNOMED vocabulary will only have “Heart failure”/“Failure of the left heart”/“Reduced ejection fraction”. In this case, how would you map that source diagnosis?</p>
+<div class="webex-check webex-box">
 <ul>
-<li>Understand why OMOP CDM exists</li>
-<li>Understand OHDSI ecosystem components</li>
-<li>Identify key CDM tables</li>
+<li><strong>Heart failure</strong> <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></li>
+<li><strong>Failure of the left heart</strong> <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></li>
+<li><strong>Reduced ejection fraction</strong> <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></li>
 </ul>
+</div>
+<div class="webex-solution">
+<button>
+Why?
+</button>
+<p>The thing is, that all previous answers are correct, it is just a matter of personal preference or discussing with clinicians what is to prioritise. In the <a href="https://www.ohdsi.org/tutorials/">OHDSI tutorials</a> you have some guidance on how to map your data to an OMOP CDM.</p>
+</div>
+<p>For more information about the OMOP CDM, please, refer to: <a href="https://ohdsi.github.io/CommonDataModel/" class="uri">https://ohdsi.github.io/CommonDataModel/</a></p>
 </section>
-<section id="omop-cdm-overview" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="omop-cdm-overview"><span class="header-section-number">2</span> OMOP CDM overview</h2>
-<p>The OMOP Common Data Model standardises healthcare data…</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'dplyr' was built under R version 4.5.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-</div>
 </section>
-<section id="ohdsi-ecosystem" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="ohdsi-ecosystem"><span class="header-section-number">3</span> OHDSI ecosystem</h2>
-<p>Key components:</p>
-<ul>
-<li>ATLAS (study design tool)</li>
-<li>HADES (R packages)</li>
-<li>OHDSI community tools</li>
-</ul>
+<section id="structure" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="structure"><span class="header-section-number">2</span> Structure</h2>
+<p>In the <a href="https://ohdsi.github.io/TheBookOfOhdsi/">Book of OHDSI</a>, you will find everything you need to understand how data is structured in the OMOP CDM. Think of your medical history as a <strong>jigsaw puzzle</strong>. Each table (conditions, drugs, procedures, measurements, and so on) holds one piece of the picture, recording a different kind of medical or sociodemographic information. On its own, no single piece tells you much. But every piece has a matching edge: your identifying number, or <code>person_id</code>. That shared edge is what lets all the pieces click together into one complete picture: your medical history.</p>
+<p>In the Figure below, you can see all the different tables that build up the OMOP CDM, with the different variables that each one records.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="https://ohdsi.github.io/CommonDataModel/cdm54erd.html"><img src="..\images/omop-cdm-structure.jpg" class="img-fluid figure-img" alt="This image depicts the structure of an OMOP CDM 5.4 database, we can see the clinical data tables, health system tables, health economics tables, standardized derived elements tables, metadata tables and vocabulary tables."></a></p>
 <figcaption>Figure. The OMOP CDM 5.4 table structure, including all variables available.</figcaption>
 </figure>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>OMOP standardisation enables reproducible observational research across institutions.</p>
 </div>
 </div>
-<p>Key tables</p>
-<ul>
-<li>PERSON</li>
-<li>CONDITION_OCCURRENCE</li>
-<li>DRUG_EXPOSURE</li>
-<li>OBSERVATION_PERIOD</li>
-</ul>
+<p>Nevertheless, and although all different sites will share the same data structure, it does not mean that they all have the same information recorded. Some sites might have a complete date of birth, while others will only incorporate month and year of birth, due to regional data privacy policies. Some sites will have information on devices, or economic information, some not. This will also depend on which type of data is being mapped: claims data, primary care, hospital care, emergency care… This will make a crucial difference, since some analyses will be restricted by the resolution of the data available in each site or even the data source type.<br>
+</p>
+</section>
+<section id="why-studies-with-observational-data-are-important" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="why-studies-with-observational-data-are-important"><span class="header-section-number">3</span> Why studies with observational data are important?</h2>
+<p>At this point, you might wonder, why so much effort? Why is it important to do studies with observational data? Why do we want to guarantee observational data quality and standardisation?</p>
+<p>The answer is as complex as it is simple. A medicine, vaccine or device cannot be commercialized without a clinical trial proving its effectiveness and assessing its safety (at least, 99% of times). However, clinical trials are costly, usually done with a small sample size of patients, and of limited heterogeneity of the population. <strong>It is impossible to design a trial that covers all minority cases.</strong> At the same time, would you agree, as a pregnant woman, to undergo a clinical trial? Would you agree your children to undergo one? The answer to these questions is most probably “not if not desperate”.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observational data allow us to (partially) cover the heterogeneity caveats that clinical trials have.</p>
+</div>
+</div>
+<p>Clinical trials, especially randomised clinical trials (RCT), are the gold standard to prove the effectiveness and safety of medicinal products and devices. Nevertheless, observational data allow us to ascertain that what we saw in the trial is applicable to the reality of administration of the product, as well as generalisable to all its target populations. Observational data will, at the same time, cover one aspect that is not accounted for in RCTs: off-label prescription. This is when a medicine/device is given to a patient although this medicine/device was not designed for its characteristics. And it is a reality in real-life clinical settings. That is also why observational data is often called <strong>real-world data</strong>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can use observational data to study the effectiveness and safety of medicines, vaccines and devices under real-world implementation conditions!</p>
+</div>
+</div>
+<p>The importance of real-world evidence has not gone unnoticed by regulators. The EMA has been actively working to integrate observational data into regulatory decision-making, with the explicit goal of embedding real-world evidence into its processes by 2025. To operationalise this, EMA and the European Medicines Regulatory Network established the Data Analysis and Real World Interrogation Network (<a href="https://www.darwin-eu.org/">DARWIN EU ®</a>) to provide timely and reliable evidence on the use, safety, and effectiveness of medicines for human use. What makes DARWIN EU® particularly relevant is that they develop statistical tools that work with the OMOP CDM to produce RWE, therefore, the standardisation pipeline that you are learning in this tutorial is not an academic exercise, it is the same infrastructure that feeds into European regulatory decisions. As of 2026, DARWIN EU® has access to data from around 250 million patients, with 108 research topics assessed and 88 studies completed or ongoing.</p>
 
 
 </section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

@@ -2,3 +2,195 @@
 title: "ATLAS"
 format: html
 ---
+
+```{r setup, include=FALSE}
+library(webexercises)
+```
+
+## What is ATLAS?
+
+ATLAS is a free, publicly available web-based, open-source software application developed by the OHDSI community to support the design and execution of observational analyses to generate real world evidence from patient level observational data. You have both the public [ATLAS demo](https://atlas-demo.ohdsi.org/), that uses information from the [EHDEN portal](https://portal.ehden.eu/), and private ATLAS linked to your own database.
+
+## Tutorials and resources
+
+There are two main sources of information to make ATLAS work and understand what it does:
+
+- [The Book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/OhdsiAnalyticsTools.html#atlas)
+
+- [ATLAS tutorials](https://github.com/OHDSI/Atlas/wiki)
+
+## Brief introduction to ATLAS
+
+ATLAS is organised around a left-hand navigation panel with several modules, each corresponding to a distinct analytical task. Here you will find a brief description of the five modules you will use most frequently in a GREG study: **Concept Sets**, **Cohort Definitions**, **Characterisation**, **Incidence Rates**, and **Effectiveness estimation**.
+
+### Concept Sets
+
+Everything in ATLAS starts with a concept set. A concept set is a reusable, named collection of OMOP standard *concept id*s that together represent a clinical entity, such as a disease, a drug, a procedure or a measurement. Before you can define a cohort, you need to define the concepts that describe it.
+
+To build a concept set, you use the `search` module to query the OMOP vocabulary, and then add relevant concepts to a concept set. You can use [Athena](https://athena.ohdsi.org/search-terms/start) for assistance, see [Support with Athena]. An important decision at this stage is whether to include **descendants**: ticking the *Include Descendants* checkbox means that all more-specific child concepts in the SNOMED or RxNorm hierarchy are automatically included, which is usually desirable for conditions and drug ingredients.
+
+> For the GLP-1 receptor agonist vs. acute pancreatitis study, we need at minimum three concept sets:
+>
+> 1.  **GLP-1 receptor agonists**: built by searching for each ingredient (semaglutide, liraglutide, dulaglutide, exenatide, tirzepatide) in the RxNorm vocabulary and including descendants to capture all branded formulations and dose forms automatically.
+> 2.  **Type 2 diabetes mellitus**: built using relevant SNOMED concepts for *type 2 diabetes mellitus* with descendants included, to capture all coded sub-types.
+> 3.  **Acute pancreatitis**: built using relevant SNOMED concepts for *acute pancreatitis* with descendants included, restricted to inpatient or emergency settings to improve specificity, or we could even include drug exposure concepts related to some treatment for acute pancreatitis as a proxy for the diagnosis.
+
+::: callout-tip
+When you add a concept and tick *Include Descendants*, ATLAS shows you the **Descendant Person Count (DPC)**: the number of patients in the connected database who have at least one record mapped to that concept or any of its descendants. A DPC of zero usually means the concept is not used in your data, either because it is not coded or because the data source does not capture it. Always review this before finalising your concept set.
+:::
+
+```{r concept-set-q, echo=FALSE, results='asis'}
+cat(
+  "**Quick check:** In ATLAS, you are building the concept set for semaglutide. You search for 'semaglutide' and find the RxNorm ingredient concept. Should you tick *Include Descendants*?",
+  "\n\n",
+  torf(TRUE),
+  "\n\n"
+)
+```
+
+`r hide("Why?")` Ticking *Include Descendants* ensures that all branded products and dose forms are captured automatically. If you only include the ingredient-level concept without descendants, you will miss every prescription recorded at the product level, which is how most EHR and claims data are coded. `r unhide()`
+
+```{r concept-set-q2, echo=FALSE, results='asis'}
+cat(
+  "**Quick check:** In ATLAS, you are building the concept set for acute pancreatitis. You search for 'pancreatitis' and find the SNOMED concept. You tick *Include Descendants* because this is the standard approach. Have you successfully built the concept set for acute pancreatitis?",
+  "\n\n",
+  torf(FALSE),
+  "\n\n"
+)
+```
+
+`r hide("Why?")` No. Ticking *Include Descendants* does not make your concept set correct immediately. Since you are including all pancreatitis with descendants, you are also incorporating to your concept set chronic pancreatitis, surgery-derived pancreatitis, and others. You should be specific when building your concept set! `r unhide()`
+
+#### Example of acute pancreatitis:
+
+[![Figure. Acute pancreatitis concept set building with ATLAS.](/images/acute_pancreatitis.png){fig-align="center"}](https://atlas-demo.ohdsi.org/#/conceptset/1891170/expression)
+
+------------------------------------------------------------------------
+
+### Cohort definitions
+
+A cohort in ATLAS is a set of persons who satisfy one or more inclusion criteria to be your population of study for a defined duration of time. Every cohort has:
+
+- An **entry event**: the clinical event that marks the start of the cohort period (index date)
+- **Inclusion criteria**: additional conditions that must be met at or before the index date
+- **Cohort exit**: the event or rule that determines when a person leaves the cohort
+
+Cohort definitions in ATLAS are built using a drag-and-drop interface that translates directly into SQL executed against your OMOP database. Once saved, a cohort definition can be reused across all analytical modules, shared with collaborators across the network, and exported as JSON for version control and to be analysed in R (see [The Book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)).
+
+> In our study, we will define five separate exposure cohorts, one per GLP-1 RA agent. Nevertheless, for this example, we will consider them all together for simplicity:
+>
+> - **Entry event:** first prescription (drug exposure start date) for the agent of interest, using the corresponding concept set built in the previous step.
+> - **Inclusion criteria:**
+>   1.  Age ≥ 18 years at index date
+>   2.  Diagnosis of type 2 diabetes mellitus at any time prior to or on the index date (using the diabetes concept set)
+>   3.  No prior prescription of the specific GLP-1 of interest in the 365 days before the index date (washout window to enforce the new-user design)
+>   4.  At least 365 days of continuous observation prior to the index date (to ensure adequate baseline covariate capture)
+> - **Cohort exit:** the earliest of treatment discontinuation, switch to another GLP-1 RA, acute pancreatitis or initiation of a pancreatitis-associated drug, death, or end of observation.
+
+::: callout-important
+A concept set is just a list of concept IDs, it has no temporal logic and no patient-level criteria. A cohort uses concept sets as building blocks but adds the *when*, the *how long*, and the *who else qualifies*. You can think of concept sets as vocabulary and cohorts as grammar.
+:::
+
+#### Example of our cohort of interest:
+
+[![Figure. Example cohort of GLP1-RA created with ATLAS.](/images/atlas_demo_cohort.png){fig-align="center"}](https://atlas-demo.ohdsi.org/#/cohortdefinition/1798116)
+
+::: callout-tip
+Before running any analysis, you should run the built-in diagnostics in ATLAS on your cohort definitions. This produces incidence rates, attrition tables, time distributions, and index event breakdown plots that allow you to detect errors in your cohort logic. We will discuss how to implement this in R in the [Diagnostics section](diagnostics.qmd) of this tutorial.
+:::
+
+------------------------------------------------------------------------
+
+### Characterisation
+
+The Characterisation module allows you to describe the baseline characteristics of one or more cohorts, including demographics, comorbidities, concomitant medications, prior procedures, and measurements, as prevalence and mean values across the cohort at the index date. ATLAS comes with nearly 100 preset feature analyses that perform aggregation and summarisation functions on clinical observations for selected target cohorts, providing potentially thousands of features to describe the cohort's baseline and post-index characteristics.
+
+Characterisation is useful for two distinct purposes in a study:
+
+1.  **Before the analysis**, to understand who is in each cohort and whether the study population makes clinical sense.
+2.  **After propensity score adjustment**, to compare covariate balance between exposure groups before and after adjustment, using the standardised mean difference (SMD). An SMD below 0.1 for all covariates is generally considered indicative of adequate balance.
+
+> Imagine that we run Characterisation in our example study.
+
+```{r char-q, echo=FALSE, results='asis'}
+cat(
+  "You run the characterisation and notice that the prevalence of prior hypertriglyceridaemia is 18% in the semaglutide cohort but 31% in the exenatide cohort. What should you do?",
+  "\n\n",
+  mcq(c(
+    "Ignore it, because small differences in baseline characteristics are expected",
+    answer = "Include hypertriglyceridaemia as a covariate in the propensity score model to adjust for this imbalance",
+    "Exclude all patients with hypertriglyceridaemia from both cohorts",
+    "Re-define the semaglutide cohort to match the exenatide cohort prevalence"
+  )),
+  "\n\n"
+)
+```
+
+`r hide("Why?")` Hypertriglyceridaemia is an established independent risk factor for acute pancreatitis and is differentially distributed between your exposure groups. This is precisely the definition of a confounder. The correct action is to include it in the propensity score model (or as a covariate in the outcome model) so that the hazard ratio comparing the two agents is not distorted by this baseline difference. Excluding patients or re-defining cohorts based on observed imbalances would introduce selection bias and change your target population. `r unhide()`
+
+------------------------------------------------------------------------
+
+### Incidence Rates
+
+The Incidence Rates module estimates the crude incidence rate (or incidence proportion) of an outcome within one or more target cohorts, stratified by calendar time, age, sex, or any combination thereof. It answers the descriptive question: *how often does the outcome occur in this population, per unit of person-time?*
+
+This is not a causal analysis but it is a crucial first step in any study for two reasons: it tells you whether your outcome cohort is capturing events at a plausible rate, and it provides the absolute risk context that HR estimates alone cannot convey.
+
+> In our example study of type 2 diabetes mellitus users of GLP-1 receptor agonists, we estimate the crude incidence rate of acute pancreatitis within each of the five GLP-1 cohorts, stratified by:
+>
+> - **Calendar year** (2023, 2024, 2025), to detect any secular trends or data artefacts
+> - **Age group**, since pancreatitis risk increases with age
+> - **Sex**, to understand baseline differences
+>
+> Since the expected background incidence of acute pancreatitis in a type 2 diabetes population is approximately 2-5 per 1,000 person-years, if your crude rates are an order of magnitude higher or lower, this is a signal to revisit the outcome concept set or cohort exit criteria before proceeding to the causal analysis.
+
+::: callout-tip
+If your incidence rate shows a dramatic spike in a specific calendar year with no clinical explanation, this is almost certainly a data artefact. For example, there could have been a change in coding practice at a data partner, or a batch upload of historical records. Flag this before running the estimation analysis.
+:::
+
+------------------------------------------------------------------------
+
+### Estimation module
+
+The Estimation module is where the causal analysis takes place. It implements a new-user active-comparator cohort design with propensity score adjustment, and produces the hazard ratio (or other effect measure) comparing the outcome risk between two exposure cohorts.
+
+The key components of a Cohort Method analysis in ATLAS are:
+
+- **Target and comparator cohorts**: the two exposure groups being compared (e.g. semaglutide vs. liraglutide)
+- **Outcome cohort**: the event of interest (acute pancreatitis)
+- **Covariates**: features extracted from the baseline window to build the propensity score; ATLAS allows you to select from the same preset feature analyses used in characterisation
+- **Propensity score model**: ATLAS uses LASSO logistic regression by default to estimate the probability of treatment assignment given baseline covariates
+- **Analysis settings**: trimming (e.g. remove top 1% of propensity scores), matching or weighting strategy (1:1 matching, variable ratio matching, IPTW), and outcome model (Cox proportional hazards regression)
+- **Negative controls**: a set of outcome concepts where no true causal effect is expected, used to detect and calibrate for residual systematic error (unmeasured confounding, outcome misclassification, immortal time)
+
+> Because we are comparing five agents in our example study, we run a series of pairwise comparisons (semaglutide vs. liraglutide, semaglutide vs. dulaglutide, semaglutide vs. exenatide, and so on) each as a separate Cohort Method analysis. For each pair:
+>
+> 1.  Propensity scores should be estimated using demographic, comorbidity, and medication covariates from the 365 days prior to the index date
+> 2.  Cohorts should be trimmed to the region of common support (patients with extreme propensity scores who have no plausible counterpart in the other group are excluded)
+> 3.  Cohorts should be exactly matched 1:1 on the propensity score in first instance. If we lose a lot of sample size then we can consider other configurations.
+> 4.  A Cox proportional hazards model should be fitted on the matched sample, with time zero at the index date and time-to-first acute pancreatitis event as the outcome
+> 5.  A set of 50-100 negative control outcomes should be included to assess and calibrate residual bias
+>
+> The primary output is a **calibrated hazard ratio** with 95% confidence interval and empirical *p*-value for each pairwise comparison.
+
+::: callout-note
+A **negative control outcome** is a condition that the exposure is not believed to cause. For instance, "ingrown toenail" or "broken wrist" as outcomes in a drug safety study. If your analysis finds a hazard ratio different from 1.0 for negative controls, this is evidence of systematic error (bias) in your analysis pipeline that is not explained by the drugs themselves. ATLAS uses the distribution of negative control estimates to empirically calibrate your *p*-values and confidence intervals, producing estimates that are honest about the true uncertainty in the analysis. This is now considered best practice in OHDSI network studies.
+:::
+
+------------------------------------------------------------------------
+
+## Summary
+
+| Module | What it does | Output |
+|------------------------|------------------------|------------------------|
+| **Concept Sets** | Define clinical entities using OMOP vocabularies | Reusable list of concept IDs |
+| **Cohort Definitions** | Define populations with temporal logic | Patient-level cohort table |
+| **Characterisation** | Describe baseline features of cohorts | Prevalence tables, SMD plots |
+| **Incidence Rates** | Estimate crude outcome rates | IR per 1,000 person-years |
+| **Estimation** | Causal comparison between two cohorts | Calibrated HR, 95% CI |
+
+Everything you define in ATLAS is exportable as JSON and fully reproducible. A collaborator at another GREG data partner can import your concept sets and cohort definitions directly into their own ATLAS instance and run the identical analysis on their local data, which is the foundation of the federated network study approach used across DARWIN EU® and the OHDSI network.
+
+## Support with Athena
+
+[Athena](https://athena.ohdsi.org/search-terms/start) is a free website that you can use to look for the *concept id*s that represent the variable of your interest. It has a similar outcome than the search tool in ATLAS, but it is faster because it does not render counts for concepts. In Athena, you can type to the search bar your concept of interest, for example "type 2 diabetes", and you obtain an extensive list of concepts that might appear in a CDM. For simplicity, when searching for relevant concepts, you will filter by *standard* and *valid*, and you might want to filter further by domain of the concept (whether it is a condition, a measurement, an observation, a procedure, drug exposure, device...).

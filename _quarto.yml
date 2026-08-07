@@ -1,56 +1,47 @@
 project:
   type: website
   output-dir: docs
-  
-filters:
-  - shinylive
+
 website:
-  title: "GREGonBoard"
-  #site-url: https://onboardingGREG.eu
-  
+  title: GREGonBoard
   navbar:
     background: primary
     search: true
     left:
-      - text: Home
-        href: index.qmd
-
+    - text: Home
+      href: index.qmd
   sidebar:
     style: docked
     search: true
     contents:
-      - index.qmd
-
-      - section: "Foundations"
-        contents:
-          - chapters/OHDSI.qmd
-          - chapters/OMOPCDM.qmd
-          - chapters/WhyGREG.qmd
-
-      - section: "Planning a study"
-        contents:
-          - chapters/study_outline.qmd
-          - chapters/study_protocol.qmd
-          
-      - section: "Feasibility assessment"
-        contents:
-          - chapters/standard_procedure.qmd
-          - chapters/required_documents.qmd
-
-      - section: "Design & Execution"
-        contents:
-          - chapters/atlas.qmd
-          - chapters/phenotyping.qmd
-          - chapters/diagnostics.qmd
-          - chapters/incidenceprevalence.qmd
-          - chapters/characterisation.qmd
-          - chapters/drugutilisation.qmd
-          - chapters/effectiveness.qmd
-
-      - section: "Reporting a study"
-        contents:
-          - chapters/study_report.qmd
-
+    - index.qmd
+    - section: Foundations
+      contents:
+      - chapters/OHDSI.qmd
+      - chapters/OMOPCDM.qmd
+      - chapters/WhyGREG.qmd
+    - section: Planning a study
+      contents:
+      - chapters/study_outline.qmd
+      - chapters/study_protocol.qmd
+    - section: Feasibility assessment
+      contents:
+      - chapters/standard_procedure.qmd
+    - section: Design & Execution
+      contents:
+      - chapters/phenotyping.qmd
+      - chapters/atlas.qmd
+      - chapters/using_R.qmd
+      - chapters/codelistgenerator.qmd
+      - chapters/cohortconstruction.qmd
+      - chapters/diagnostics.qmd
+      - chapters/incidenceprevalence.qmd
+      - chapters/characterisation.qmd
+      - chapters/drugutilisation.qmd
+      - chapters/effectiveness.qmd
+    - section: Reporting a study
+      contents: 
+      - chapters/study_report.qmd
 format:
   html:
     theme:
@@ -62,5 +53,9 @@ format:
     code-copy: true
     code-fold: show
     smooth-scroll: true
+    css: include/webex.css
+    include-after-body: include/webex.js
     
+bibliography: references.bib
+csl: american-medical-association-10th-edition.csl
 editor: visual

@@ -1,4 +1,300 @@
 ---
-title: "Effectiveness"
+title: "Estimating effectiveness"
 format: html
 ---
+
+```{r setup, include=FALSE}
+library(webexercises)
+```
+
+## From description to causal inference
+
+All the analyses in previous chapters were descriptive or exploratory — they characterise populations, estimate rates, and describe drug utilisation. An effectiveness (or comparative safety) study takes a fundamentally different step: it attempts to **estimate a causal effect** of one treatment compared to another.
+
+This is harder. Confounding — the systematic difference between who receives each treatment — is the central threat. In a randomised trial, random allocation ensures that confounders are distributed equally between groups. In observational data, we must adjust for confounding analytically, using tools like propensity scores.
+
+The OHDSI approach to causal inference from observational data is the **new-user active-comparator cohort design with propensity score adjustment and negative control calibration**, implemented in the `CohortMethod` R package (part of HADES).
+
+::: callout-note
+## For epidemiologists
+
+This chapter implements what Hernán and Robins call the "target trial emulation" framework: we specify the hypothetical trial that would answer our question (the estimand), and then use the observational data to emulate it as closely as possible.
+:::
+
+::: callout-note
+## For regulators and HTA bodies
+
+The methods in this chapter align with the ICH E9(R1) estimand framework and the ENCePP Guide on methodological standards. The negative control calibration step is specifically designed to address the systematic error (residual confounding, outcome misclassification) that EMA flagged as the primary concern in RWE submissions.
+:::
+
+------------------------------------------------------------------------
+
+## Setup
+
+```{r setup-packages, message=FALSE, warning=FALSE, eval=FALSE}
+library(CohortMethod)
+library(Cyclops)         # LASSO logistic regression for PS
+library(DatabaseConnector)
+library(FeatureExtraction)
+library(EmpiricalCalibration)  # negative control calibration
+library(dplyr)
+
+# CohortMethod works with OHDSI's DatabaseConnector rather than CDMConnector
+# Connection details depend on your database backend
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms     = "postgresql",
+  server   = Sys.getenv("CDM_SERVER"),
+  user     = Sys.getenv("CDM_USER"),
+  password = Sys.getenv("CDM_PASSWORD"),
+  port     = 5432
+)
+```
+
+::: callout-tip
+## CohortMethod uses a different connection approach
+
+Unlike the DARWIN EU packages (CDMConnector-based), CohortMethod uses `DatabaseConnector`. Both ultimately connect to the same OMOP CDM, but you need to specify the CDM schema and results schema separately in the CohortMethod functions.
+:::
+
+------------------------------------------------------------------------
+
+## The target estimand
+
+Before writing any code, state the estimand precisely (ICH E9(R1)):
+
+> **Population:** Adult T2DM patients initiating a GLP-1 RA for the first time, with 365 days prior observation and no prior GLP-1 RA use
+>
+> **Treatment:** Semaglutide vs. liraglutide (one pairwise comparison shown; repeat for all pairs)
+>
+> **Variable:** Time to first acute pancreatitis event (inpatient/emergency)
+>
+> **Summary measure:** Hazard ratio from Cox proportional hazards regression on propensity-score-matched cohorts
+>
+> **Intercurrent event strategy:** Hypothetical — patients censored at treatment discontinuation (gap \>60 days), switch to other GLP-1 RA, or initiation of pancreatitis-associated drug
+
+------------------------------------------------------------------------
+
+## Step 1: Define covariates for propensity score
+
+```{r covariates, eval=FALSE}
+# FeatureExtraction defines which baseline features go into the PS model
+covariateSettings <- FeatureExtraction::createDefaultCovariateSettings(
+  excludedCovariateConceptIds  = c(
+    # Exclude concepts that are proxies for treatment assignment
+    # (e.g., the drug itself, its class members)
+  ),
+  addDescendantsToExclude      = TRUE
+)
+```
+
+The default covariate settings extract thousands of binary features from the 365-day pre-index window: all conditions, drugs, procedures, and measurements. The LASSO regression will select the subset that is informative for predicting treatment assignment.
+
+------------------------------------------------------------------------
+
+## Step 2: Specify the CohortMethod analysis
+
+```{r cohort-method-spec, eval=FALSE}
+# Build the analysis specification
+cmAnalysis <- CohortMethod::createCmAnalysis(
+  analysisId        = 1,
+  description       = "Semaglutide vs Liraglutide — AP outcome — PS matching",
+
+  # Propensity score model
+  createStudyPopArgs = CohortMethod::createCreateStudyPopulationArgs(
+    removeSubjectsWithPriorOutcome = TRUE,   # exclude prior AP
+    priorOutcomeLookback           = 99999,
+    riskWindowStart                = 0,
+    startAnchor                    = "cohort start",
+    riskWindowEnd                  = 1095,   # 3 years
+    endAnchor                      = "cohort start",
+    minDaysAtRisk                  = 1
+  ),
+
+  # Fit propensity score using LASSO logistic regression
+  fitOutcomeModelArgs = CohortMethod::createFitOutcomeModelArgs(
+    modelType        = "cox",
+    stratified       = TRUE    # stratified Cox on matched pairs
+  )
+)
+```
+
+------------------------------------------------------------------------
+
+## Step 3: Propensity score estimation and matching
+
+```{r ps-matching, eval=FALSE}
+# Extract cohorts and covariates
+cohortMethodData <- CohortMethod::getDbCohortMethodData(
+  connectionDetails      = connectionDetails,
+  cdmDatabaseSchema      = "omop_cdm",
+  targetId               = 1,    # semaglutide cohort_definition_id
+  comparatorId           = 2,    # liraglutide cohort_definition_id
+  outcomeIds             = 3,    # acute pancreatitis outcome cohort
+  exposureDatabaseSchema = "results",
+  exposureTable          = "glp1_cohorts",
+  outcomeDatabaseSchema  = "results",
+  outcomeTable           = "ap_cohort",
+  covariateSettings      = covariateSettings
+)
+
+# Create study population
+studyPop <- CohortMethod::createStudyPopulation(
+  cohortMethodData       = cohortMethodData,
+  outcomeId              = 3,
+  removeSubjectsWithPriorOutcome = TRUE,
+  riskWindowStart        = 0,
+  riskWindowEnd          = 1095
+)
+
+# Estimate propensity score (LASSO logistic regression via Cyclops)
+ps <- CohortMethod::createPs(
+  cohortMethodData = cohortMethodData,
+  population       = studyPop
+)
+
+# Plot PS distribution — check for overlap before matching
+CohortMethod::plotPs(ps,
+  scale         = "preference",
+  showCountsLabel = TRUE,
+  showAucLabel    = TRUE
+)
+```
+
+::: callout-tip
+## The preference score plot is your most important diagnostic
+
+Before matching, plot the propensity score distributions of the two cohorts on the **preference score** scale (which re-scales the PS to account for prevalence differences). If the distributions do not overlap substantially, matching is impossible for a large fraction of patients — you have an equipoise problem and your causal estimate will be extrapolating outside the region of common support.
+:::
+
+```{r matching, eval=FALSE}
+# 1:1 nearest-neighbour matching on log PS
+matchedPop <- CohortMethod::matchOnPs(
+  population      = ps,
+  caliper         = 0.2,           # 0.2 SD of log PS
+  caliperScale    = "standardized logit",
+  maxRatio        = 1              # 1:1 matching
+)
+
+# Check balance after matching
+bal <- CohortMethod::computeCovariateBalance(matchedPop, cohortMethodData)
+CohortMethod::plotCovariateBalanceScatterPlot(bal,
+  showCovariateCountLabel = TRUE,
+  showMaxLabel            = TRUE
+)
+```
+
+> **Our study:** After 1:1 matching, we expect the Love plot to show all covariates with SMD below 0.1. If several covariates remain above 0.1 after matching, consider switching to IPTW or adding interaction terms to the propensity score model.
+
+------------------------------------------------------------------------
+
+## Step 4: Outcome model (Cox regression)
+
+```{r cox, eval=FALSE}
+# Fit stratified Cox model on matched pairs
+outcomeModel <- CohortMethod::fitOutcomeModel(
+  population       = matchedPop,
+  cohortMethodData = cohortMethodData,
+  outcomeId        = 3,
+  modelType        = "cox",
+  stratified       = TRUE    # condition on matched pairs
+)
+
+summary(outcomeModel)
+# Key output: HR (95% CI), p-value
+```
+
+------------------------------------------------------------------------
+
+## Step 5: Negative control calibration
+
+This is the step that distinguishes a rigorous OHDSI analysis from a conventional pharmacoepidemiology study. Negative controls are outcomes where we know (from clinical reasoning) that the exposure has no causal effect. If our analysis pipeline has systematic error (residual confounding, outcome misclassification, time-at-risk misspecification), the negative control estimates will not be centred on a HR of 1.0.
+
+```{r negative-controls, eval=FALSE}
+# Negative control outcomes (conditions causally unrelated to GLP-1 RAs)
+# e.g. ingrown toenail, ankle sprain, foreign body in ear
+negativeControlIds <- c(
+  440448,  # ingrown nail
+  81151,   # ankle sprain
+  374914   # foreign body in ear
+  # ... typically 50-100 negative controls
+)
+
+# Run the same analysis pipeline on all negative controls
+ncResults <- CohortMethod::runCmAnalyses(
+  connectionDetails = connectionDetails,
+  # ... same settings as primary analysis
+  # ... but with outcomeIds = negativeControlIds
+)
+
+# Fit calibration model
+nullDist <- EmpiricalCalibration::fitMcmcNull(
+  logRr   = ncResults$logRr,
+  seLogRr = ncResults$seLogRr
+)
+
+# Plot the null distribution
+EmpiricalCalibration::plotCalibrationEffect(
+  logRrNegatives  = ncResults$logRr,
+  seLogRrNegatives = ncResults$seLogRr,
+  logRrPositives  = log(outcomeModel$outcomeModelTreatmentEstimate$estimate),
+  seLogRrPositives = outcomeModel$outcomeModelTreatmentEstimate$logRrSe
+)
+
+# Apply calibration to the primary estimate
+calibratedEstimate <- EmpiricalCalibration::calibrateP(
+  null    = nullDist,
+  logRr   = log(outcomeModel$outcomeModelTreatmentEstimate$estimate),
+  seLogRr = outcomeModel$outcomeModelTreatmentEstimate$logRrSe
+)
+calibratedEstimate
+```
+
+> **Our study:** If the negative control estimates are systematically shifted above HR = 1.0 (suggesting our analysis over-estimates risk), this means there is residual confounding — semaglutide users are sicker than liraglutide users in ways our propensity score did not fully capture. The calibrated HR corrects for this bias empirically. A calibrated p-value above the threshold after this correction means the primary finding is not robust to systematic error.
+
+```{r q1, echo=FALSE, results='asis'}
+cat(
+  "**Quick check:** After running 75 negative control outcomes through the same pipeline",
+  "as your primary analysis, you find that the median HR for negative controls is 1.28",
+  "(rather than the expected 1.0). What does this tell you?\n\n",
+  mcq(c(
+    "GLP-1 RAs increase risk of most conditions by 28%, which is a class effect",
+    "Your negative control outcomes were not truly negative controls",
+    answer = "There is systematic positive bias in your analysis — likely residual confounding — which is inflating all HRs by approximately 28%; the calibration step will correct for this",
+    "The propensity score model is perfectly calibrated"
+  )), "\n\n"
+)
+```
+
+`r hide("Explanation")` A systematic shift in negative control estimates away from HR = 1.0 is the definition of systematic error in your analytical pipeline. Since negative controls are chosen specifically because GLP-1 RAs should have no causal effect on them, any deviation from 1.0 must be due to bias in the analysis — most commonly residual confounding (sicker patients in one group), differential observation (one group has more healthcare contacts and therefore more coded diagnoses), or immortal time bias. The `EmpiricalCalibration` package uses the distribution of negative control estimates to model this systematic error and correct the primary estimate and its p-value accordingly. `r unhide()`
+
+------------------------------------------------------------------------
+
+## Step 6: Kaplan-Meier plot
+
+```{r km-plot, eval=FALSE}
+CohortMethod::plotKaplanMeier(
+  population  = matchedPop,
+  outcomeId   = 3,
+  confidenceIntervals = TRUE
+)
+```
+
+------------------------------------------------------------------------
+
+## Interpreting the hazard ratio
+
+```{r q2, echo=FALSE, results='asis'}
+cat(
+  "**Quick check:** Your calibrated HR for acute pancreatitis comparing",
+  "semaglutide vs. liraglutide is 0.87 (95% CI: 0.71–1.06, calibrated p = 0.18).",
+  "What is the correct conclusion?\n\n",
+  mcq(c(
+    "Semaglutide is significantly safer than liraglutide for pancreatitis",
+    "Liraglutide is significantly safer than semaglutide for pancreatitis",
+    answer = "There is no statistically significant difference in acute pancreatitis risk between semaglutide and liraglutide; the point estimate suggests a possible 13% lower risk with semaglutide but the confidence interval includes 1.0",
+    "The study is underpowered and should be repeated with a larger sample"
+  )), "\n\n"
+)
+```
+
+`r hide("Explanation")` A HR of 0.87 with a 95% CI of 0.71–1.06 means the confidence interval includes 1.0 (no difference). The calibrated p-value of 0.18 is above any conventional threshold for statistical significance. The correct conclusion is that we found no statistically significant difference in acute pancreatitis risk between the two agents. The point estimate is directionally consistent with a small advantage for semaglutide, but the evidence is insufficient to conclude a true difference exists. This is a clinically important null finding — it provides reassurance that both agents carry similar pancreatitis risk in real-world T2DM populations. `r unhide()`--- title: "Effectiveness" format: html ---

@@ -77,6 +77,7 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -274,7 +275,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/atlas.html">ATLAS</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/atlas.html">ATLAS</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -367,12 +368,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Standard Procedure</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/required_documents.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Documents</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -386,14 +381,32 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phenotyping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">ATLAS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Phenotyping</span></a>
+  <a href="../chapters/using_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDM using R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/codelistgenerator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Codelist Generator</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/cohortconstruction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cohort Construction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -423,7 +436,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Effectiveness</span></a>
+ <span class="menu-text">Estimating effectiveness</span></a>
   </div>
 </li>
       </ul>
@@ -450,14 +463,31 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-atlas" id="toc-what-is-atlas" class="nav-link active" data-scroll-target="#what-is-atlas"><span class="header-section-number">1</span> What is ATLAS?</a></li>
+  <li><a href="#tutorials-and-resources" id="toc-tutorials-and-resources" class="nav-link" data-scroll-target="#tutorials-and-resources"><span class="header-section-number">2</span> Tutorials and resources</a></li>
+  <li><a href="#brief-introduction-to-atlas" id="toc-brief-introduction-to-atlas" class="nav-link" data-scroll-target="#brief-introduction-to-atlas"><span class="header-section-number">3</span> Brief introduction to ATLAS</a>
+  <ul class="collapse">
+  <li><a href="#concept-sets" id="toc-concept-sets" class="nav-link" data-scroll-target="#concept-sets"><span class="header-section-number">3.1</span> Concept Sets</a></li>
+  <li><a href="#cohort-definitions" id="toc-cohort-definitions" class="nav-link" data-scroll-target="#cohort-definitions"><span class="header-section-number">3.2</span> Cohort definitions</a></li>
+  <li><a href="#characterisation" id="toc-characterisation" class="nav-link" data-scroll-target="#characterisation"><span class="header-section-number">3.3</span> Characterisation</a></li>
+  <li><a href="#incidence-rates" id="toc-incidence-rates" class="nav-link" data-scroll-target="#incidence-rates"><span class="header-section-number">3.4</span> Incidence Rates</a></li>
+  <li><a href="#estimation-module" id="toc-estimation-module" class="nav-link" data-scroll-target="#estimation-module"><span class="header-section-number">3.5</span> Estimation module</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">4</span> Summary</a></li>
+  <li><a href="#support-with-athena" id="toc-support-with-athena" class="nav-link" data-scroll-target="#support-with-athena"><span class="header-section-number">5</span> Support with Athena</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/atlas.html">ATLAS</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/atlas.html">ATLAS</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">ATLAS</h1>
 </div>
@@ -476,10 +506,488 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="what-is-atlas" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-atlas"><span class="header-section-number">1</span> What is ATLAS?</h2>
+<p>ATLAS is a free, publicly available web-based, open-source software application developed by the OHDSI community to support the design and execution of observational analyses to generate real world evidence from patient level observational data. You have both the public <a href="https://atlas-demo.ohdsi.org/">ATLAS demo</a>, that uses information from the <a href="https://portal.ehden.eu/">EHDEN portal</a>, and private ATLAS linked to your own database.</p>
+</section>
+<section id="tutorials-and-resources" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="tutorials-and-resources"><span class="header-section-number">2</span> Tutorials and resources</h2>
+<p>There are two main sources of information to make ATLAS work and understand what it does:</p>
+<ul>
+<li><p><a href="https://ohdsi.github.io/TheBookOfOhdsi/OhdsiAnalyticsTools.html#atlas">The Book of OHDSI</a></p></li>
+<li><p><a href="https://github.com/OHDSI/Atlas/wiki">ATLAS tutorials</a></p></li>
+</ul>
+</section>
+<section id="brief-introduction-to-atlas" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="brief-introduction-to-atlas"><span class="header-section-number">3</span> Brief introduction to ATLAS</h2>
+<p>ATLAS is organised around a left-hand navigation panel with several modules, each corresponding to a distinct analytical task. Here you will find a brief description of the five modules you will use most frequently in a GREG study: <strong>Concept Sets</strong>, <strong>Cohort Definitions</strong>, <strong>Characterisation</strong>, <strong>Incidence Rates</strong>, and <strong>Effectiveness estimation</strong>.</p>
+<section id="concept-sets" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="concept-sets"><span class="header-section-number">3.1</span> Concept Sets</h3>
+<p>Everything in ATLAS starts with a concept set. A concept set is a reusable, named collection of OMOP standard <em>concept id</em>s that together represent a clinical entity, such as a disease, a drug, a procedure or a measurement. Before you can define a cohort, you need to define the concepts that describe it.</p>
+<p>To build a concept set, you use the <code>search</code> module to query the OMOP vocabulary, and then add relevant concepts to a concept set. You can use <a href="https://athena.ohdsi.org/search-terms/start">Athena</a> for assistance, see <a href="#support-with-athena">Support with Athena</a>. An important decision at this stage is whether to include <strong>descendants</strong>: ticking the <em>Include Descendants</em> checkbox means that all more-specific child concepts in the SNOMED or RxNorm hierarchy are automatically included, which is usually desirable for conditions and drug ingredients.</p>
+<blockquote class="blockquote">
+<p>For the GLP-1 receptor agonist vs.&nbsp;acute pancreatitis study, we need at minimum three concept sets:</p>
+<ol type="1">
+<li><strong>GLP-1 receptor agonists</strong>: built by searching for each ingredient (semaglutide, liraglutide, dulaglutide, exenatide, tirzepatide) in the RxNorm vocabulary and including descendants to capture all branded formulations and dose forms automatically.</li>
+<li><strong>Type 2 diabetes mellitus</strong>: built using relevant SNOMED concepts for <em>type 2 diabetes mellitus</em> with descendants included, to capture all coded sub-types.</li>
+<li><strong>Acute pancreatitis</strong>: built using relevant SNOMED concepts for <em>acute pancreatitis</em> with descendants included, restricted to inpatient or emergency settings to improve specificity, or we could even include drug exposure concepts related to some treatment for acute pancreatitis as a proxy for the diagnosis.</li>
+</ol>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you add a concept and tick <em>Include Descendants</em>, ATLAS shows you the <strong>Descendant Person Count (DPC)</strong>: the number of patients in the connected database who have at least one record mapped to that concept or any of its descendants. A DPC of zero usually means the concept is not used in your data, either because it is not coded or because the data source does not capture it. Always review this before finalising your concept set.</p>
+</div>
+</div>
+<p><strong>Quick check:</strong> In ATLAS, you are building the concept set for semaglutide. You search for ‘semaglutide’ and find the RxNorm ingredient concept. Should you tick <em>Include Descendants</em>?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></p>
+<div class="webex-solution">
+<button>
+Why?
+</button>
+<p>Ticking <em>Include Descendants</em> ensures that all branded products and dose forms are captured automatically. If you only include the ingredient-level concept without descendants, you will miss every prescription recorded at the product level, which is how most EHR and claims data are coded.</p>
+</div>
+<p><strong>Quick check:</strong> In ATLAS, you are building the concept set for acute pancreatitis. You search for ‘pancreatitis’ and find the SNOMED concept. You tick <em>Include Descendants</em> because this is the standard approach. Have you successfully built the concept set for acute pancreatitis?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
+<div class="webex-solution">
+<button>
+Why?
+</button>
+<p>No.&nbsp;Ticking <em>Include Descendants</em> does not make your concept set correct immediately. Since you are including all pancreatitis with descendants, you are also incorporating to your concept set chronic pancreatitis, surgery-derived pancreatitis, and others. You should be specific when building your concept set!</p>
+</div>
+<section id="example-of-acute-pancreatitis" class="level4" data-number="3.1.1">
+<h4 data-number="3.1.1" class="anchored" data-anchor-id="example-of-acute-pancreatitis"><span class="header-section-number">3.1.1</span> Example of acute pancreatitis:</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://atlas-demo.ohdsi.org/#/conceptset/1891170/expression"><img src="..\images/acute_pancreatitis.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
+</figure>
+</div>
+<figcaption>Figure. Acute pancreatitis concept set building with ATLAS.</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="cohort-definitions" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="cohort-definitions"><span class="header-section-number">3.2</span> Cohort definitions</h3>
+<p>A cohort in ATLAS is a set of persons who satisfy one or more inclusion criteria to be your population of study for a defined duration of time. Every cohort has:</p>
+<ul>
+<li>An <strong>entry event</strong>: the clinical event that marks the start of the cohort period (index date)</li>
+<li><strong>Inclusion criteria</strong>: additional conditions that must be met at or before the index date</li>
+<li><strong>Cohort exit</strong>: the event or rule that determines when a person leaves the cohort</li>
+</ul>
+<p>Cohort definitions in ATLAS are built using a drag-and-drop interface that translates directly into SQL executed against your OMOP database. Once saved, a cohort definition can be reused across all analytical modules, shared with collaborators across the network, and exported as JSON for version control and to be analysed in R (see <a href="https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html">The Book of OHDSI</a>).</p>
+<blockquote class="blockquote">
+<p>In our study, we will define five separate exposure cohorts, one per GLP-1 RA agent. Nevertheless, for this example, we will consider them all together for simplicity:</p>
+<ul>
+<li><strong>Entry event:</strong> first prescription (drug exposure start date) for the agent of interest, using the corresponding concept set built in the previous step.</li>
+<li><strong>Inclusion criteria:</strong>
+<ol type="1">
+<li>Age ≥ 18 years at index date</li>
+<li>Diagnosis of type 2 diabetes mellitus at any time prior to or on the index date (using the diabetes concept set)</li>
+<li>No prior prescription of the specific GLP-1 of interest in the 365 days before the index date (washout window to enforce the new-user design)</li>
+<li>At least 365 days of continuous observation prior to the index date (to ensure adequate baseline covariate capture)</li>
+</ol></li>
+<li><strong>Cohort exit:</strong> the earliest of treatment discontinuation, switch to another GLP-1 RA, acute pancreatitis or initiation of a pancreatitis-associated drug, death, or end of observation.</li>
+</ul>
+</blockquote>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A concept set is just a list of concept IDs, it has no temporal logic and no patient-level criteria. A cohort uses concept sets as building blocks but adds the <em>when</em>, the <em>how long</em>, and the <em>who else qualifies</em>. You can think of concept sets as vocabulary and cohorts as grammar.</p>
+</div>
+</div>
+<section id="example-of-our-cohort-of-interest" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="example-of-our-cohort-of-interest"><span class="header-section-number">3.2.1</span> Example of our cohort of interest:</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://atlas-demo.ohdsi.org/#/cohortdefinition/1798116"><img src="..\images/atlas_demo_cohort.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
+</figure>
+</div>
+<figcaption>Figure. Example cohort of GLP1-RA created with ATLAS.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before running any analysis, you should run the built-in diagnostics in ATLAS on your cohort definitions. This produces incidence rates, attrition tables, time distributions, and index event breakdown plots that allow you to detect errors in your cohort logic. We will discuss how to implement this in R in the <a href="../chapters/diagnostics.html">Diagnostics section</a> of this tutorial.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="characterisation" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="characterisation"><span class="header-section-number">3.3</span> Characterisation</h3>
+<p>The Characterisation module allows you to describe the baseline characteristics of one or more cohorts, including demographics, comorbidities, concomitant medications, prior procedures, and measurements, as prevalence and mean values across the cohort at the index date. ATLAS comes with nearly 100 preset feature analyses that perform aggregation and summarisation functions on clinical observations for selected target cohorts, providing potentially thousands of features to describe the cohort’s baseline and post-index characteristics.</p>
+<p>Characterisation is useful for two distinct purposes in a study:</p>
+<ol type="1">
+<li><strong>Before the analysis</strong>, to understand who is in each cohort and whether the study population makes clinical sense.</li>
+<li><strong>After propensity score adjustment</strong>, to compare covariate balance between exposure groups before and after adjustment, using the standardised mean difference (SMD). An SMD below 0.1 for all covariates is generally considered indicative of adequate balance.</li>
+</ol>
+<blockquote class="blockquote">
+<p>Imagine that we run Characterisation in our example study.</p>
+</blockquote>
+<p>You run the characterisation and notice that the prevalence of prior hypertriglyceridaemia is 18% in the semaglutide cohort but 31% in the exenatide cohort. What should you do?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">Ignore it, because small differences in baseline characteristics are expected</option><option value="answer">Include hypertriglyceridaemia as a covariate in the propensity score model to adjust for this imbalance</option><option value="">Exclude all patients with hypertriglyceridaemia from both cohorts</option><option value="">Re-define the semaglutide cohort to match the exenatide cohort prevalence</option></select></p>
+<div class="webex-solution">
+<button>
+Why?
+</button>
+<p>Hypertriglyceridaemia is an established independent risk factor for acute pancreatitis and is differentially distributed between your exposure groups. This is precisely the definition of a confounder. The correct action is to include it in the propensity score model (or as a covariate in the outcome model) so that the hazard ratio comparing the two agents is not distorted by this baseline difference. Excluding patients or re-defining cohorts based on observed imbalances would introduce selection bias and change your target population.</p>
+</div>
+<hr>
+</section>
+<section id="incidence-rates" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="incidence-rates"><span class="header-section-number">3.4</span> Incidence Rates</h3>
+<p>The Incidence Rates module estimates the crude incidence rate (or incidence proportion) of an outcome within one or more target cohorts, stratified by calendar time, age, sex, or any combination thereof. It answers the descriptive question: <em>how often does the outcome occur in this population, per unit of person-time?</em></p>
+<p>This is not a causal analysis but it is a crucial first step in any study for two reasons: it tells you whether your outcome cohort is capturing events at a plausible rate, and it provides the absolute risk context that HR estimates alone cannot convey.</p>
+<blockquote class="blockquote">
+<p>In our example study of type 2 diabetes mellitus users of GLP-1 receptor agonists, we estimate the crude incidence rate of acute pancreatitis within each of the five GLP-1 cohorts, stratified by:</p>
+<ul>
+<li><strong>Calendar year</strong> (2023, 2024, 2025), to detect any secular trends or data artefacts</li>
+<li><strong>Age group</strong>, since pancreatitis risk increases with age</li>
+<li><strong>Sex</strong>, to understand baseline differences</li>
+</ul>
+<p>Since the expected background incidence of acute pancreatitis in a type 2 diabetes population is approximately 2-5 per 1,000 person-years, if your crude rates are an order of magnitude higher or lower, this is a signal to revisit the outcome concept set or cohort exit criteria before proceeding to the causal analysis.</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If your incidence rate shows a dramatic spike in a specific calendar year with no clinical explanation, this is almost certainly a data artefact. For example, there could have been a change in coding practice at a data partner, or a batch upload of historical records. Flag this before running the estimation analysis.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="estimation-module" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="estimation-module"><span class="header-section-number">3.5</span> Estimation module</h3>
+<p>The Estimation module is where the causal analysis takes place. It implements a new-user active-comparator cohort design with propensity score adjustment, and produces the hazard ratio (or other effect measure) comparing the outcome risk between two exposure cohorts.</p>
+<p>The key components of a Cohort Method analysis in ATLAS are:</p>
+<ul>
+<li><strong>Target and comparator cohorts</strong>: the two exposure groups being compared (e.g.&nbsp;semaglutide vs.&nbsp;liraglutide)</li>
+<li><strong>Outcome cohort</strong>: the event of interest (acute pancreatitis)</li>
+<li><strong>Covariates</strong>: features extracted from the baseline window to build the propensity score; ATLAS allows you to select from the same preset feature analyses used in characterisation</li>
+<li><strong>Propensity score model</strong>: ATLAS uses LASSO logistic regression by default to estimate the probability of treatment assignment given baseline covariates</li>
+<li><strong>Analysis settings</strong>: trimming (e.g.&nbsp;remove top 1% of propensity scores), matching or weighting strategy (1:1 matching, variable ratio matching, IPTW), and outcome model (Cox proportional hazards regression)</li>
+<li><strong>Negative controls</strong>: a set of outcome concepts where no true causal effect is expected, used to detect and calibrate for residual systematic error (unmeasured confounding, outcome misclassification, immortal time)</li>
+</ul>
+<blockquote class="blockquote">
+<p>Because we are comparing five agents in our example study, we run a series of pairwise comparisons (semaglutide vs.&nbsp;liraglutide, semaglutide vs.&nbsp;dulaglutide, semaglutide vs.&nbsp;exenatide, and so on) each as a separate Cohort Method analysis. For each pair:</p>
+<ol type="1">
+<li>Propensity scores should be estimated using demographic, comorbidity, and medication covariates from the 365 days prior to the index date</li>
+<li>Cohorts should be trimmed to the region of common support (patients with extreme propensity scores who have no plausible counterpart in the other group are excluded)</li>
+<li>Cohorts should be exactly matched 1:1 on the propensity score in first instance. If we lose a lot of sample size then we can consider other configurations.</li>
+<li>A Cox proportional hazards model should be fitted on the matched sample, with time zero at the index date and time-to-first acute pancreatitis event as the outcome</li>
+<li>A set of 50-100 negative control outcomes should be included to assess and calibrate residual bias</li>
+</ol>
+<p>The primary output is a <strong>calibrated hazard ratio</strong> with 95% confidence interval and empirical <em>p</em>-value for each pairwise comparison.</p>
+</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>negative control outcome</strong> is a condition that the exposure is not believed to cause. For instance, “ingrown toenail” or “broken wrist” as outcomes in a drug safety study. If your analysis finds a hazard ratio different from 1.0 for negative controls, this is evidence of systematic error (bias) in your analysis pipeline that is not explained by the drugs themselves. ATLAS uses the distribution of negative control estimates to empirically calibrate your <em>p</em>-values and confidence intervals, producing estimates that are honest about the true uncertainty in the analysis. This is now considered best practice in OHDSI network studies.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="summary" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="summary"><span class="header-section-number">4</span> Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>What it does</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Concept Sets</strong></td>
+<td>Define clinical entities using OMOP vocabularies</td>
+<td>Reusable list of concept IDs</td>
+</tr>
+<tr class="even">
+<td><strong>Cohort Definitions</strong></td>
+<td>Define populations with temporal logic</td>
+<td>Patient-level cohort table</td>
+</tr>
+<tr class="odd">
+<td><strong>Characterisation</strong></td>
+<td>Describe baseline features of cohorts</td>
+<td>Prevalence tables, SMD plots</td>
+</tr>
+<tr class="even">
+<td><strong>Incidence Rates</strong></td>
+<td>Estimate crude outcome rates</td>
+<td>IR per 1,000 person-years</td>
+</tr>
+<tr class="odd">
+<td><strong>Estimation</strong></td>
+<td>Causal comparison between two cohorts</td>
+<td>Calibrated HR, 95% CI</td>
+</tr>
+</tbody>
+</table>
+<p>Everything you define in ATLAS is exportable as JSON and fully reproducible. A collaborator at another GREG data partner can import your concept sets and cohort definitions directly into their own ATLAS instance and run the identical analysis on their local data, which is the foundation of the federated network study approach used across DARWIN EU® and the OHDSI network.</p>
+</section>
+<section id="support-with-athena" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="support-with-athena"><span class="header-section-number">5</span> Support with Athena</h2>
+<p><a href="https://athena.ohdsi.org/search-terms/start">Athena</a> is a free website that you can use to look for the <em>concept id</em>s that represent the variable of your interest. It has a similar outcome than the search tool in ATLAS, but it is faster because it does not render counts for concepts. In Athena, you can type to the search bar your concept of interest, for example “type 2 diabetes”, and you obtain an extensive list of concepts that might appear in a CDM. For simplicity, when searching for relevant concepts, you will filter by <em>standard</em> and <em>valid</em>, and you might want to filter further by domain of the concept (whether it is a condition, a measurement, an observation, a procedure, drug exposure, device…).</p>
 
 
+</section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

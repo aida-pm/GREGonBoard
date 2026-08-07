@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Effectiveness – GREGonBoard</title>
+<title>effectiveness – GREGonBoard</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -77,6 +112,7 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -274,7 +310,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/effectiveness.html">Effectiveness</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/effectiveness.html">Estimating effectiveness</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -367,12 +403,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Standard Procedure</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/required_documents.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Documents</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -388,6 +418,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/using_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDM using R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -423,7 +459,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Effectiveness</span></a>
+ <span class="menu-text">Estimating effectiveness</span></a>
   </div>
 </li>
       </ul>
@@ -450,36 +486,556 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-description-to-causal-inference" id="toc-from-description-to-causal-inference" class="nav-link active" data-scroll-target="#from-description-to-causal-inference"><span class="header-section-number">1</span> From description to causal inference</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
+  <li><a href="#the-target-estimand" id="toc-the-target-estimand" class="nav-link" data-scroll-target="#the-target-estimand"><span class="header-section-number">3</span> The target estimand</a></li>
+  <li><a href="#step-1-define-covariates-for-propensity-score" id="toc-step-1-define-covariates-for-propensity-score" class="nav-link" data-scroll-target="#step-1-define-covariates-for-propensity-score"><span class="header-section-number">4</span> Step 1: Define covariates for propensity score</a></li>
+  <li><a href="#step-2-specify-the-cohortmethod-analysis" id="toc-step-2-specify-the-cohortmethod-analysis" class="nav-link" data-scroll-target="#step-2-specify-the-cohortmethod-analysis"><span class="header-section-number">5</span> Step 2: Specify the CohortMethod analysis</a></li>
+  <li><a href="#step-3-propensity-score-estimation-and-matching" id="toc-step-3-propensity-score-estimation-and-matching" class="nav-link" data-scroll-target="#step-3-propensity-score-estimation-and-matching"><span class="header-section-number">6</span> Step 3: Propensity score estimation and matching</a></li>
+  <li><a href="#step-4-outcome-model-cox-regression" id="toc-step-4-outcome-model-cox-regression" class="nav-link" data-scroll-target="#step-4-outcome-model-cox-regression"><span class="header-section-number">7</span> Step 4: Outcome model (Cox regression)</a></li>
+  <li><a href="#step-5-negative-control-calibration" id="toc-step-5-negative-control-calibration" class="nav-link" data-scroll-target="#step-5-negative-control-calibration"><span class="header-section-number">8</span> Step 5: Negative control calibration</a></li>
+  <li><a href="#step-6-kaplan-meier-plot" id="toc-step-6-kaplan-meier-plot" class="nav-link" data-scroll-target="#step-6-kaplan-meier-plot"><span class="header-section-number">9</span> Step 6: Kaplan-Meier plot</a></li>
+  <li><a href="#interpreting-the-hazard-ratio" id="toc-interpreting-the-hazard-ratio" class="nav-link" data-scroll-target="#interpreting-the-hazard-ratio"><span class="header-section-number">10</span> Interpreting the hazard ratio</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/effectiveness.html">Estimating effectiveness</a></li></ol></nav></header>
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/effectiveness.html">Effectiveness</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">Effectiveness</h1>
+
+
+
+<section id="from-description-to-causal-inference" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="from-description-to-causal-inference"><span class="header-section-number">1</span> From description to causal inference</h2>
+<p>All the analyses in previous chapters were descriptive or exploratory — they characterise populations, estimate rates, and describe drug utilisation. An effectiveness (or comparative safety) study takes a fundamentally different step: it attempts to <strong>estimate a causal effect</strong> of one treatment compared to another.</p>
+<p>This is harder. Confounding — the systematic difference between who receives each treatment — is the central threat. In a randomised trial, random allocation ensures that confounders are distributed equally between groups. In observational data, we must adjust for confounding analytically, using tools like propensity scores.</p>
+<p>The OHDSI approach to causal inference from observational data is the <strong>new-user active-comparator cohort design with propensity score adjustment and negative control calibration</strong>, implemented in the <code>CohortMethod</code> R package (part of HADES).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>For epidemiologists
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter implements what Hernán and Robins call the “target trial emulation” framework: we specify the hypothetical trial that would answer our question (the estimand), and then use the observational data to emulate it as closely as possible.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>For regulators and HTA bodies
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The methods in this chapter align with the ICH E9(R1) estimand framework and the ENCePP Guide on methodological standards. The negative control calibration step is specifically designed to address the systematic error (residual confounding, outcome misclassification) that EMA flagged as the primary concern in RWE submissions.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="setup" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="setup"><span class="header-section-number">2</span> Setup</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortMethod)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Cyclops)         <span class="co"># LASSO logistic regression for PS</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DatabaseConnector)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FeatureExtraction)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EmpiricalCalibration)  <span class="co"># negative control calibration</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># CohortMethod works with OHDSI's DatabaseConnector rather than CDMConnector</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Connection details depend on your database backend</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>connectionDetails <span class="ot">&lt;-</span> DatabaseConnector<span class="sc">::</span><span class="fu">createConnectionDetails</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbms     =</span> <span class="st">"postgresql"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">server   =</span> <span class="fu">Sys.getenv</span>(<span class="st">"CDM_SERVER"</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">user     =</span> <span class="fu">Sys.getenv</span>(<span class="st">"CDM_USER"</span>),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="fu">Sys.getenv</span>(<span class="st">"CDM_PASSWORD"</span>),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">port     =</span> <span class="dv">5432</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>CohortMethod uses a different connection approach
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Unlike the DARWIN EU packages (CDMConnector-based), CohortMethod uses <code>DatabaseConnector</code>. Both ultimately connect to the same OMOP CDM, but you need to specify the CDM schema and results schema separately in the CohortMethod functions.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="the-target-estimand" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-target-estimand"><span class="header-section-number">3</span> The target estimand</h2>
+<p>Before writing any code, state the estimand precisely (ICH E9(R1)):</p>
+<blockquote class="blockquote">
+<p><strong>Population:</strong> Adult T2DM patients initiating a GLP-1 RA for the first time, with 365 days prior observation and no prior GLP-1 RA use</p>
+<p><strong>Treatment:</strong> Semaglutide vs.&nbsp;liraglutide (one pairwise comparison shown; repeat for all pairs)</p>
+<p><strong>Variable:</strong> Time to first acute pancreatitis event (inpatient/emergency)</p>
+<p><strong>Summary measure:</strong> Hazard ratio from Cox proportional hazards regression on propensity-score-matched cohorts</p>
+<p><strong>Intercurrent event strategy:</strong> Hypothetical — patients censored at treatment discontinuation (gap &gt;60 days), switch to other GLP-1 RA, or initiation of pancreatitis-associated drug</p>
+</blockquote>
+<hr>
+</section>
+<section id="step-1-define-covariates-for-propensity-score" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="step-1-define-covariates-for-propensity-score"><span class="header-section-number">4</span> Step 1: Define covariates for propensity score</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># FeatureExtraction defines which baseline features go into the PS model</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>covariateSettings <span class="ot">&lt;-</span> FeatureExtraction<span class="sc">::</span><span class="fu">createDefaultCovariateSettings</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">excludedCovariateConceptIds  =</span> <span class="fu">c</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Exclude concepts that are proxies for treatment assignment</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (e.g., the drug itself, its class members)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">addDescendantsToExclude      =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>The default covariate settings extract thousands of binary features from the 365-day pre-index window: all conditions, drugs, procedures, and measurements. The LASSO regression will select the subset that is informative for predicting treatment assignment.</p>
+<hr>
+</section>
+<section id="step-2-specify-the-cohortmethod-analysis" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="step-2-specify-the-cohortmethod-analysis"><span class="header-section-number">5</span> Step 2: Specify the CohortMethod analysis</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the analysis specification</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cmAnalysis <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">createCmAnalysis</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">analysisId        =</span> <span class="dv">1</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">description       =</span> <span class="st">"Semaglutide vs Liraglutide — AP outcome — PS matching"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Propensity score model</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">createStudyPopArgs =</span> CohortMethod<span class="sc">::</span><span class="fu">createCreateStudyPopulationArgs</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">removeSubjectsWithPriorOutcome =</span> <span class="cn">TRUE</span>,   <span class="co"># exclude prior AP</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">priorOutcomeLookback           =</span> <span class="dv">99999</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">riskWindowStart                =</span> <span class="dv">0</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">startAnchor                    =</span> <span class="st">"cohort start"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">riskWindowEnd                  =</span> <span class="dv">1095</span>,   <span class="co"># 3 years</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">endAnchor                      =</span> <span class="st">"cohort start"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">minDaysAtRisk                  =</span> <span class="dv">1</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit propensity score using LASSO logistic regression</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">fitOutcomeModelArgs =</span> CohortMethod<span class="sc">::</span><span class="fu">createFitOutcomeModelArgs</span>(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">modelType        =</span> <span class="st">"cox"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">stratified       =</span> <span class="cn">TRUE</span>    <span class="co"># stratified Cox on matched pairs</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="step-3-propensity-score-estimation-and-matching" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="step-3-propensity-score-estimation-and-matching"><span class="header-section-number">6</span> Step 3: Propensity score estimation and matching</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract cohorts and covariates</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cohortMethodData <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">getDbCohortMethodData</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">connectionDetails      =</span> connectionDetails,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdmDatabaseSchema      =</span> <span class="st">"omop_cdm"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">targetId               =</span> <span class="dv">1</span>,    <span class="co"># semaglutide cohort_definition_id</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">comparatorId           =</span> <span class="dv">2</span>,    <span class="co"># liraglutide cohort_definition_id</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeIds             =</span> <span class="dv">3</span>,    <span class="co"># acute pancreatitis outcome cohort</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">exposureDatabaseSchema =</span> <span class="st">"results"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">exposureTable          =</span> <span class="st">"glp1_cohorts"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeDatabaseSchema  =</span> <span class="st">"results"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable           =</span> <span class="st">"ap_cohort"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">covariateSettings      =</span> covariateSettings</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create study population</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>studyPop <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">createStudyPopulation</span>(</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohortMethodData       =</span> cohortMethodData,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeId              =</span> <span class="dv">3</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">removeSubjectsWithPriorOutcome =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">riskWindowStart        =</span> <span class="dv">0</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">riskWindowEnd          =</span> <span class="dv">1095</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate propensity score (LASSO logistic regression via Cyclops)</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">createPs</span>(</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohortMethodData =</span> cohortMethodData,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">population       =</span> studyPop</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot PS distribution — check for overlap before matching</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>CohortMethod<span class="sc">::</span><span class="fu">plotPs</span>(ps,</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale         =</span> <span class="st">"preference"</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">showCountsLabel =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">showAucLabel    =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The preference score plot is your most important diagnostic
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before matching, plot the propensity score distributions of the two cohorts on the <strong>preference score</strong> scale (which re-scales the PS to account for prevalence differences). If the distributions do not overlap substantially, matching is impossible for a large fraction of patients — you have an equipoise problem and your causal estimate will be extrapolating outside the region of common support.</p>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1:1 nearest-neighbour matching on log PS</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>matchedPop <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">matchOnPs</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">population      =</span> ps,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">caliper         =</span> <span class="fl">0.2</span>,           <span class="co"># 0.2 SD of log PS</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">caliperScale    =</span> <span class="st">"standardized logit"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxRatio        =</span> <span class="dv">1</span>              <span class="co"># 1:1 matching</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check balance after matching</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>bal <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">computeCovariateBalance</span>(matchedPop, cohortMethodData)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>CohortMethod<span class="sc">::</span><span class="fu">plotCovariateBalanceScatterPlot</span>(bal,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">showCovariateCountLabel =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">showMaxLabel            =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study:</strong> After 1:1 matching, we expect the Love plot to show all covariates with SMD below 0.1. If several covariates remain above 0.1 after matching, consider switching to IPTW or adding interaction terms to the propensity score model.</p>
+</blockquote>
+<hr>
+</section>
+<section id="step-4-outcome-model-cox-regression" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="step-4-outcome-model-cox-regression"><span class="header-section-number">7</span> Step 4: Outcome model (Cox regression)</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit stratified Cox model on matched pairs</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>outcomeModel <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">fitOutcomeModel</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">population       =</span> matchedPop,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohortMethodData =</span> cohortMethodData,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeId        =</span> <span class="dv">3</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">modelType        =</span> <span class="st">"cox"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">stratified       =</span> <span class="cn">TRUE</span>    <span class="co"># condition on matched pairs</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(outcomeModel)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Key output: HR (95% CI), p-value</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="step-5-negative-control-calibration" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="step-5-negative-control-calibration"><span class="header-section-number">8</span> Step 5: Negative control calibration</h2>
+<p>This is the step that distinguishes a rigorous OHDSI analysis from a conventional pharmacoepidemiology study. Negative controls are outcomes where we know (from clinical reasoning) that the exposure has no causal effect. If our analysis pipeline has systematic error (residual confounding, outcome misclassification, time-at-risk misspecification), the negative control estimates will not be centred on a HR of 1.0.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative control outcomes (conditions causally unrelated to GLP-1 RAs)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># e.g. ingrown toenail, ankle sprain, foreign body in ear</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>negativeControlIds <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">440448</span>,  <span class="co"># ingrown nail</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">81151</span>,   <span class="co"># ankle sprain</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">374914</span>   <span class="co"># foreign body in ear</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... typically 50-100 negative controls</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the same analysis pipeline on all negative controls</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>ncResults <span class="ot">&lt;-</span> CohortMethod<span class="sc">::</span><span class="fu">runCmAnalyses</span>(</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">connectionDetails =</span> connectionDetails,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... same settings as primary analysis</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ... but with outcomeIds = negativeControlIds</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit calibration model</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>nullDist <span class="ot">&lt;-</span> EmpiricalCalibration<span class="sc">::</span><span class="fu">fitMcmcNull</span>(</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">logRr   =</span> ncResults<span class="sc">$</span>logRr,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">seLogRr =</span> ncResults<span class="sc">$</span>seLogRr</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the null distribution</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>EmpiricalCalibration<span class="sc">::</span><span class="fu">plotCalibrationEffect</span>(</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">logRrNegatives  =</span> ncResults<span class="sc">$</span>logRr,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">seLogRrNegatives =</span> ncResults<span class="sc">$</span>seLogRr,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">logRrPositives  =</span> <span class="fu">log</span>(outcomeModel<span class="sc">$</span>outcomeModelTreatmentEstimate<span class="sc">$</span>estimate),</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">seLogRrPositives =</span> outcomeModel<span class="sc">$</span>outcomeModelTreatmentEstimate<span class="sc">$</span>logRrSe</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply calibration to the primary estimate</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>calibratedEstimate <span class="ot">&lt;-</span> EmpiricalCalibration<span class="sc">::</span><span class="fu">calibrateP</span>(</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">null    =</span> nullDist,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">logRr   =</span> <span class="fu">log</span>(outcomeModel<span class="sc">$</span>outcomeModelTreatmentEstimate<span class="sc">$</span>estimate),</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">seLogRr =</span> outcomeModel<span class="sc">$</span>outcomeModelTreatmentEstimate<span class="sc">$</span>logRrSe</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>calibratedEstimate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study:</strong> If the negative control estimates are systematically shifted above HR = 1.0 (suggesting our analysis over-estimates risk), this means there is residual confounding — semaglutide users are sicker than liraglutide users in ways our propensity score did not fully capture. The calibrated HR corrects for this bias empirically. A calibrated p-value above the threshold after this correction means the primary finding is not robust to systematic error.</p>
+</blockquote>
+<p><strong>Quick check:</strong> After running 75 negative control outcomes through the same pipeline as your primary analysis, you find that the median HR for negative controls is 1.28 (rather than the expected 1.0). What does this tell you?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">GLP-1 RAs increase risk of most conditions by 28%, which is a class effect</option><option value="">Your negative control outcomes were not truly negative controls</option><option value="answer">There is systematic positive bias in your analysis — likely residual confounding — which is inflating all HRs by approximately 28%; the calibration step will correct for this</option><option value="">The propensity score model is perfectly calibrated</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>A systematic shift in negative control estimates away from HR = 1.0 is the definition of systematic error in your analytical pipeline. Since negative controls are chosen specifically because GLP-1 RAs should have no causal effect on them, any deviation from 1.0 must be due to bias in the analysis — most commonly residual confounding (sicker patients in one group), differential observation (one group has more healthcare contacts and therefore more coded diagnoses), or immortal time bias. The <code>EmpiricalCalibration</code> package uses the distribution of negative control estimates to model this systematic error and correct the primary estimate and its p-value accordingly.</p>
+</div>
+<hr>
+</section>
+<section id="step-6-kaplan-meier-plot" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="step-6-kaplan-meier-plot"><span class="header-section-number">9</span> Step 6: Kaplan-Meier plot</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>CohortMethod<span class="sc">::</span><span class="fu">plotKaplanMeier</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">population  =</span> matchedPop,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeId   =</span> <span class="dv">3</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">confidenceIntervals =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="interpreting-the-hazard-ratio" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="interpreting-the-hazard-ratio"><span class="header-section-number">10</span> Interpreting the hazard ratio</h2>
+<p><strong>Quick check:</strong> Your calibrated HR for acute pancreatitis comparing semaglutide vs.&nbsp;liraglutide is 0.87 (95% CI: 0.71–1.06, calibrated p = 0.18). What is the correct conclusion?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">Semaglutide is significantly safer than liraglutide for pancreatitis</option><option value="">Liraglutide is significantly safer than semaglutide for pancreatitis</option><option value="answer">There is no statistically significant difference in acute pancreatitis risk between semaglutide and liraglutide; the point estimate suggests a possible 13% lower risk with semaglutide but the confidence interval includes 1.0</option><option value="">The study is underpowered and should be repeated with a larger sample</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>A HR of 0.87 with a 95% CI of 0.71–1.06 means the confidence interval includes 1.0 (no difference). The calibrated p-value of 0.18 is above any conventional threshold for statistical significance. The correct conclusion is that we found no statistically significant difference in acute pancreatitis risk between the two agents. The point estimate is directionally consistent with a small advantage for semaglutide, but the evidence is insufficient to conclude a true difference exists. This is a clinically important null finding — it provides reassurance that both agents carry similar pancreatitis risk in real-world T2DM populations.</p>
+</div>
+<p>— title: “Effectiveness” format: html —</p>
 
 
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-
-
+</section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

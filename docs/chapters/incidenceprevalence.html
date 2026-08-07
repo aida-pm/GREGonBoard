@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -77,6 +112,7 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -367,12 +403,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Standard Procedure</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/required_documents.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Documents</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -388,6 +418,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/using_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDM using R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -423,7 +459,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Effectiveness</span></a>
+ <span class="menu-text">From description to causal inference</span></a>
   </div>
 </li>
       </ul>
@@ -450,8 +486,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#incidence-vs.-prevalence-the-epidemiological-distinction" id="toc-incidence-vs.-prevalence-the-epidemiological-distinction" class="nav-link active" data-scroll-target="#incidence-vs.-prevalence-the-epidemiological-distinction"><span class="header-section-number">1</span> Incidence vs.&nbsp;prevalence — the epidemiological distinction</a></li>
+  <li><a href="#the-incidenceprevalence-package" id="toc-the-incidenceprevalence-package" class="nav-link" data-scroll-target="#the-incidenceprevalence-package"><span class="header-section-number">2</span> The <code>IncidencePrevalence</code> package</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">3</span> Setup</a></li>
+  <li><a href="#step-1-define-the-denominator-population" id="toc-step-1-define-the-denominator-population" class="nav-link" data-scroll-target="#step-1-define-the-denominator-population"><span class="header-section-number">4</span> Step 1: Define the denominator population</a></li>
+  <li><a href="#step-2-define-the-outcome-cohort" id="toc-step-2-define-the-outcome-cohort" class="nav-link" data-scroll-target="#step-2-define-the-outcome-cohort"><span class="header-section-number">5</span> Step 2: Define the outcome cohort</a></li>
+  <li><a href="#step-3-estimate-incidence-rates" id="toc-step-3-estimate-incidence-rates" class="nav-link" data-scroll-target="#step-3-estimate-incidence-rates"><span class="header-section-number">6</span> Step 3: Estimate incidence rates</a></li>
+  <li><a href="#step-4-estimate-prevalence" id="toc-step-4-estimate-prevalence" class="nav-link" data-scroll-target="#step-4-estimate-prevalence"><span class="header-section-number">7</span> Step 4: Estimate prevalence</a></li>
+  <li><a href="#stratification-and-subgroup-analyses" id="toc-stratification-and-subgroup-analyses" class="nav-link" data-scroll-target="#stratification-and-subgroup-analyses"><span class="header-section-number">8</span> Stratification and subgroup analyses</a></li>
+  <li><a href="#suppression-and-export" id="toc-suppression-and-export" class="nav-link" data-scroll-target="#suppression-and-export"><span class="header-section-number">9</span> Suppression and export</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -476,10 +526,522 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="incidence-vs.-prevalence-the-epidemiological-distinction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="incidence-vs.-prevalence-the-epidemiological-distinction"><span class="header-section-number">1</span> Incidence vs.&nbsp;prevalence — the epidemiological distinction</h2>
+<p>Before running any code, it is worth being precise about what these two measures actually mean, because they answer fundamentally different questions.</p>
+<p><strong>Prevalence</strong> answers: <em>what proportion of the population has this condition at a given point in time (or during a given period)?</em> It captures both old and new cases.</p>
+<p><strong>Incidence</strong> answers: <em>at what rate are new cases occurring in the at-risk population?</em> It captures only new events in people who did not previously have the condition.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Measure</th>
+<th>Formula</th>
+<th>Answers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Point prevalence</td>
+<td>Cases at time t / Population at time t</td>
+<td>How common is this condition right now?</td>
+</tr>
+<tr class="even">
+<td>Period prevalence</td>
+<td>Cases during period / Population during period</td>
+<td>How common was it over this period?</td>
+</tr>
+<tr class="odd">
+<td>Incidence proportion</td>
+<td>New cases / At-risk persons</td>
+<td>What is the risk of developing it?</td>
+</tr>
+<tr class="even">
+<td>Incidence rate</td>
+<td>New cases / Person-time at risk</td>
+<td>At what rate does it occur?</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>For regulators and HTA bodies
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Incidence rates are the most relevant measure for safety signal quantification and for risk-benefit assessments — they express how many events occur per 1,000 (or 100,000) patient-years and can be directly compared across populations and time periods. Prevalence is more relevant for burden-of-disease and healthcare resource utilisation analyses.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="the-incidenceprevalence-package" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-incidenceprevalence-package"><span class="header-section-number">2</span> The <code>IncidencePrevalence</code> package</h2>
+<p>The <code>IncidencePrevalence</code> package implements a principled, auditable workflow for computing these measures using OMOP CDM data. It was developed by the DARWIN EU Coordination Centre and is the standard tool for incidence/prevalence analyses across the OHDSI network.</p>
+<p>The workflow always has three steps:</p>
+<pre><code>1. Generate the DENOMINATOR cohort (who is at risk and when?)
+        ↓
+2. Generate the OUTCOME cohort (who had the event?)
+        ↓
+3. Estimate incidence / prevalence using these two cohorts</code></pre>
+<hr>
+</section>
+<section id="setup" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="setup"><span class="header-section-number">3</span> Setup</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(IncidencePrevalence)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CDMConnector)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a synthetic CDM with realistic outcome prevalence</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> IncidencePrevalence<span class="sc">::</span><span class="fu">mockIncidencePrevalence</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampleSize      =</span> <span class="dv">50000</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">outPre          =</span> <span class="fl">0.05</span>,       <span class="co"># 5% of population will have the outcome</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">minOutcomeDays  =</span> <span class="dv">1</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxOutcomeDays  =</span> <span class="dv">365</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">earliestObservationStartDate =</span> <span class="fu">as.Date</span>(<span class="st">"2015-01-01"</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">latestObservationStartDate   =</span> <span class="fu">as.Date</span>(<span class="st">"2021-01-01"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>cdm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="step-1-define-the-denominator-population" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="step-1-define-the-denominator-population"><span class="header-section-number">4</span> Step 1: Define the denominator population</h2>
+<p>The denominator defines who is at risk and for how long. You can restrict by age, sex, and a calendar study period.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">generateDenominatorCohortSet</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm                    =</span> cdm,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">name                   =</span> <span class="st">"denominator"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohortDateRange        =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2017-01-01"</span>, <span class="st">"2020-12-31"</span>)),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ageGroup               =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">44</span>), <span class="fu">c</span>(<span class="dv">45</span>, <span class="dv">64</span>), <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">150</span>)),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sex                    =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Both"</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">daysPriorObservation   =</span> <span class="dv">365</span>   <span class="co"># require 1 year washout</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># How many denominator cohorts were created?</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cohortCount</span>(cdm<span class="sc">$</span>denominator)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+  cohort_definition_id number_records number_subjects
+                 &lt;int&gt;          &lt;int&gt;           &lt;int&gt;
+1                    1           6185            6185
+2                    2           6267            6267
+3                    3          12452           12452
+4                    4           5218            5218
+5                    5           5318            5318
+6                    6          10536           10536
+7                    7           8460            8460
+8                    8           8425            8425
+9                    9          16885           16885</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study:</strong> The denominator for the acute pancreatitis incidence analysis is the type 2 diabetes population. We define it as all T2DM patients with at least 365 days of prior observation, observed between 1 January 2023 and 31 December 2025, stratified by age group (18–44, 45–64, 65+) and sex.</p>
+</blockquote>
+<p><strong>Quick check:</strong> Why do we require 365 days of prior observation in the denominator?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">To ensure patients have had time to develop the outcome</option><option value="answer">To exclude patients who may have had the outcome before the study period (washout), ensuring we only capture truly new (incident) cases</option><option value="">Because the IncidencePrevalence package requires it</option><option value="">To match the follow-up period of 365 days</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>The washout period (<code>daysPriorObservation</code>) ensures that patients entering the denominator did not already have the outcome before their observation window began. Without it, we would count as “incident” cases patients who actually had a pre-existing condition — inflating the incidence rate. This is especially important for acute pancreatitis, where a patient admitted to hospital before the study period should not be counted as a new case.</p>
+</div>
+<hr>
+</section>
+<section id="step-2-define-the-outcome-cohort" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="step-2-define-the-outcome-cohort"><span class="header-section-number">5</span> Step 2: Define the outcome cohort</h2>
+<p>The outcome cohort identifies who experienced the event. For incidence, we need the <strong>first</strong> event per person during the at-risk period.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The mockIncidencePrevalence function pre-generates an outcome cohort</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># In a real study, you would create it from conceptCohort() or ATLAS</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the outcome cohort exists</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>outcome <span class="sc">|&gt;</span> <span class="fu">cohortCount</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  cohort_definition_id number_records number_subjects
+                 &lt;int&gt;          &lt;int&gt;           &lt;int&gt;
+1                    1           2500            2500</code></pre>
+</div>
+</div>
+<p>In a real study, you would build the acute pancreatitis outcome cohort:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortConstructor)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Acute pancreatitis — inpatient / emergency only (higher specificity)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> CohortConstructor<span class="sc">::</span><span class="fu">conceptCohort</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm        =</span> cdm,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet =</span> <span class="fu">list</span>(<span class="at">acute_pancreatitis =</span> <span class="fu">c</span>(<span class="dv">197456</span>)),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">name       =</span> <span class="st">"ap_outcome"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">domain     =</span> <span class="st">"condition"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Restrict to inpatient / emergency care settings</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>ap_outcome <span class="ot">&lt;-</span> cdm<span class="sc">$</span>ap_outcome <span class="sc">|&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requireTableIntersect</span>(</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">tableName    =</span> <span class="st">"visit_occurrence"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">window       =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">indexDate    =</span> <span class="st">"cohort_start_date"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># visit_concept_id 9201 = inpatient, 9203 = emergency</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">conceptSet   =</span> <span class="fu">list</span>(<span class="at">inpatient_emergency =</span> <span class="fu">c</span>(<span class="dv">9201</span>, <span class="dv">9203</span>)),</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">name         =</span> <span class="st">"ap_outcome"</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="step-3-estimate-incidence-rates" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="step-3-estimate-incidence-rates"><span class="header-section-number">6</span> Step 3: Estimate incidence rates</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>inc <span class="ot">&lt;-</span> <span class="fu">estimateIncidence</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm             =</span> cdm,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"outcome"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,          <span class="co"># estimate per calendar year</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeWashout   =</span> <span class="dv">365</span>,              <span class="co"># exclude patients with prior outcome</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">repeatedEvents   =</span> <span class="cn">FALSE</span>             <span class="co"># first event only per person</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># # View results</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># incidenceAttrition(inc)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotIncidence</span>(inc,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">facet  =</span> <span class="fu">c</span>(<span class="st">"denominator_age_group"</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> <span class="st">"denominator_sex"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="incidenceprevalence_files/figure-html/plot-incidence-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Our study:</strong> Expected crude incidence of acute pancreatitis in a T2DM population is approximately 2–5 per 1,000 person-years. If your estimated rate is an order of magnitude higher, this indicates outcome misclassification — most likely because your outcome concept set is too broad and is capturing chronic pancreatitis follow-up visits or history codes. If it is zero or near-zero, check that your outcome concept IDs are correctly mapped in the OMOP vocabulary of your specific database.</p>
+</blockquote>
+<hr>
+</section>
+<section id="step-4-estimate-prevalence" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="step-4-estimate-prevalence"><span class="header-section-number">7</span> Step 4: Estimate prevalence</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>prev <span class="ot">&lt;-</span> <span class="fu">estimatePeriodPrevalence</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm              =</span> cdm,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"outcome"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fullContribution =</span> <span class="cn">FALSE</span>   <span class="co"># patients contribute partial periods at edges</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPrevalence</span>(prev,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">facet  =</span> <span class="st">"denominator_age_group"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> <span class="st">"denominator_sex"</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="incidenceprevalence_files/figure-html/prevalence-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Point prevalence vs period prevalence
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <code>estimatePointPrevalence()</code> when you want a snapshot on a specific date (e.g.&nbsp;1 January each year — useful for burden-of-disease estimates). Use <code>estimatePeriodPrevalence()</code> when you want to capture anyone with the condition during a time window (e.g.&nbsp;any quarter — useful for healthcare utilisation studies).</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="stratification-and-subgroup-analyses" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="stratification-and-subgroup-analyses"><span class="header-section-number">8</span> Stratification and subgroup analyses</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stratify by year and age group simultaneously</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>inc_stratified <span class="ot">&lt;-</span> <span class="fu">estimateIncidence</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm              =</span> cdm,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"outcome"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeWashout   =</span> <span class="dv">365</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Table output for sharing</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tableIncidenceRates</span>(inc_stratified, <span class="at">type =</span> <span class="st">"flextable"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="suppression-and-export" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="suppression-and-export"><span class="header-section-number">9</span> Suppression and export</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress small cell counts before sharing</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> omopgenerics<span class="sc">::</span><span class="fu">bind</span>(inc, prev) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  omopgenerics<span class="sc">::</span><span class="fu">suppress</span>(<span class="at">minCellCount =</span> <span class="dv">5</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results, <span class="st">"results/incidence_prevalence.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>Quick check:</strong> Your incidence rate estimate for acute pancreatitis is 45 per 1,000 person-years in the T2DM population. The published literature reports 2–5 per 1,000. What should you do first?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">Accept the result — your database may have a sicker population</option><option value="">Restrict the age group to 65+ where pancreatitis is more common</option><option value="answer">Investigate the outcome concept set — the high rate suggests you are likely capturing chronic pancreatitis, history codes, or outpatient follow-up visits as incident events</option><option value="">Increase the washout period to 5 years</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>An incidence rate 10–20× higher than published estimates is almost always a signal of outcome phenotype misclassification. The most common cause in OMOP databases is that the concept set captures too many non-incident events — for example, SNOMED descendants that include chronic pancreatitis, billing codes used for follow-up visits after a previously diagnosed episode, or codes used as rule-outs rather than confirmed diagnoses. The correct response is to review your concept set in Athena, restrict to inpatient/emergency settings (which dramatically improves specificity for acute conditions), and potentially run CohortDiagnostics to inspect the index event breakdown.</p>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

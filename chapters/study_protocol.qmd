@@ -2,3 +2,281 @@
 title: "Study Protocol"
 format: html
 ---
+
+```{r setup, include=FALSE}
+library(webexercises)
+```
+
+## First steps
+
+Congratulations! You are part of GREG and you are participating in an ongoing study. Now, you need to present the study protocol. *What should you do?*
+
+1.  First of all, go back to your study outline. You do not start from scratch!
+
+2.  Find [here](../templates/study_protocol_template.docx) the template of the study protocol. You should fill in this template and submit it both to GREG for feedback and to the [catalogue of the EMA](https://catalogues.ema.europa.eu/catalogue-rwd-studies) once it is the final version of the protocol.
+
+3.  You can find the ENCePP guidelines on how to write a study protocol [here](https://encepp.europa.eu/encepp-toolkit/methodological-guide/chapter-3-development-study-protocol_en). This includes the HARmonized Protocol Template to Enhance Reproducibility (HARPER) framework.
+
+## Sections of the template
+
+::: {.callout-note icon="false"}
+## 1. [Study title](#study-title-1)
+:::
+
+::: {.callout-note icon="false"}
+## 2. [Description of the study team](#description-of-the-study-team-1)
+:::
+
+::: {.callout-note icon="false"}
+## 3. [Abstract](#study_outline.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 4. [Ammendments and updates](#study_outline.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 5. [Milestones](#timelines-1)
+:::
+
+::: {.callout-note icon="false"}
+## 6. [Rationale and background](#rationale-and-background-1) {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 7. [Research question and objectives](#research-question-and-objectives-1) {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 8. [Research methods](#research-methods-1)
+
+- [Study design]
+
+- [Study period]
+
+- [Study population]
+
+- [Follow-up]
+
+- [Variables]
+
+- [Sample size]
+
+- [Analysis]
+:::
+
+::: {.callout-note icon="false"}
+## 9. Data management {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 10. Quality control {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 11. Strengths and limitations {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 12. Governance board aspects {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 13. Plans for disseminating and communicating study results {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 14. Other aspects {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 15. References {.callout-note icon="false"}
+:::
+
+### Study title {#study-title-1}
+
+Please, think of a title for your study. Let it start by "GREG - " to make sure that the study is related to the project. As much as possible, a good title should contain at least five elements: the target **P**opulation, the **I**ntervention or **E**xposure of interest, the **C**omparator, the **O**utcome of interest, and the **T**ime frame over which the outcome is assessed, commonly referred to by the acronym **PICO(T)**. In the context of observational research, the intervention component is replaced by exposure, giving rise to the [**PECO framework**](https://doi.org/10.1016/j.envint.2018.07.015), because pharmacoepidemiological studies are **non-interventional**.
+
+::: callout-tip
+Be concise! A short but informative title is better than a very long and specific title!
+:::
+
+> Let's consider the title of our example study "Use of GLP-1 receptor agonists and risk of acute pancreatitis in type 2 diabetes patients". Is this a good study title? Does it follow the PECO framework? Let's see:
+
+::: {.webex-check .webex-box}
+Population: `r torf(TRUE)` Exposure: `r torf(TRUE)` Comparator: `r torf(FALSE)` Outcome: `r torf(TRUE)` Time: `r torf(FALSE)`
+:::
+
+> Can you think of a better research question fulfilling all PECO(T) requirements?
+
+### Description of the study team {#description-of-the-study-team-1}
+
+Who is going to work on this project with you? What will be their responsibilities? Which institution do they work for?
+
+### Milestones {#timelines-1}
+
+At this stage, the milestones/timelines section is merely speculative. Nevertheless, having to think of realistic timelines for your study will make you more conscious about the amount of work that each stage will take. Remember, that not only you will need to work on the protocol, the analytical code for the study or writing the study report, but you will also need other members of your team to review your work, and each data partner (DP) to individually run the study with the code you (or the Data Scientist of your team) provided. This can take a different amount of time depending on the scale of the database of each DP, as well as the time they can dedicate to the project. Please, consider this when setting your timelines.
+
+### Rationale and background {#rationale-and-background-1}
+
+This section sets the theoretical background to your study. For the abstract or study outline, please, write a short description of the subject of your study, if possible, **not longer than one page**. For your protocol, add all necessary information, although try to keep it concise and practical. Add relevant references, state-of-the-art research outcomes and a justification of the election of your topic.
+
+::: callout-tip
+Think of it as: "What makes your study relevant so that we need to select it as a Use Case for GREG? What makes it suitable for GREG?"
+:::
+
+### Research question and objectives {#research-question-and-objectives-1}
+
+A good research question is the foundation of your study. Your RWE will answer only to that research question.
+
+::: callout-important
+It is not the same to ask: "What is the effectiveness of the flu vaccine?" Than to ask: "What is the effectiveness of the inhaled versus the injected flu vaccine against hospital admission due to flu-related bronchitis in healthy children without prior flu or bronchiolitis diagnosis?"
+
+The more precise we are, the less room we leave for misleading interpretation of our study results.
+:::
+
+A structured research question should follow the [**PECO framework**](#0). The [**ENCePP Guide on Methodological Standards in Pharmacoepidemiology**](#0) explicitly states that the research question must be clearly defined before the study protocol can be developed, and the ENCePP Checklist for Study Protocols requires researchers to justify why the study is conducted, what specific objectives it addresses, and whether those objectives are formulated in a way that is answerable with the available data [@ENCePP2024]
+
+In recent years, two complementary frameworks have substantially extended the PICO(T) approach:
+
+1.  The **estimand framework**, formalised in the [ICH E9(R1)](https://doi.org/10.1136/bmj-2023-076316) addendum published in 2019. It introduces the concept of *estimand*: a precise definition of the treatment effect of interest. An estimand is defined by [five attributes]{.underline}: the target population, the treatment or exposure, the variable (endpoint), the population-level summary measure, and the strategies for handling intercurrent events. A good estimand ensures alignment among the study objective, design, data collection, analysis, and interpretation [@ICH2021].
+
+    ::: callout-note
+    Intercurrent events are events that occur after treatment initiation that affect either the interpretation or the existence of the measurements associated with the clinical question of interest [@Lynggaard2024].
+    :::
+
+2.  The **target trial emulation**, introduced by Hernán and Robins in 2016 [@Hernan2016]. This framework serves as a guide to best design and analyse observational studies whilst preventing the most common biases, and starts by clearly defining a causal question about an intervention, specifying the protocol of the hypothetical trial that would answer it, and explaining how the observational data will be used to emulate it [@Hernan2016; @Hernan2022].
+
+    ::: callout-tip
+    Read carefully the [ICH E9(R1)](https://doi.org/10.1136/bmj-2023-076316) addendum before designing your study! It might raise questions about what you plan to do that you have not considered before.
+    :::
+
+Regarding study objectives, make sure that they have a logical order (from general to specific). They need to outline exactly what your research will achieve. Start each with a strong action verb (e.g., *evaluate, analyze, compare, determine*) and follow the [**SMART Framework**](https://www.ucop.edu/local-human-resources/_files/performance-appraisal/How+to+write+SMART+Goals+v2.pdf):
+
+- **S**pecific: Clearly state what will be done.
+
+- **M**easurable: Identify the main variables you will q uantify.
+
+- **A**chievable: Ensure you can do it with available time and resources.
+
+- **R**elevant: Map directly to your overall research question.
+
+- **T**ime-bound: Define the timeframe for the study.
+
+```{r, results='asis', echo = FALSE}
+opts <- c(
+   "Among adult patients with type 2 diabetes initiating antidiabetic therapy, what is the time to first acute pancreatitis event comparing new users of GLP-1 receptor agonists versus new users of DPP-4 inhibitors or SGLT-2 inhibitors, using real-world data standardised to the OMOP Common Data Model?",
+   answer = "Among adult patients with type 2 diabetes initiating any GLP-1 receptor agonist for the first time and no prior pancreatitis-related outcome, what is the comparative risk of acute pancreatitis event comparing semaglutide, liraglutide, dulaglutide, exenatide, and tirzepatide, using each agent as reference in pairwise comparisons, where treatment discontinuation, switching to another GLP-1, or initiation of a concomitant pancreatitis-associated drug are handled as censoring events under a hypothetical strategy?",
+   "Among adult patients with type 2 diabetes with no prior GLP-1 receptor agonist use, what is the risk of having acute pancreatitis in GLP-1 receptor agonist, over a follow-up period of up to 3 years, under a while-on-treatment strategy?"
+)
+
+cat("What would be a good research question for our study? (Choose the most complete)", longmcq(opts))
+```
+
+> Notice that the research question makes a big difference on the type of study that you will end up conducting. Are you comparing GLP-1 receptor agonists among them? Or with DPP-4 or SGLT-2 inhibitors? What will be your censoring events? Are you considering new use? Nevertheless, there is not just one good answer, if complete and rigorous, several research questions might be appropriate but they would respond to different study objectives.
+
+::: callout-tip
+An observational study needs to answer a clinically relevant question. Think of it as an answer to a question that your doctor might ask themselves before prescribing you any treatment: among the treatment options I can give to this patient, which is the safest for them?
+:::
+
+> As for the objectives, in our study they could be:
+>
+> - Calculate the yearly prevalence and incidence proportion and density of GLP-1 receptor agonists given as a treatment to type 2 diabetes patients.
+>
+> - Characterise the users of each GLP-1 receptor agonists, including sociodemographic, clinical and large-scale characteristics.
+>
+> - Define the mean duration of treatment and treatment patterns, including switches, for patients with type 2 diabetes exposed to GLP-1 receptor agonists.
+>
+> - Assess the comparative safety of the different GLP-1 receptor agonists against acute pancreatitis outcomes.
+
+### Research methods {#research-methods-1}
+
+In this section, you need to describe the methodology that you will do to successfully pursue your study. Our aim is to do open, transparent, reproducible science. Be specific, be rigorous, do not let anything for imagination or speculation.
+
+::: callout-tip
+When writing the methods section, try to think "Would someone from a different study team be able to execute the same study as my team?"
+:::
+
+#### Study design {data-link="Study design"}
+
+To decide your study design, you need to bear in mind your study objectives. Do you want to do a characterisation study? Drug utilisation? Incidence/prevalence? Or are you going to answer a causal question? All of these might need different study designs.
+
+In the [**ENCePP Guide on Methodological Standards in Pharmacoepidemiology**](https://encepp.europa.eu/encepp-toolkit/methodological-guide_en)you will find a description of the most common study designs used to generate RWE. Most of the times, you will do a cohort study design for characterisation, and an active comparator, target trial emulation for causal inference. Nevertheless, even these designs can be further specified, for example explicitly stating whether you will use a new-user or prevalent-user approach.
+
+> For our GLP-1 comparative risk of pancreatitis study, a good study design could be:\
+> - New user cohort study (for characterisation)
+>
+> \- New user, active comparator, target trial emulation study (for safety assessment)
+
+#### Study period {data-link="Study period"}
+
+The study period is the time between the start of your study and its end. Avoid unnecessary large study periods: what length is sufficient to ascertain your hypothesis? Also, take into account the dates in which the different products you study (or the outcomes) started to be available. For example, it does not make sense to make a study of causal inference related to COVID-19 with study period starting before 2019.
+
+> For our GLP-1 comparative risk of pancreatitis study, we will be comparing semaglutide, liraglutide, dulaglutide, exenatide, and tirzepatide among each other. Tirzepatide was only approved by the EMA on September 2022. Therefore, a good study period could be January 1st, 2023 to December 31st, 2025 or the most recent data available in each database.
+
+::: callout-caution
+This would, however, raise a limitation: you can only say that you studied the comparative safety of GLP-1 use for 3 years. You cannot state that your study results are applicable to a longer-term safety.
+:::
+
+#### Study population
+
+In this section, consider all relevant sociodemographic and clinical characteristics of your population. Their age, sex, whether you want to study a particular socioeconomic stratum or ethnic, whether you need your population to have a previous condition or not.
+
+> In our example, we will need two populations:
+>
+> **General population (Population A):** All adults (≥18 years) with a recorded diagnosis of type 2 diabetes who are actively registered in the participating database and eligible for observation during each calendar year of the study period (1st January 2023 to 31st December 2025, or the latest data available). Eligible individuals must have at least 365 days of continuous observation before index date. Individuals must have continuous database enrollment or observation for the period required to contribute person-time. This is the population "at risk" of receiving GLP-1 receptor agonists, it serves as the denominator for annual prevalence and incidence estimates of GLP-1 receptor agonist use. If they receive the treatment, they are censored from this population, but for each type of GLP-1. For example, if they receive semaglutide, they are no longer in population A for incidence or prevalence of semaglutide calculation, but they remain in population A for dulaglutide-related calculations.
+>
+> **New-user population (Population B):** Adults (≥18 years) with type 2 diabetes who initiate treatment with one of the study GLP-1 receptor agonists (semaglutide, liraglutide, dulaglutide, exenatide, or tirzepatide) for the first time during the study period. Eligible individuals must have at least 365 days of continuous observation before treatment initiation, no dispensing or prescription of any GLP-1 receptor agonist during the washout period, and no recorded history of acute pancreatitis or related outcomes before the index date. The date of first dispensing or prescription defines cohort entry (index date). Patients contribute only their first eligible treatment episode for each type of GLP-1 receptor agonist. That means, that the same patient might be part of the semaglutide and liraglutide cohorts, but just once for each cohort.
+
+#### Follow-up
+
+To define the follow-up of your population of study, the HARPER guidelines are a basic. You must define the index date of your study without introducing immortal time bias, and set your censoring events wisely. HARPER diagrams help with visualisation. Have a look at: <https://doi.org/10.1002/pds.5507>
+
+Each of your populations might have different follow-up definitions.
+
+> In our example, there are two different follow-up definitions, one for each population:
+>
+> - **Population A**: they will contribute observation time from the date they satisfy the eligibility criteria (diagnosis of type 2 diabetes, age ≥18 years, prior observation of 365 days) within the study period. Follow-up will continue until the earliest of death, transfer out of the database, end of continuous observation, or prescription of a GLP-1 receptor agonist. Individuals may contribute person-time to more than one calendar year provided they remain eligible. This dynamic cohort will serve as the denominator for estimating the annual prevalence and incidence of GLP-1 receptor agonist use.
+>
+> ![Figure. HARPER diagram for population A in our example.](/images/HARPER_A.png){fig-align="center"}
+>
+> - **Population B**: they will contribute observation time beginning on the index date, defined as the date of the first prescription or dispensing of a GLP-1 receptor agonist (semaglutide, liraglutide, dulaglutide, exenatide, or tirzepatide) during the study period (1st January 2023 to 31st December 2025, or the latest available date in each database), after satisfying all eligibility criteria. Participants will be followed from treatment initiation until the earliest occurrence of an acute pancreatitis event (study outcome), discontinuation of the index GLP-1 receptor agonist, switching to another GLP-1 receptor agonist, initiation of a concomitant medication associated with pancreatitis risk, death, loss to follow-up or end of data availability, or end of the study period, whichever occurs first. Treatment discontinuation, switching to another GLP-1 receptor agonist, and initiation of a concomitant pancreatitis-associated medication will be treated as censoring events.
+>
+>   ![Figure. HARPER diagram for population B in our example.](/images/HARPER_B.png)
+
+#### Variables {data-link="Variables"}
+
+You should consider all the variables that are relevant to define the eligibility of your population (age, sex, year, region, clinical diagnoses, measurements...), as well as those that are relevant for the study (exposure, outcomes, confounders, stratification variables...). You can introduce covariables, like concomitant medication or comorbidities. It can be a good approach to search for the published literature or similar studies in the [EMA Catalogue](https://catalogues.ema.europa.eu/catalogue-rwd-studies) to explore the variables that have been previously used in related analyses.
+
+#### Sample size {data-link="Sample size"}
+
+If you are doing a characterisation study, sample size calculation is not applicable. You can say that you are using information from all patients available in the corresponding databases, and provide some counts on the number of patients of each database, if relevant. For effectiveness and safety studies, you should provide a calculation of estimated sample size needed to observe an effect.
+
+To do a sample size calculation, you need to define your statistical test, set your acceptable error margins (typically α=0.05, power =0.80), and estimate the effect size (the difference you expect to find between cohorts). These parameters are then plugged into formulas or software to determine the required participant count. Some of these variables might be obtained from published literature, like previous incidence or prevalence of disease before intervention (e.g. for vaccines) or the expected effect of the intervention or treatment (from clinical studies or previous observational studies).
+
+#### Analysis {data-link="Analysis"}
+
+This is the core of the study for the data analyst of your team. Defining well the analysis section will ascertain reproducibility of the study if the analytical code is lost for whatever reason. In the **Study design & execution** section of this tutorial, you will find examples of implementation of different types of studies.
+
+Nevertheless, for further information, you can look at:
+
+- [The Book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/)
+
+- [What if...?](https://miguelhernan.org/whatifbook)
+
+- [Developing a Protocol for Observational Comparative Effectiveness Research: A User's Guide](https://www.academia.edu/109155833/Developing_a_Protocol_for_Observational_Comparative_Effectiveness_Research_A_Users_Guide)
+
+- [OHDSI R packages](https://github.com/orgs/OHDSI/repositories)
+
+- [DARWIN EU packages](https://github.com/orgs/darwin-eu/repositories?type=all)
+
+But also check the tutorials in:
+
+- [EHDEN Academy](https://academy.ehden.eu/)
+
+- [OHDSI tutorials](https://www.ohdsi.org/tutorials/)
+
+## Bibliography
+
+::: {#refs}
+:::

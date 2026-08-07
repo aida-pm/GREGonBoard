@@ -77,6 +77,7 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -274,7 +275,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Phenotyping</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Phenotyping</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -367,12 +368,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Standard Procedure</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/required_documents.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Documents</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -386,14 +381,32 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Phenotyping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Phenotyping</span></a>
+  <a href="../chapters/using_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDM using R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/codelistgenerator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Codelist Generator</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/cohortconstruction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cohort Construction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -423,7 +436,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Effectiveness</span></a>
+ <span class="menu-text">Estimating effectiveness</span></a>
   </div>
 </li>
       </ul>
@@ -450,14 +463,28 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-are-phenotypes" id="toc-what-are-phenotypes" class="nav-link active" data-scroll-target="#what-are-phenotypes"><span class="header-section-number">1</span> What are phenotypes?</a></li>
+  <li><a href="#evaluating-a-phenotype" id="toc-evaluating-a-phenotype" class="nav-link" data-scroll-target="#evaluating-a-phenotype"><span class="header-section-number">2</span> Evaluating a phenotype</a></li>
+  <li><a href="#tools-for-phenotyping-and-evaluating-phenotypes" id="toc-tools-for-phenotyping-and-evaluating-phenotypes" class="nav-link" data-scroll-target="#tools-for-phenotyping-and-evaluating-phenotypes"><span class="header-section-number">3</span> Tools for phenotyping and evaluating phenotypes</a>
+  <ul class="collapse">
+  <li><a href="#building-the-phenotype-atlascodelistgeneratorcohortconstructor" id="toc-building-the-phenotype-atlascodelistgeneratorcohortconstructor" class="nav-link" data-scroll-target="#building-the-phenotype-atlascodelistgeneratorcohortconstructor"><span class="header-section-number">3.1</span> 1. Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor</a></li>
+  <li><a href="#diagnosing-the-phenotype-cohortdiagnosticsphenotyper" id="toc-diagnosing-the-phenotype-cohortdiagnosticsphenotyper" class="nav-link" data-scroll-target="#diagnosing-the-phenotype-cohortdiagnosticsphenotyper"><span class="header-section-number">3.2</span> 2. Diagnosing the phenotype: CohortDiagnostics/PhenotypeR</a></li>
+  <li><a href="#evaluating-sensitivity-and-specificity-with-phevaluator" id="toc-evaluating-sensitivity-and-specificity-with-phevaluator" class="nav-link" data-scroll-target="#evaluating-sensitivity-and-specificity-with-phevaluator"><span class="header-section-number">3.3</span> 3. Evaluating sensitivity and specificity with PheValuator</a></li>
+  <li><a href="#the-ohdsi-phenotype-library" id="toc-the-ohdsi-phenotype-library" class="nav-link" data-scroll-target="#the-ohdsi-phenotype-library"><span class="header-section-number">3.4</span> 4. The OHDSI Phenotype Library</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Phenotyping</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Phenotyping</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Phenotyping</h1>
 </div>
@@ -476,10 +503,375 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="what-are-phenotypes" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-are-phenotypes"><span class="header-section-number">1</span> What are phenotypes?</h2>
+<p>A <em>phenotype</em> in biology refers to the observable characteristics of an organism, as opposed to the genotype, which is the underlying genetic blueprint. In the context of observational health data, the term has been adopted with an analogous meaning: a <strong>phenotype</strong> is a specification of an observable, potentially changing clinical state of a patient, inferred from EHR data, claims data, or other routinely collected health data.</p>
+<p>In practice, when we talk about phenotyping in an OMOP study, we mean the process of algorithmically identifying patients who have a particular condition, who received a particular treatment, or who experienced a particular outcome. This is done based on the diagnostic codes, prescriptions, measurements, and clinical notes recorded in their data.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A phenotype is not a direct observation of clinical reality, but a <strong>computational inference</strong> <strong>about clinical reality</strong> based on whatever was recorded in the database!</p>
+</div>
+</div>
+<p>This distinction matters. A patient coded as having type 2 diabetes mellitus in an EHR may have been coded that way because a clinician confirmed the diagnosis after laboratory testing, because a coding clerk assigned a default code, or because the diagnosis was carried forward from a previous admission without review. The code is the same in all three cases but the clinical reality is not. <strong>Phenotyping is the discipline of navigating this uncertainty systematically</strong>. In OMOP studies, phenotyping applies to all three core building blocks of a cohort study: the <strong>exposure</strong> (who received the drug?), the <strong>outcome</strong> (who experienced the event?), and the <strong>population</strong> (who has the condition of interest?). You will need to consider all of these elements when building the phenotype for your population of interest, and it is essential that you consider all the domains in which the exposure or outcome that you want to describe might be captured in a relevant way for your study. Do you want to include ejection fraction (of the left ventricle of the heart, for instance) in your study? Then, you might need conditions (reduced ejection fraction, preserved ejection fraction) as well as measurements (ejection fraction of X%) or observations.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Remember:</strong> In the feasibility stage, you will need to provide 5 phenotypes. You can ask for help to WP6 in case you need it, both for clinical and programming assistance, since you will need to think of the clinical, sociodemographic, etc. characteristics that your population might have, as well as how to implement it with ATLAS (see the <a href="../chapters/atlas.html">ATLAS</a> section) or CohortConstructor (see the <a href="../chapters/cohortconstruction.html">Cohort construction</a> section).</p>
+</div>
+</div>
+</section>
+<section id="evaluating-a-phenotype" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="evaluating-a-phenotype"><span class="header-section-number">2</span> Evaluating a phenotype</h2>
+<p>When we evaluate a phenotype algorithm, we are essentially asking: of all the patients in the database who truly have the condition, how many does our algorithm correctly identify (sensitivity)? And of all the patients our algorithm flags, how many truly have the condition (positive predictive value / specificity)?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Sensitivity</strong> measures how well a test correctly identifies people who have a condition, while <strong>specificity</strong> measures how well a test correctly identifies people who do not have it.</p>
+</div>
+</div>
+<p>These two properties pull in opposite directions, and the right trade-off depends on the study type:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Study type</th>
+<th>Priority</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Incidence / prevalence</td>
+<td>High sensitivity</td>
+<td>Better to capture all cases, even if some are false positives</td>
+</tr>
+<tr class="even">
+<td>Safety outcome (rare event)</td>
+<td>High specificity</td>
+<td>A false positive outcome event can create a spurious safety signal</td>
+</tr>
+<tr class="odd">
+<td>Exposure definition</td>
+<td>High specificity</td>
+<td>Misclassifying non-users as users is a major source of confounding</td>
+</tr>
+<tr class="even">
+<td>Characterisation</td>
+<td>Balanced</td>
+<td>Describes the cohort as captured; misclassification affects interpretation</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Let’s go back to our study example.</strong> <em>Why does specificity matter more for the outcome?</em> Acute pancreatitis is a serious adverse event with a relatively low background incidence (~2-5 per 1,000 person-years in T2DM patients). A low-specificity outcome phenotype, that is, a phenotype that captures chronic pancreatitis follow-up visits, pancreatitis history codes, or rule-out diagnoses coded as confirmatory, would inflate the event count and potentially dilute or distort the hazard ratio. For this reason, <strong>restricting the outcome</strong> to inpatient or emergency settings is a deliberate specificity-improving decision, even at the cost of some sensitivity.</p>
+</blockquote>
+<p><strong>Quick check:</strong> You are designing the outcome phenotype for acute pancreatitis. You have two options: (A) any condition occurrence record for acute pancreatitis in any care setting, or (B) at least one inpatient or emergency acute pancreatitis record. Which has higher specificity?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">Option A</option><option value="answer">Option B</option><option value="">They have the same specificity</option><option value="">It depends on the database</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>Option B has higher specificity because restricting to inpatient or emergency settings filters out the codes most likely to represent historical diagnoses, follow-up visits for previously diagnosed pancreatitis, or diagnostic uncertainty (where a clinician codes a rule-out condition). Nevertheless, outpatient acute pancreatitis codes are far more likely to be false positives than inpatient codes, where the diagnosis typically requires clinical examination, laboratory findings, and often imaging confirmation. The trade-off is reduced sensitivity: some true acute pancreatitis events managed in outpatient settings will be missed; but for a rare serious adverse event, this trade-off is generally acceptable.</p>
+</div>
+</section>
+<section id="tools-for-phenotyping-and-evaluating-phenotypes" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="tools-for-phenotyping-and-evaluating-phenotypes"><span class="header-section-number">3</span> Tools for phenotyping and evaluating phenotypes</h2>
+<p>The OHDSI ecosystem provides a structured, layered set of tools that cover the full phenotyping workflow: from building concept sets and cohort definitions, to diagnosing their performance, to formally evaluating their sensitivity and specificity, to sharing validated definitions with the global community.</p>
+<section id="building-the-phenotype-atlascodelistgeneratorcohortconstructor" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="building-the-phenotype-atlascodelistgeneratorcohortconstructor"><span class="header-section-number">3.1</span> 1. Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor</h3>
+<p><a href="../chapters/atlas.html">ATLAS</a> is a web tool where you can build your concept sets and cohort definitions. The cohort definition is the phenotype algorithm in its executable form (a JSON specification that can be run against any OMOP CDM database). If you are using R instead of ATLAS, you can use the packages <a href="../chapters/codelistgenerator.html">CodelistGenerator</a> and <a href="../chapters/cohortconstruction.html">CohortConstructor</a>, which will be explained in the following sections. The executable form is then the R script itself since you create the cohorts in your OMOP CDM database, and you do not need the JSON file.</p>
+<p>The key decisions at this stage are:</p>
+<ul>
+<li>Which concept(s) to use and whether to include descendants</li>
+<li>Which OMOP domain(s) to search (condition occurrence, drug exposure, measurement, etc.)</li>
+<li>What temporal logic to apply (first ever occurrence, any occurrence, occurrence within a window)</li>
+<li>What additional inclusion and exclusion criteria to apply</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before designing a phenotype from scratch, always search the <a href="https://ohdsi.github.io/PhenotypeLibrary/">OHDSI Phenotype Library</a>! It is a publicly accessible, version-controlled catalogue of peer-reviewed cohort definitions contributed by the OHDSI community. Each entry includes clinical descriptions, technical logic, evaluation results, and a stable DOI.</p>
+</div>
+</div>
+<p>This section is further developed in the <a href="../chapters/atlas.html">ATLAS</a>, <a href="../chapters/codelistgenerator.html">CodelistGenerator</a> and <a href="../chapters/cohortconstruction.html">CohortConstructor</a> chapters.</p>
+</section>
+<section id="diagnosing-the-phenotype-cohortdiagnosticsphenotyper" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="diagnosing-the-phenotype-cohortdiagnosticsphenotyper"><span class="header-section-number">3.2</span> 2. Diagnosing the phenotype: CohortDiagnostics/PhenotypeR</h3>
+<p><a href="https://ohdsi.github.io/CohortDiagnostics/">CohortDiagnostics</a> and <a href="https://ohdsi.github.io/PhenotypeR/">PhenotypeR</a> are R packages that produce a standardised battery of diagnostics for any cohort definition, without sharing patient-level data. It is the essential next step after building a cohort and before running any analysis. They help ascertain whether you have created your cohort properly or you might be missing something (or someone).</p>
+<p>This section is further developed in the <a href="../chapters/diagnostics.html">Diagnostics</a> chapter.</p>
+</section>
+<section id="evaluating-sensitivity-and-specificity-with-phevaluator" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="evaluating-sensitivity-and-specificity-with-phevaluator"><span class="header-section-number">3.3</span> 3. Evaluating sensitivity and specificity with PheValuator</h3>
+<p><a href="https://ohdsi.github.io/PheValuator/">PheValuator</a> is an R package that provides a semi-automated method for estimating the sensitivity, specificity, and positive predictive value (PPV) of a phenotype algorithm without requiring manual chart review. It does this by building a diagnostic prediction model using a cohort of patients very likely to be true positives (the <em>xSpec</em> — extremely specific cohort — defined by requiring multiple diagnostic codes over time) and applying it to a large random sample of the database to generate a predicted probability of the condition for every patient. These probabilities are then used as a probabilistic gold standard against which the rule-based phenotype algorithm is evaluated.</p>
+<p>The key outputs of PheValuator are:</p>
+<ul>
+<li><strong>Sensitivity</strong>: the proportion of true cases captured by the phenotype algorithm</li>
+<li><strong>Specificity</strong>: the proportion of true non-cases correctly excluded</li>
+<li><strong>PPV</strong>: the proportion of algorithm-identified cases that are true cases</li>
+<li><strong>NPV</strong>: the proportion of algorithm-excluded patients that are true non-cases</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a nice addition to the phenotyping process, but it is <strong>not a required</strong> <strong>step</strong>.</p>
+</div>
+</div>
+</section>
+<section id="the-ohdsi-phenotype-library" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="the-ohdsi-phenotype-library"><span class="header-section-number">3.4</span> 4. The OHDSI Phenotype Library</h3>
+<p>The <a href="https://ohdsi.github.io/PhenotypeLibrary/">OHDSI Phenotype Library</a> is the community’s shared repository of cohort definitions, subject to version control, open peer review, and regular quality checks across the OHDSI network. Each entry includes not only the cohort definition JSON (from ATLAS) but also clinical descriptions, evaluation results from CohortDiagnostics and PheValuator, contributor attribution, and a stable DOI that can be cited in publications.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

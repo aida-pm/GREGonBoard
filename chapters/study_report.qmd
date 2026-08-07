@@ -2,3 +2,9 @@
 title: "Study Report"
 format: html
 ---
+
+## Doing a study report
+
+1.  First of all, go back to your study outline. You do not start from scratch!
+
+2.  Find [here](../templates/study_report_template.docx) the template of the study protocol. You should fill in this template and submit it to GREG for feedback.

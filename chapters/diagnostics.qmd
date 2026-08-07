@@ -2,3 +2,224 @@
 title: "Diagnostics"
 format: html
 ---
+
+```{r setup, include=FALSE}
+library(webexercises)
+```
+
+## Why diagnostics before analysis?
+
+Running an analysis on a poorly specified cohort is worse than running no analysis at all — it produces numbers that look credible but are wrong. Diagnostic tools exist to systematically surface problems with your phenotype algorithms and cohort logic **before** you commit to an analytical result.
+
+In the OHDSI/DARWIN EU ecosystem, the diagnostic workflow centres on two tools: **CohortDiagnostics** for population-level phenotype evaluation, and **CohortCharacteristics** for detailed baseline description. Think of these as your study's quality control layer.
+
+---
+
+## Setup
+
+```{r setup-packages, message=FALSE, warning=FALSE}
+library(CDMConnector)
+library(CohortCharacteristics)
+library(omopgenerics)
+library(omock)
+library(DrugUtilisation)
+library(dplyr)
+library(ggplot2)
+
+# Synthetic CDM + cohorts
+cdm <- omock::mockCdmReference() |>
+  omock::mockPerson(nPerson = 2000) |>
+  omock::mockObservationPeriod() |>
+  omock::mockConditionOccurrence() |>
+  omock::mockDrugExposure()
+
+# Create a simple drug cohort to use throughout this chapter
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm        = cdm,
+  name       = "glp1_cohorts",
+  ingredient = c("insulin", "metformin")   # using available mock ingredients
+)
+```
+
+---
+
+## 1. Cohort counts and attrition
+
+The first diagnostic is always: how many patients are in the cohort, and how many were lost at each step?
+
+```{r attrition, eval=FALSE}
+# Cohort entry counts
+count_result <- summariseCohortCount(cdm$glp1_cohorts)
+tableCohortCount(count_result)
+
+# Attrition (if you built the cohort with CohortConstructor)
+attrition_result <- summariseCohortAttrition(cdm$glp1_cohorts)
+tableCohortAttrition(attrition_result)
+
+# Plot the attrition flowchart for one cohort
+attrition_result |>
+  filter(group_level == "semaglutide") |>
+  plotCohortAttrition()
+```
+
+> **Our study:** Review the attrition for each of the five GLP-1 RA cohorts side by side. Pay particular attention to whether the washout step removes a disproportionate fraction of patients in older agents (exenatide, liraglutide) compared to newer ones (tirzepatide). If so, this is expected — older drugs have more prevalent users by definition.
+
+---
+
+## 2. Index event breakdown
+
+The index event breakdown tells you which specific concepts are driving cohort entry. For a drug cohort, this shows which branded products or formulations account for the most index dates.
+
+```{r index-breakdown, eval=FALSE}
+# Summarise the concept codes that appear on the index date
+# (requires CohortDiagnostics — shown here conceptually)
+
+# In CohortCharacteristics, use large scale characteristics
+# restricted to the index date window
+index_result <- cdm$glp1_cohorts |>
+  summariseLargeScaleCharacteristics(
+    window            = list(c(0, 0)),       # on index date only
+    eventInWindow     = "drug_exposure",
+    minimumFrequency  = 0.005                # only show if >0.5% of cohort
+  )
+
+tableTopLargeScaleCharacteristics(index_result)
+```
+
+::: {.callout-note}
+## What to look for
+For the semaglutide exposure cohort, you expect to see Ozempic (injectable) and Rybelsus (oral) as the dominant index concepts. If you see unexpected concepts — for example, a weight-loss branded product like Wegovy being excluded when you wanted to include it — your concept set needs revision.
+:::
+
+---
+
+## 3. Time distributions
+
+How long do patients have prior observation before the index date? And how long do they remain in the cohort post-index?
+
+```{r time-dist, eval=FALSE}
+# Summarise cohort entry timing
+timing_result <- summariseCohortTiming(cdm$glp1_cohorts)
+tableCohortTiming(timing_result)
+
+plotCohortTiming(
+  timing_result,
+  uniqueCombinations = TRUE,
+  timeScale          = "years"
+)
+```
+
+> **Our study:** The distribution of prior observation time should show a minimum of 365 days (our washout + observation requirement). If you see patients with fewer than 365 days, your `requireObservationBeforeDrug()` criterion was not applied correctly. The distribution of post-index time tells you how much follow-up you have — if most patients have less than 6 months of follow-up, your 3-year HR estimate will be very imprecise.
+
+---
+
+## 4. Baseline characteristics
+
+The core diagnostic for confounding: are the five GLP-1 RA cohorts comparable at baseline, or do they differ systematically in ways that could explain any observed difference in pancreatitis risk?
+
+```{r characteristics, eval=FALSE}
+# Summarise age, sex, and prior conditions
+char_result <- summariseCharacteristics(
+  cohort   = cdm$glp1_cohorts,
+  ageGroup = list(c(18, 44), c(45, 64), c(65, 150)),
+  tableIntersectCount = list(
+    list(
+      tableName  = "condition_occurrence",
+      window     = c(-365, -1)
+    )
+  )
+)
+
+tableCharacteristics(char_result)
+
+# Age distribution by cohort
+char_result |>
+  filter(variable_name == "Age") |>
+  plotCharacteristics(
+    plotType = "boxplot",
+    colour   = "cohort_name"
+  )
+```
+
+---
+
+## 5. Large-scale characteristics — the SMD plot
+
+The standardised mean difference (SMD) is the standard metric for assessing covariate balance across cohorts. An SMD below 0.1 for a covariate is generally considered indicative of no meaningful imbalance.
+
+```{r lsc, eval=FALSE}
+# Large scale characteristics: all conditions, drugs, procedures
+lsc_result <- cdm$glp1_cohorts |>
+  summariseLargeScaleCharacteristics(
+    window            = list(c(-365, -1)),    # 1 year prior to index
+    eventInWindow     = c("condition_occurrence", "drug_exposure"),
+    minimumFrequency  = 0.01                  # at least 1% prevalence
+  )
+
+# Comparison plot — SMD between cohorts
+lsc_result |>
+  plotComparedLargeScaleCharacteristics(
+    reference = "semaglutide",
+    colour    = "variable_level"
+  )
+```
+
+> **Our study:** After running large-scale characteristics across all five GLP-1 RA cohorts, we expect some imbalances. Key ones to look for:
+>
+> - **Hypertriglyceridaemia** — if more prevalent in older-drug cohorts (exenatide, liraglutide), this is a confounder for the pancreatitis outcome
+> - **Obesity** — tirzepatide may be preferentially prescribed to more obese patients, which itself increases pancreatitis risk
+> - **Prior pancreatitis** — must be inspected carefully; any prior acute pancreatitis should be handled as an exclusion criterion or sensitivity analysis
+
+```{r q1, echo=FALSE, results='asis'}
+cat(
+  "**Quick check:** You plot the SMD for 500 baseline covariates and find that",
+  "hypertriglyceridaemia has an SMD of 0.32 between semaglutide and exenatide users.",
+  "What does this tell you?\n\n",
+  mcq(c(
+    "The difference is small and can be ignored",
+    answer = "There is meaningful imbalance — hypertriglyceridaemia should be included in the propensity score model as it is both a confounder and a risk factor for the outcome",
+    "You should exclude all patients with hypertriglyceridaemia",
+    "The cohort definitions are wrong and need to be redefined"
+  )), "\n\n"
+)
+```
+
+`r hide("Explanation")`
+An SMD of 0.32 is well above the conventional threshold of 0.1, meaning hypertriglyceridaemia is meaningfully more prevalent in one exposure group than the other. Since hypertriglyceridaemia is also an independent risk factor for acute pancreatitis, it meets the definition of a confounder — it is associated with both treatment assignment and the outcome. It must be included in the propensity score model or adjusted for in the outcome model. Excluding patients with hypertriglyceridaemia would change your target population and invalidate the generalisability of your results.
+`r unhide()`
+
+---
+
+## 6. Cohort overlap
+
+Do patients appear in more than one of our five exposure cohorts? This should be rare or impossible if your new-user + washout criteria are correctly specified — a patient should only initiate one GLP-1 RA first.
+
+```{r overlap, eval=FALSE}
+overlap_result <- summariseCohortOverlap(cdm$glp1_cohorts)
+tableCohortOverlap(overlap_result)
+plotCohortOverlap(overlap_result, uniqueCombinations = TRUE)
+```
+
+::: {.callout-tip}
+## If overlap is high
+High overlap between exposure cohorts means your cohort exit criteria are not correctly excluding patients who switch between agents. For example, if a patient switches from liraglutide to semaglutide, they should exit the liraglutide cohort at the switch date and — if their second entry passes the washout criterion — enter the semaglutide cohort. Failure to handle this correctly leads to immortal time and misclassification bias.
+:::
+
+---
+
+## Exporting diagnostics results
+
+```{r export, eval=FALSE}
+# Combine all diagnostic results
+all_diagnostics <- omopgenerics::bind(
+  count_result,
+  attrition_result,
+  char_result,
+  lsc_result,
+  overlap_result
+) |>
+  omopgenerics::suppress(minCellCount = 5)  # privacy protection
+
+# Export for sharing with study team
+write.csv(all_diagnostics, "results/diagnostics.csv", row.names = FALSE)
+```

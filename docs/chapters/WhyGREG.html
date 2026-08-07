@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -112,6 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -402,12 +368,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Standard Procedure</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/required_documents.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Documents</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -421,14 +381,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phenotyping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Phenotyping</span></a>
+  <a href="../chapters/using_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDM using R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/codelistgenerator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cohort Construction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/cohortconstruction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cohort Construction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -458,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Effectiveness</span></a>
+ <span class="menu-text">Estimating effectiveness</span></a>
   </div>
 </li>
       </ul>
@@ -490,9 +468,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">1</span> Learning objectives</a></li>
-  <li><a href="#omop-cdm-overview" id="toc-omop-cdm-overview" class="nav-link" data-scroll-target="#omop-cdm-overview"><span class="header-section-number">2</span> OMOP CDM overview</a></li>
-  <li><a href="#ohdsi-ecosystem" id="toc-ohdsi-ecosystem" class="nav-link" data-scroll-target="#ohdsi-ecosystem"><span class="header-section-number">3</span> OHDSI ecosystem</a></li>
+  <li><a href="#why-do-we-need-greg" id="toc-why-do-we-need-greg" class="nav-link active" data-scroll-target="#why-do-we-need-greg"><span class="header-section-number">1</span> Why do we need GREG?</a></li>
+  <li><a href="#work-packages" id="toc-work-packages" class="nav-link" data-scroll-target="#work-packages"><span class="header-section-number">2</span> Work packages</a></li>
+  <li><a href="#what-is-my-task-in-greg" id="toc-what-is-my-task-in-greg" class="nav-link" data-scroll-target="#what-is-my-task-in-greg"><span class="header-section-number">3</span> What is my task in GREG?</a></li>
   </ul>
 </nav>
     </div>
@@ -519,49 +497,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="learning-objectives" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1</span> Learning objectives</h2>
-<ul>
-<li>Understand why OMOP CDM exists</li>
-<li>Understand OHDSI ecosystem components</li>
-<li>Identify key CDM tables</li>
-</ul>
-</section>
-<section id="omop-cdm-overview" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="omop-cdm-overview"><span class="header-section-number">2</span> OMOP CDM overview</h2>
-<p>The OMOP Common Data Model standardises healthcare data…</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'dplyr' was built under R version 4.5.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-</div>
-</section>
-<section id="ohdsi-ecosystem" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="ohdsi-ecosystem"><span class="header-section-number">3</span> OHDSI ecosystem</h2>
-<p>Key components:</p>
-<ul>
-<li>ATLAS (study design tool)</li>
-<li>HADES (R packages)</li>
-<li>OHDSI community tools</li>
-</ul>
+<section id="why-do-we-need-greg" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="why-do-we-need-greg"><span class="header-section-number">1</span> Why do we need GREG?</h2>
+<p>But, if there are already projects like OHDSI, if <a href="https://www.darwin-eu.org/">DARWIN EU ®</a> is already an ongoing project linked to the EMA, why do we need the project GREG?</p>
+<p>While OHDSI provides the methodological framework and analytical tools and DARWIN EU® operationalises those tools to answer specific regulatory questions at the EMA level, a critical gap remains: who ensures that the diverse ecosystem of stakeholders, i.e., pharmaceutical companies, medical device manufacturers, HTA bodies, hospital researchers, patient organisations; generates evidence consistently, rigorously, and in a manner that is accepted across the board?</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -572,21 +511,270 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>OMOP standardisation enables reproducible observational research across institutions.</p>
+<p>You should never assume that the same guideline is a gold standard for every stakeholder!</p>
 </div>
 </div>
-<p>Key tables</p>
+<p>This is the gap that GREG was designed to address. GREG is the acronym for the project name <em>“Testing, improving, and co-creating Guidance and Tools for Real World Evidence Generation and Use for Decision-Making in Europe”</em> . It is a 60-month initiative that began in May 2025, funded by the Innovative Health Initiative Joint Undertaking (IHI JU). Despite the proliferation of guidelines and recommendations for real-world evidence generation, they are not consistently interpreted, applied, or accepted across stakeholder groups. The divergence between regulatory agencies and HTA bodies is a particularly concrete illustration of this problem.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s take the example of medical devices:</p>
 <ul>
-<li>PERSON</li>
-<li>CONDITION_OCCURRENCE</li>
-<li>DRUG_EXPOSURE</li>
-<li>OBSERVATION_PERIOD</li>
+<li>The EMA, as a regulatory body, evaluates the safety and efficacy of a health technology; the question it asks is, broadly, does this work and is it safe?</li>
+<li>HTA bodies, such as NICE in England, the Haute Autorité de Santé in France, or the G-BA in Germany ask a fundamentally different question: is this better than what we already have, and is it worth the cost?</li>
 </ul>
+<p>These are not the same question, and they do not require the same evidence. A medical device manufacturer may successfully obtain CE (European Conformity) marking following EMA-aligned regulatory requirements, only to face entirely different, and sometimes contradictory, evidentiary demands from each national HTA body when seeking reimbursement. The evidence generated for one purpose must then be reframed, supplemented, or entirely duplicated to satisfy another. The requirement for an active comparator arm, and the use of surrogate endpoints are areas where regulators and HTA bodies frequently disagree. Furthermore, while some HTA bodies such as NICE have established frameworks receptive to real-world evidence, many others either lack a formal policy entirely or restrict acceptable evidence to traditional clinical studies, creating a fragmented landscape where the same device, supported by the same data, may be reimbursed in one European country and rejected in another.</p>
+</div>
+</div>
+<p>GREG aims to address this by generating guidance and tools to advance the use of RWE in the development and evaluation of medicines, medical devices, and drug-device combinations, supporting both regulatory and HTA decision-making. Critically, rather than producing guidance in isolation, the consortium actively engages with regulators, HTA bodies, healthcare professionals, industry partners, and patients to co-design and validate its tools and guidance, with pilot testing studies of relevance and an active dialogue with decision-making bodies planned to support endorsement and alignment, fostering harmonised assessment practices across Europe.</p>
+<p>In this context, OHDSI, DARWIN EU®, and GREG are not redundant, but complementary. OHDSI establishes the methodological foundation. DARWIN EU® applies it at the regulatory level and develops its own tools. GREG ensures that the broader European ecosystem has the guidance, tools, and shared understanding necessary to generate evidence that is robust, consistent, and fit for decision-making across all relevant stakeholder contexts.</p>
+</section>
+<section id="work-packages" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="work-packages"><span class="header-section-number">2</span> Work packages</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://ihi-greg.eu/project/"><img src="..\images/wpkgs.png" class="img-fluid figure-img" alt="The image shows the different work packages that are part of the GREG project, from WP1 to WP9"></a></p>
+<figcaption>Figure. The work packages (WP) that are part of GREG and their role in the project.</figcaption>
+</figure>
+</div>
+<p>If you want to know more about GREG and its work packages (WP), please, visit the website <a href="https://ihi-greg.eu/" class="uri">https://ihi-greg.eu/</a> and keep up to date following the <a href="https://www.linkedin.com/company/ihi-greg/">LinkedIn</a> of the project or <a href="https://ihi-greg.us9.list-manage.com/subscribe?u=6631e6d7afaae130acef13c89&amp;id=680fd0d6cb">subscribing to our newsletter</a>!</p>
+</section>
+<section id="what-is-my-task-in-greg" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="what-is-my-task-in-greg"><span class="header-section-number">3</span> What is my task in GREG?</h2>
+<p>To answer this question, you need to be aware of which WP you are involved in. Each WP has their own responsibilities and objectives. Please, keep an eye to the <strong>Teams</strong> channel of your WP and the General <strong>GREG channel</strong> to make sure that you are up to date with current use cases and work.</p>
+<p>Besides, you are expected to attend to the <strong>monthly remote meetings</strong> of your WP, where you will discuss the ongoing work and you will be able to make suggestions, receive feedback, and collaborate towards your WP objective.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can always suggest a new Use Case or collaborate in one! Think of a topic of interest aligned to GREG’s objectives and that answer to some of the relevant tasks of the project, and suggest it in the new Use Case Prioritisation Task Force (UCPTF). <strong>Be proactive</strong>!</p>
+</div>
+</div>
+<p><em>Do you want to submit a new use case</em>? Then, go to the <a href="../chapters/study_outline.html">Study Outline</a> section. Preparing your study outline will be the first step towards submission of a new use case!</p>
 
 
 </section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

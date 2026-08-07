@@ -3,35 +3,45 @@ title: "Why GREG?"
 format: html
 ---
 
-## Learning objectives
+## Why do we need GREG?
 
-- Understand why OMOP CDM exists
-- Understand OHDSI ecosystem components
-- Identify key CDM tables
+But, if there are already projects like OHDSI, if [DARWIN EU ®](https://www.darwin-eu.org/) is already an ongoing project linked to the EMA, why do we need the project GREG?
 
-## OMOP CDM overview
-
-The OMOP Common Data Model standardises healthcare data...
-
-```{r}
-library(dplyr)
-```
-
-## OHDSI ecosystem
-
-Key components:
-
-- ATLAS (study design tool)
-- HADES (R packages)
-- OHDSI community tools
+While OHDSI provides the methodological framework and analytical tools and DARWIN EU® operationalises those tools to answer specific regulatory questions at the EMA level, a critical gap remains: who ensures that the diverse ecosystem of stakeholders, i.e., pharmaceutical companies, medical device manufacturers, HTA bodies, hospital researchers, patient organisations; generates evidence consistently, rigorously, and in a manner that is accepted across the board?
 
 ::: callout-tip
-OMOP standardisation enables reproducible observational research across institutions.
+You should never assume that the same guideline is a gold standard for every stakeholder!
 :::
 
-Key tables
+This is the gap that GREG was designed to address. GREG is the acronym for the project name *"Testing, improving, and co-creating Guidance and Tools for Real World Evidence Generation and Use for Decision-Making in Europe"* . It is a 60-month initiative that began in May 2025, funded by the Innovative Health Initiative Joint Undertaking (IHI JU). Despite the proliferation of guidelines and recommendations for real-world evidence generation, they are not consistently interpreted, applied, or accepted across stakeholder groups. The divergence between regulatory agencies and HTA bodies is a particularly concrete illustration of this problem.
 
-- PERSON
-- CONDITION_OCCURRENCE
-- DRUG_EXPOSURE
-- OBSERVATION_PERIOD
+::: callout-caution
+Let's take the example of medical devices:
+
+- The EMA, as a regulatory body, evaluates the safety and efficacy of a health technology; the question it asks is, broadly, does this work and is it safe?
+- HTA bodies, such as NICE in England, the Haute Autorité de Santé in France, or the G-BA in Germany ask a fundamentally different question: is this better than what we already have, and is it worth the cost?
+
+These are not the same question, and they do not require the same evidence. A medical device manufacturer may successfully obtain CE (European Conformity) marking following EMA-aligned regulatory requirements, only to face entirely different, and sometimes contradictory, evidentiary demands from each national HTA body when seeking reimbursement. The evidence generated for one purpose must then be reframed, supplemented, or entirely duplicated to satisfy another. The requirement for an active comparator arm, and the use of surrogate endpoints are areas where regulators and HTA bodies frequently disagree. Furthermore, while some HTA bodies such as NICE have established frameworks receptive to real-world evidence, many others either lack a formal policy entirely or restrict acceptable evidence to traditional clinical studies, creating a fragmented landscape where the same device, supported by the same data, may be reimbursed in one European country and rejected in another.
+:::
+
+GREG aims to address this by generating guidance and tools to advance the use of RWE in the development and evaluation of medicines, medical devices, and drug-device combinations, supporting both regulatory and HTA decision-making. Critically, rather than producing guidance in isolation, the consortium actively engages with regulators, HTA bodies, healthcare professionals, industry partners, and patients to co-design and validate its tools and guidance, with pilot testing studies of relevance and an active dialogue with decision-making bodies planned to support endorsement and alignment, fostering harmonised assessment practices across Europe.
+
+In this context, OHDSI, DARWIN EU®, and GREG are not redundant, but complementary. OHDSI establishes the methodological foundation. DARWIN EU® applies it at the regulatory level and develops its own tools. GREG ensures that the broader European ecosystem has the guidance, tools, and shared understanding necessary to generate evidence that is robust, consistent, and fit for decision-making across all relevant stakeholder contexts.
+
+## Work packages
+
+[![Figure. The work packages (WP) that are part of GREG and their role in the project.](/images/wpkgs.png){fig-alt="The image shows the different work packages that are part of the GREG project, from WP1 to WP9"}](https://ihi-greg.eu/project/)
+
+If you want to know more about GREG and its work packages (WP), please, visit the website <https://ihi-greg.eu/> and keep up to date following the [LinkedIn](https://www.linkedin.com/company/ihi-greg/) of the project or [subscribing to our newsletter](https://ihi-greg.us9.list-manage.com/subscribe?u=6631e6d7afaae130acef13c89&id=680fd0d6cb)!
+
+## What is my task in GREG?
+
+To answer this question, you need to be aware of which WP you are involved in. Each WP has their own responsibilities and objectives. Please, keep an eye to the **Teams** channel of your WP and the General **GREG channel** to make sure that you are up to date with current use cases and work.
+
+Besides, you are expected to attend to the **monthly remote meetings** of your WP, where you will discuss the ongoing work and you will be able to make suggestions, receive feedback, and collaborate towards your WP objective.
+
+::: callout-tip
+You can always suggest a new Use Case or collaborate in one! Think of a topic of interest aligned to GREG's objectives and that answer to some of the relevant tasks of the project, and suggest it in the new Use Case Prioritisation Task Force (UCPTF). **Be proactive**!
+:::
+
+*Do you want to submit a new use case*? Then, go to the [Study Outline](study_outline.qmd) section. Preparing your study outline will be the first step towards submission of a new use case!

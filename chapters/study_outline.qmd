@@ -2,3 +2,67 @@
 title: "Study Outline"
 format: html
 ---
+
+## First steps
+
+Congratulations! You are part of GREG and you want to suggest a new use case, you are collaborating in one, or you have initiated a use case. Now, you need to present the study outline. *What should you do?*
+
+1.  First of all, think of the study that you want to do. What is your topic? Is it aligned with GREG objectives? Does it respond to GREG tasks?
+
+2.  Find [here](../templates/study_outline_template.docx) the template of the study outline. You should fill in this template before submitting your use case.
+
+In [Study protocol](study_protocol.qmd) you will find a description of every section in the study outline document, since they both share information. In fact, the study outline would be basically the "abstract" of your study protocol, where all necessary information to understand the study is available but summarised and more schematic. It is in the study protocol where the different sections are extensively developed.
+
+## Sections of the template
+
+::: {.callout-note icon="false"}
+## 1. [Study title](study_protocol.qmd#study-title-1)
+:::
+
+::: {.callout-note icon="false"}
+## 2. [Description of the study team](study_protocol.qmd#description-of-the-study-team-1)
+:::
+
+::: {.callout-note icon="false"}
+## 3. [Timelines](study_protocol.qmd#timelines-1)
+:::
+
+::: {.callout-note icon="false"}
+## 4. [Rationale and background](study_protocol.qmd#rationale-and-background-1) {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 5. [Research question and objectives](study_protocol.qmd#research-question-and-objectives-1) {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 6. [Research methods](study_protocol.qmd#research-methods-1)
+
+- Study design
+
+- Follow-up
+
+- Study population
+
+- Data souces
+
+- Study period
+
+- Variables
+
+- Sample size
+
+- Analysis
+:::
+
+::: {.callout-note icon="false"}
+## 7. [Strengths and limitations](study_protocol.qmd#strengths-and-limitations-1) {.callout-note icon="false"}
+:::
+
+::: {.callout-note icon="false"}
+## 8. [References](study_protocol.qmd#references-1) {.callout-note icon="false"}
+:::
+
+## Feasibility
+
+Remember that, for [feasibility purposes](standard_procedure.qmd), you will have to add information about what kind of data sources you will need for the study (already in the template) but also include a 40 *concept ids* excel file with the most relevant concepts that you need for your study.

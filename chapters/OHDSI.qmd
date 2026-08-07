@@ -3,35 +3,32 @@ title: "OHDSI Journey"
 format: html
 ---
 
-## Learning objectives
+## About OHDSI
 
-- Understand why OMOP CDM exists
-- Understand OHDSI ecosystem components
-- Identify key CDM tables
+The Observational Health Data Sciences and Informatics (or OHDSI, pronounced "Odyssey") program is a multi-stakeholder, interdisciplinary collaborative to bring out the value of health data through large-scale analytics. OHDSI has established an international network of researchers and observational health databases with a central coordinating center housed at Columbia University.
 
-## OMOP CDM overview
+The OHDSI mission is to improve health by empowering a community to collaboratively generate the evidence that promotes better health decisions and better care. In OHDSI, and also in GREG, we do large scale, multicentre analyses in a federated manner, so that data remains with each data partner and the only thing that is shared is the data format, the Observational Medical Outcomes Partnership (OMOP) Common Data Model (CDM), as well as analytical tools developed by the OHDSI collaborators and, most recently, by the [DARWIN EU®](https://www.darwin-eu.org/) project.
 
-The OMOP Common Data Model standardises healthcare data...
+The OHDSI network was built to do [collaborative studies](https://data.ohdsi.org/OhdsiStudies/) to which one can adhere whether they find them interesting or recognise their potential contribution benefits. The [OHDSI forums](https://forums.ohdsi.org/) are the standard communication and informative tool, and you can find several nodes of OHDSI to "restrict" your research geographically, for example:
 
-```{r}
-library(dplyr)
-```
+- OHDSI Europe
 
-## OHDSI ecosystem
+- OHDSI Japan
 
-Key components:
+- OHDSI Korea
 
-- ATLAS (study design tool)
-- HADES (R packages)
-- OHDSI community tools
+- OHDSI China
 
-::: callout-tip
-OMOP standardisation enables reproducible observational research across institutions.
-:::
+- OHDSI LATAM
 
-Key tables
+- OHDSI en Español
 
-- PERSON
-- CONDITION_OCCURRENCE
-- DRUG_EXPOSURE
-- OBSERVATION_PERIOD
+But you can also find groups by role (developer, implementer, researcher...) and, of course, a *General* channel. There are regular meetings to which you are kindly requested to attend, may you have an ongoing project within the OHDSI network.
+
+Read more about OHDSI: <https://www.ohdsi.org/>
+
+## The Book of OHDSI
+
+You can access the book of OHDSI here: <https://ohdsi.github.io/TheBookOfOhdsi/>
+
+The OHDSI community wrote the book to serve as a central knowledge repository for all things OHDSI. This book is a great introduction to the OMOP CDM and how to plan and execute studies using OMOP CDM databases and OHDSI tools such as ATLAS or the OHDSI R packages.

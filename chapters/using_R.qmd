@@ -1,0 +1,289 @@
+---
+title: "CDM using R"
+engine: knitr
+format: live-html
+---
+
+```{r setup, include=FALSE}
+library(webexercises)
+install.packages("CDMConnector")
+install.packages("dplyr")
+install.packages("omock")
+library(CDMConnector)
+library(dplyr)
+library(omock)
+```
+
+## Why R for OMOP?
+
+ATLAS is a powerful graphical interface, but it has limits: complex cohort manipulations, custom statistical models, and some automated multi-study pipelines all might require additional `code`. The OHDSI community and the DARWIN EU Coordination Centre have co-developed a rich ecosystem of R packages — collectively known as the **OMOPverse** — that allow you to work directly with OMOP CDM data in R in a consistent, reproducible, and database-agnostic way.
+
+The key architectural principle of the OMOPverse is that **you never need to change your analysis code when you change your database**. Whether your data lives in DuckDB, PostgreSQL, SQL Server, Snowflake, or Redshift, the same R functions work identically because the packages use `dbplyr` to translate R code into database-specific SQL at runtime.
+
+::: callout-tip
+You can check what are SQL databases [here](https://cloud.google.com/discover/what-are-sql-databases).
+:::
+
+::: callout-note
+## The OMOPverse core packages
+
+The packages covered across these tutorial chapters are:
+
+| Package | Purpose |
+|----|----|
+| [`CDMConnector`](https://darwin-eu.github.io/CDMConnector/index.html) | Connect to any OMOP CDM database |
+| [`omopgenerics`](https://darwin-eu.github.io/omopgenerics/) | Shared data structures and utilities |
+| [`omock`](https://ohdsi.github.io/omock/) | Generate synthetic OMOP data for testing |
+| [`CohortDiagnostics`](https://ohdsi.github.io/CohortDiagnostics/index.html) | Generate a set of diagnostic features for cohorts |
+| [`PhenotypeR`](https://ohdsi.github.io/PhenotypeR/index.html) | Generate a set of diagnostic features for cohorts |
+| [`CodelistGenerator`](https://darwin-eu.github.io/CodelistGenerator/) | Create concept sets to build cohorts in R |
+| [`CohortConstructor`](https://ohdsi.github.io/CohortConstructor/) | Build and manipulate cohorts in R |
+| [`CohortCharacteristics`](https://darwin-eu.github.io/CohortCharacteristics/) | Summarise cohort characteristics |
+| [`IncidencePrevalence`](https://darwin-eu.github.io/IncidencePrevalence/) | Estimate incidence rates and prevalence |
+| [`DrugUtilisation`](https://darwin-eu.github.io/DrugUtilisation/) | Drug cohort creation and DUS analyses |
+| [`CohortSurvival`](https://darwin-eu-dev.github.io/CohortSurvival/) | Causal comparative effectiveness (DARWIN EU®) |
+| [`CohortMethod`](https://ohdsi.github.io/CohortMethod/) | Causal comparative effectiveness (OHDSI) |
+
+All are available either on CRAN or downloadable from their GitHub repository.
+:::
+
+------------------------------------------------------------------------
+
+## Installation
+
+### Installing R and RStudio
+
+Please, check this guide: <https://ohdsi.github.io/Hades/rSetup.html>
+
+### Setting up R
+
+Ideally, when you are doing R code for a GREG study, you will create a new R project and set up the environment. This includes installing all the packages required for the project and recording the package versions in a `.lock` file. By doing so, you can restore the exact same environment whenever you open the project in a new session or on a different computer, ensuring that the code remains reproducible and consistent over time.
+
+A common workflow is to use the **renv** package, which creates an isolated project library and manages package dependencies. After installing the required packages, you can save the environment with `renv::snapshot()`, which generates the `renv.lock` file. Later, anyone working on the project can recreate the same environment by running `renv::restore()`. This approach minimizes compatibility issues caused by package updates and helps guarantee that analyses can be reproduced exactly as originally performed.
+
+Install all packages you will need for these tutorials and set up the environment:
+
+```{r install, eval=FALSE}
+install.packages("renv")
+
+renv::init()
+
+install.packages(c(
+  "CDMConnector",
+  "omopgenerics",
+  "omock",
+  "CohortDiagnostics",
+  "PhenotypeR",
+  "CodelistGenerator",
+  "CohortConstructor",
+  "CohortCharacteristics",
+  "IncidencePrevalence",
+  "DrugUtilisation",
+  "CohortSurvival",
+  "CohortMethod",
+  "dplyr",
+  "duckdb",
+  "DBI",
+  "ggplot2"
+))
+
+renv::snapshot()
+```
+
+Later, when you (or someone else) open the project on a different computer or in a fresh R session, simply run:
+
+```{r, eval=FALSE}
+renv::restore()
+```
+
+::: callout-tip
+A good practice is to include the following commands at the beginning of your project setup script:
+
+```{r, eval=FALSE}
+# ------------------------------------------------------------
+# Project setup
+# ------------------------------------------------------------
+
+# Install renv if it is not available
+if (!requireNamespace("renv", quietly = TRUE)) {
+  install.packages("renv")
+}
+
+# Restore the project environment
+renv::restore()
+```
+:::
+
+### Working on GitHub
+
+To make the project easier to share, collaborate on, and keep track of changes, it is recommended to use GitHub as a version-control platform. The first step is to create a new repository on GitHub. A repository acts as the central location where all project files, scripts, documentation, and version history are stored.
+
+To create a new repository, log in to your GitHub account, select **New repository**, choose a descriptive name for the project, and initialize it with a README file if desired. Once the repository has been created, clone it to your local computer using either Git or the GitHub interface. The local copy of the repository will contain all project files and will be connected to the remote GitHub repository.
+
+::: callout-tip
+You can use [GitHub Desktop](https://desktop.github.com/download/), it is very convenient!
+:::
+
+After cloning the repository, open the project directly from the local folder in RStudio by selecting **File → New Project → Existing Directory** and choosing the repository folder. This creates an R project (`.Rproj`) inside the GitHub repository, allowing RStudio to recognize the project structure and keep all files organized.
+
+Once the project is set up, changes can be tracked using Git. After modifying files or adding new scripts, commit the changes with a meaningful message and push them to GitHub. This workflow ensures that the project history is preserved and that collaborators can access the most recent version of the analysis.
+
+For reproducible research, the GitHub repository should include the R project file, the analysis scripts, documentation files, and the `renv.lock` file created with `renv::snapshot()`. The `renv.lock` file allows collaborators to recreate the exact R environment required to run the project.
+
+------------------------------------------------------------------------
+
+## Connecting to an OMOP CDM
+
+With all set up, let's enter the OMOPverse! To all OMOP analyses, the entrance door is the **CDM reference**, an R object that represents your database connection and knows where your OMOP tables live (see [OMOP CDM](OMOPCDM.qmd)). This object in R is created with `CDMConnector`. You can either work with a real database or synthetic data. If you have access to a real database, you can connect to that one. Nevertheless, some analyses might be very computationally expensive and spend days running.
+
+::: callout-tip
+You might want to use synthetic data to try your code before running it on real data!
+:::
+
+### A. Real database (e.g. PostgreSQL)
+
+```{r real-db, eval=FALSE}
+library(CDMConnector)
+library(DBI)
+library(RPostgres)
+
+# 1. Create a database connection
+
+# 1.1 Database metadata and connection details -----
+
+# name of the database, use acronym in capital letters 
+dbName <-
+
+# 1.2 parameters to connect to create cdm object ----
+
+# name of the schema where cdm tables are located
+cdmSchema <- "cdm"
+ 
+# name of a schema in the database where you have writing permission
+writeSchema <- 
+
+# name of the achilles schema
+achillesSchema <- 
+
+# combination of at least 5 letters + _ (eg. "abcde_") that will lead any table
+# written in the write schema
+writePrefix <- 
+
+# connection
+con <- DBI::dbConnect(RPostgres::Postgres(), # Go to: https://dbi.r-dbi.org/
+                      host = db_host,
+                      port = db_port,
+                      dbname = db_cdmvers,
+                      user = db_user,
+                      password = db_password)
+
+cdm <- cdmFromCon(con = con,
+                  cdmSchema = cdmSchema,
+                  writeSchema = writeSchema,
+                  achillesSchema = achillesSchema,
+                  cdmName = "your_study_name")
+
+cdm
+```
+
+::: callout-warning
+Use `usethis::edit_r_environ()` to open your `.Renviron` file and store connection credentials there. This prevents accidentally committing passwords to Git and makes your code portable across team members.
+:::
+
+### B. Synthetic data with `omock` (what we use in this tutorial)
+
+For all code examples in these chapters, we use synthetic data generated by the `omock` package. This means you can run every code block yourself, right now, without needing a real database connection. You can also do this when planning a study, to avoid running unnecessary long codes or codes with bugs in real databases.
+
+```{webr mock-cdm, message=FALSE, warning=FALSE}
+library(omopgenerics)
+library(omock)
+library(CDMConnector)
+library(dplyr)
+
+# Create a synthetic CDM with 1000 people
+cdm <- omock::mockCdmReference() |>
+  omock::mockPerson(nPerson = 1000) |>
+  omock::mockObservationPeriod() |>
+  omock::mockConditionOccurrence() |>
+  omock::mockDrugExposure() |>
+  omock::mockDeath()
+
+cdm
+```
+
+## Exploring the CDM structure
+
+Once you have a CDM reference, you can inspect it like a named list. Each element is a lazy database table, it does not load data into memory until you explicitly `collect()` it.
+
+```{r explore-cdm, eval=FALSE}
+# List all available tables
+names(cdm)
+
+# Inspect the person table
+cdm$person |> glimpse()
+
+# Count rows without loading everything into memory
+cdm$person |> count()
+
+# Look at a few drug exposure records
+cdm$drug_exposure |> head(10) |> collect()
+```
+
+::: callout-note
+When you write `cdm$drug_exposure |> filter(drug_concept_id == 1503297)`, R does **not** immediately execute this against the database. Instead, it builds a query that is only sent to the database when you call `collect()`, `count()`, `glimpse()`, or a `summarise*` function. This means you can build complex multi-step queries without pulling millions of rows into memory.
+:::
+
+```{r lazy-demo, eval=FALSE}
+# This builds a query but does NOT run it yet
+query <- cdm$condition_occurrence |>
+  filter(condition_concept_id == 201826) |>  # Type 2 diabetes
+  select(person_id, condition_start_date)
+
+# This sends the query to the database and returns results
+query |> collect() |> head(5)
+
+# This just counts — much faster for large tables
+query |> count()
+```
+
+## The `omopgenerics` result format
+
+All OMOPverse analytical functions return results in a standardised **`summarised_result`** format: a tibble with a consistent set of columns regardless of which analysis was run. Understanding this format is essential because all downstream table and plot functions expect it.
+
+```{r result-format, eval=FALSE}
+# A summarised_result always has these columns:
+# result_id, cdm_name, group_name, group_level,
+# strata_name, strata_level, variable_name, variable_level,
+# estimate_name, estimate_type, estimate_value,
+# additional_name, additional_level
+
+# You can check if an object is a summarised_result
+omopgenerics::isSummarisedResult(my_result)
+
+# Suppress small cell counts before sharing (required for privacy)
+my_result |> omopgenerics::suppress(minCellCount = 5)
+```
+
+::: callout-important
+The `suppress(minCellCount = 5)` function replaces any count below 5 with `<5` and sets related percentages to `NA`. This is a minimum standard for privacy protection in federated network studies. You should always apply it before exporting results from a data partner.
+:::
+
+## Disconnecting
+
+Always close your database connection at the end of a session:
+
+```{r disconnect, eval=FALSE}
+# For a real database connection
+CDMConnector::cdmDisconnect(cdm)
+# or 
+dbDisconnect(con)
+
+# For a mock CDM created with omock
+omopgenerics::cdmDisconnect(cdm)
+# or
+dbDisconnect(con)
+```
+
+## More information
+
+You can expand your knowledge on CDM Connector through this [tutorial](https://dpa-pde-oxford.quarto.pub/omop-and-cdmconnector). As always, you can additionally check [The Book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/SqlAndR.html).
