@@ -310,7 +310,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/diagnostics.html">Diagnostics</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/diagnostics.html">Diagnostics</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -416,6 +416,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phenotyping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
   </div>
@@ -428,8 +434,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Phenotyping</span></a>
+  <a href="../chapters/codelistgenerator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Codelist Generator</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/cohortconstruction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cohort Construction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -459,7 +471,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">From description to causal inference</span></a>
+ <span class="menu-text">Estimating effectiveness</span></a>
   </div>
 </li>
       </ul>
@@ -491,15 +503,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#why-diagnostics-before-analysis" id="toc-why-diagnostics-before-analysis" class="nav-link active" data-scroll-target="#why-diagnostics-before-analysis"><span class="header-section-number">1</span> Why diagnostics before analysis?</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
-  <li><a href="#cohort-counts-and-attrition" id="toc-cohort-counts-and-attrition" class="nav-link" data-scroll-target="#cohort-counts-and-attrition"><span class="header-section-number">3</span> 1. Cohort counts and attrition</a></li>
-  <li><a href="#index-event-breakdown" id="toc-index-event-breakdown" class="nav-link" data-scroll-target="#index-event-breakdown"><span class="header-section-number">4</span> 2. Index event breakdown</a></li>
-  <li><a href="#time-distributions" id="toc-time-distributions" class="nav-link" data-scroll-target="#time-distributions"><span class="header-section-number">5</span> 3. Time distributions</a></li>
-  <li><a href="#baseline-characteristics" id="toc-baseline-characteristics" class="nav-link" data-scroll-target="#baseline-characteristics"><span class="header-section-number">6</span> 4. Baseline characteristics</a></li>
-  <li><a href="#large-scale-characteristics-the-smd-plot" id="toc-large-scale-characteristics-the-smd-plot" class="nav-link" data-scroll-target="#large-scale-characteristics-the-smd-plot"><span class="header-section-number">7</span> 5. Large-scale characteristics — the SMD plot</a></li>
-  <li><a href="#cohort-overlap" id="toc-cohort-overlap" class="nav-link" data-scroll-target="#cohort-overlap"><span class="header-section-number">8</span> 6. Cohort overlap</a></li>
-  <li><a href="#exporting-diagnostics-results" id="toc-exporting-diagnostics-results" class="nav-link" data-scroll-target="#exporting-diagnostics-results"><span class="header-section-number">9</span> Exporting diagnostics results</a></li>
+  <li><a href="#why-to-run-diagnostics-before-analysis" id="toc-why-to-run-diagnostics-before-analysis" class="nav-link active" data-scroll-target="#why-to-run-diagnostics-before-analysis"><span class="header-section-number">1</span> Why to run diagnostics before analysis?</a></li>
+  <li><a href="#phenotyper-sections" id="toc-phenotyper-sections" class="nav-link" data-scroll-target="#phenotyper-sections"><span class="header-section-number">2</span> PhenotypeR sections</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">3</span> Setup</a></li>
+  <li><a href="#example-pipeline" id="toc-example-pipeline" class="nav-link" data-scroll-target="#example-pipeline"><span class="header-section-number">4</span> Example pipeline</a>
+  <ul class="collapse">
+  <li><a href="#running-phenotyper" id="toc-running-phenotyper" class="nav-link" data-scroll-target="#running-phenotyper"><span class="header-section-number">4.1</span> 1. Running PhenotypeR</a></li>
+  <li><a href="#interpreting-the-results" id="toc-interpreting-the-results" class="nav-link" data-scroll-target="#interpreting-the-results"><span class="header-section-number">4.2</span> 2. Interpreting the results</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -507,7 +518,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/diagnostics.html">Diagnostics</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/diagnostics.html">Diagnostics</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Diagnostics</h1>
 </div>
@@ -526,205 +537,240 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="why-diagnostics-before-analysis" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="why-diagnostics-before-analysis"><span class="header-section-number">1</span> Why diagnostics before analysis?</h2>
-<p>Running an analysis on a poorly specified cohort is worse than running no analysis at all — it produces numbers that look credible but are wrong. Diagnostic tools exist to systematically surface problems with your phenotype algorithms and cohort logic <strong>before</strong> you commit to an analytical result.</p>
-<p>In the OHDSI/DARWIN EU ecosystem, the diagnostic workflow centres on two tools: <strong>CohortDiagnostics</strong> for population-level phenotype evaluation, and <strong>CohortCharacteristics</strong> for detailed baseline description. Think of these as your study’s quality control layer.</p>
-<hr>
+<section id="why-to-run-diagnostics-before-analysis" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="why-to-run-diagnostics-before-analysis"><span class="header-section-number">1</span> Why to run diagnostics before analysis?</h2>
+<p>Running an analysis on a poorly specified cohort is worse than running no analysis at all! It can produce numbers that look credible but are wrong. Diagnostic tools exist to systematically surface problems with your phenotype algorithms and cohort logic <strong>before</strong> you commit to an analytical result.</p>
+<p>In the OHDSI ecosystem, the diagnostic workflow centres on two tools: <strong>CohortDiagnostics</strong> and <strong>PhenotypeR</strong>. We will introduce PhenotypeR in this tutorial.</p>
 </section>
-<section id="setup" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="setup"><span class="header-section-number">2</span> Setup</h2>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CDMConnector)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortCharacteristics)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omopgenerics)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omock)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DrugUtilisation)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Synthetic CDM + cohorts</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> omock<span class="sc">::</span><span class="fu">mockCdmReference</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockPerson</span>(<span class="at">nPerson =</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockObservationPeriod</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockConditionOccurrence</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockDrugExposure</span>()</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a simple drug cohort to use throughout this chapter</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> DrugUtilisation<span class="sc">::</span><span class="fu">generateIngredientCohortSet</span>(</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm        =</span> cdm,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">name       =</span> <span class="st">"glp1_cohorts"</span>,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">ingredient =</span> <span class="fu">c</span>(<span class="st">"insulin"</span>, <span class="st">"metformin"</span>)   <span class="co"># using available mock ingredients</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<hr>
-</section>
-<section id="cohort-counts-and-attrition" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="cohort-counts-and-attrition"><span class="header-section-number">3</span> 1. Cohort counts and attrition</h2>
-<p>The first diagnostic is always: how many patients are in the cohort, and how many were lost at each step?</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cohort entry counts</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>count_result <span class="ot">&lt;-</span> <span class="fu">summariseCohortCount</span>(cdm<span class="sc">$</span>glp1_cohorts)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tableCohortCount</span>(count_result)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Attrition (if you built the cohort with CohortConstructor)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>attrition_result <span class="ot">&lt;-</span> <span class="fu">summariseCohortAttrition</span>(cdm<span class="sc">$</span>glp1_cohorts)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tableCohortAttrition</span>(attrition_result)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the attrition flowchart for one cohort</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>attrition_result <span class="sc">|&gt;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group_level <span class="sc">==</span> <span class="st">"semaglutide"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotCohortAttrition</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<blockquote class="blockquote">
-<p><strong>Our study:</strong> Review the attrition for each of the five GLP-1 RA cohorts side by side. Pay particular attention to whether the washout step removes a disproportionate fraction of patients in older agents (exenatide, liraglutide) compared to newer ones (tirzepatide). If so, this is expected — older drugs have more prevalent users by definition.</p>
-</blockquote>
-<hr>
-</section>
-<section id="index-event-breakdown" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="index-event-breakdown"><span class="header-section-number">4</span> 2. Index event breakdown</h2>
-<p>The index event breakdown tells you which specific concepts are driving cohort entry. For a drug cohort, this shows which branded products or formulations account for the most index dates.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarise the concept codes that appear on the index date</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (requires CohortDiagnostics — shown here conceptually)</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># In CohortCharacteristics, use large scale characteristics</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># restricted to the index date window</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>index_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseLargeScaleCharacteristics</span>(</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">window            =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)),       <span class="co"># on index date only</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">eventInWindow     =</span> <span class="st">"drug_exposure"</span>,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">minimumFrequency  =</span> <span class="fl">0.005</span>                <span class="co"># only show if &gt;0.5% of cohort</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tableTopLargeScaleCharacteristics</span>(index_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
+<section id="phenotyper-sections" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="phenotyper-sections"><span class="header-section-number">2</span> PhenotypeR sections</h2>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to look for
+<span class="screen-reader-only">Note</span>1. Background
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For the semaglutide exposure cohort, you expect to see Ozempic (injectable) and Rybelsus (oral) as the dominant index concepts. If you see unexpected concepts — for example, a weight-loss branded product like Wegovy being excluded when you wanted to include it — your concept set needs revision.</p>
-</div>
-</div>
-<hr>
-</section>
-<section id="time-distributions" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="time-distributions"><span class="header-section-number">5</span> 3. Time distributions</h2>
-<p>How long do patients have prior observation before the index date? And how long do they remain in the cohort post-index?</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarise cohort entry timing</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>timing_result <span class="ot">&lt;-</span> <span class="fu">summariseCohortTiming</span>(cdm<span class="sc">$</span>glp1_cohorts)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tableCohortTiming</span>(timing_result)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plotCohortTiming</span>(</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  timing_result,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">uniqueCombinations =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">timeScale          =</span> <span class="st">"years"</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<blockquote class="blockquote">
-<p><strong>Our study:</strong> The distribution of prior observation time should show a minimum of 365 days (our washout + observation requirement). If you see patients with fewer than 365 days, your <code>requireObservationBeforeDrug()</code> criterion was not applied correctly. The distribution of post-index time tells you how much follow-up you have — if most patients have less than 6 months of follow-up, your 3-year HR estimate will be very imprecise.</p>
-</blockquote>
-<hr>
-</section>
-<section id="baseline-characteristics" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="baseline-characteristics"><span class="header-section-number">6</span> 4. Baseline characteristics</h2>
-<p>The core diagnostic for confounding: are the five GLP-1 RA cohorts comparable at baseline, or do they differ systematically in ways that could explain any observed difference in pancreatitis risk?</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarise age, sex, and prior conditions</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>char_result <span class="ot">&lt;-</span> <span class="fu">summariseCharacteristics</span>(</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohort   =</span> cdm<span class="sc">$</span>glp1_cohorts,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ageGroup =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">44</span>), <span class="fu">c</span>(<span class="dv">45</span>, <span class="dv">64</span>), <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">150</span>)),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tableIntersectCount =</span> <span class="fu">list</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">tableName  =</span> <span class="st">"condition_occurrence"</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">window     =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">365</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tableCharacteristics</span>(char_result)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Age distribution by cohort</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>char_result <span class="sc">|&gt;</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable_name <span class="sc">==</span> <span class="st">"Age"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotCharacteristics</span>(</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">plotType =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour   =</span> <span class="st">"cohort_name"</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<hr>
-</section>
-<section id="large-scale-characteristics-the-smd-plot" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="large-scale-characteristics-the-smd-plot"><span class="header-section-number">7</span> 5. Large-scale characteristics — the SMD plot</h2>
-<p>The standardised mean difference (SMD) is the standard metric for assessing covariate balance across cohorts. An SMD below 0.1 for a covariate is generally considered indicative of no meaningful imbalance.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Large scale characteristics: all conditions, drugs, procedures</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lsc_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseLargeScaleCharacteristics</span>(</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">window            =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">365</span>, <span class="sc">-</span><span class="dv">1</span>)),    <span class="co"># 1 year prior to index</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">eventInWindow     =</span> <span class="fu">c</span>(<span class="st">"condition_occurrence"</span>, <span class="st">"drug_exposure"</span>),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">minimumFrequency  =</span> <span class="fl">0.01</span>                  <span class="co"># at least 1% prevalence</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparison plot — SMD between cohorts</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>lsc_result <span class="sc">|&gt;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotComparedLargeScaleCharacteristics</span>(</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> <span class="st">"semaglutide"</span>,</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour    =</span> <span class="st">"variable_level"</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<blockquote class="blockquote">
-<p><strong>Our study:</strong> After running large-scale characteristics across all five GLP-1 RA cohorts, we expect some imbalances. Key ones to look for:</p>
 <ul>
-<li><strong>Hypertriglyceridaemia</strong> — if more prevalent in older-drug cohorts (exenatide, liraglutide), this is a confounder for the pancreatitis outcome</li>
-<li><strong>Obesity</strong> — tirzepatide may be preferentially prescribed to more obese patients, which itself increases pancreatitis risk</li>
-<li><strong>Prior pancreatitis</strong> — must be inspected carefully; any prior acute pancreatitis should be handled as an exclusion criterion or sensitivity analysis</li>
+<li>Database descriptions</li>
+<li>Clinical descriptions</li>
 </ul>
-</blockquote>
-<p><strong>Quick check:</strong> You plot the SMD for 500 baseline covariates and find that hypertriglyceridaemia has an SMD of 0.32 between semaglutide and exenatide users. What does this tell you?</p>
-<p><select class="webex-select"><option value="blank"></option><option value="">The difference is small and can be ignored</option><option value="answer">There is meaningful imbalance — hypertriglyceridaemia should be included in the propensity score model as it is both a confounder and a risk factor for the outcome</option><option value="">You should exclude all patients with hypertriglyceridaemia</option><option value="">The cohort definitions are wrong and need to be redefined</option></select></p>
-<div class="webex-solution">
-<button>
-Explanation
-</button>
-<p>An SMD of 0.32 is well above the conventional threshold of 0.1, meaning hypertriglyceridaemia is meaningfully more prevalent in one exposure group than the other. Since hypertriglyceridaemia is also an independent risk factor for acute pancreatitis, it meets the definition of a confounder — it is associated with both treatment assignment and the outcome. It must be included in the propensity score model or adjusted for in the outcome model. Excluding patients with hypertriglyceridaemia would change your target population and invalidate the generalisability of your results.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>2. Database diagnostics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Snapshot</li>
+<li>Person</li>
+<li>Observation periods</li>
+<li>Clinical Records</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>3. Codelist diagnostics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Cohort code use</li>
+<li>Orphan codes</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>4. Cohort diagnostics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Cohort count</li>
+<li>Cohort characteristics</li>
+<li>Large scale characteristics</li>
+<li>Compare large scale characteristics</li>
+<li>Compare cohorts</li>
+<li>Cohort survival</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>5. Population diagnostics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Incidence</li>
+<li>Period prevalence</li>
+</ul>
+</div>
 </div>
 <hr>
 </section>
-<section id="cohort-overlap" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="cohort-overlap"><span class="header-section-number">8</span> 6. Cohort overlap</h2>
-<p>Do patients appear in more than one of our five exposure cohorts? This should be rare or impossible if your new-user + washout criteria are correctly specified — a patient should only initiate one GLP-1 RA first.</p>
+<section id="setup" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="setup"><span class="header-section-number">3</span> Setup</h2>
+<p>In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the omock package, like the GiBleed dataset. The documentation of the package is here.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>overlap_result <span class="ot">&lt;-</span> <span class="fu">summariseCohortOverlap</span>(cdm<span class="sc">$</span>glp1_cohorts)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tableCohortOverlap</span>(overlap_result)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plotCohortOverlap</span>(overlap_result, <span class="at">uniqueCombinations =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortConstructor)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CodelistGenerator)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CDMConnector)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omopgenerics)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omock)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(duckdb)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">requireEunomia</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>(), <span class="at">dbdir =</span> <span class="fu">eunomiaDir</span>())</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">cdmFromCon</span>(db, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cdmSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writeSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writePrefix =</span> <span class="st">"greg_"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>semaglutide <span class="ot">&lt;-</span> <span class="fu">getDrugIngredientCodes</span>(<span class="at">cdm =</span> cdm,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">name =</span> <span class="st">"semaglutide"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>t2dm <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"type 2 diabetis mellitus"</span>, <span class="st">"T2DM"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>acute_pancreatitis <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>, </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"Acute pancreatitis"</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Build drug exposure cohorts (one per GLP-1 agent)</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>semaglutide_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> semaglutide,</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"semaglutide_cohort"</span>,   <span class="co"># name of the cohort table in the CDM</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">exit =</span> <span class="st">"event_end_date"</span>,</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">overlap =</span> <span class="st">"merge"</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Build condition cohorts</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>t2dm_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> t2dm,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"t2dm_cohort"</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>ap_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> acute_pancreatitis,</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"ap_cohort"</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">bind</span>(cdm<span class="sc">$</span>semaglutide_cohort, cdm<span class="sc">$</span>t2dm_cohort, cdm<span class="sc">$</span>ap_cohort, <span class="at">name =</span> <span class="st">"study_cohorts"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="example-pipeline" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="example-pipeline"><span class="header-section-number">4</span> Example pipeline</h2>
+<p>In this tutorial we will provide an example on how to run diagnostics with PhenotypeR, but further documentation can be found in the <a href="https://ohdsi.github.io/PhenotypeR/">package documentation</a>, with all available functions in its <a href="https://ohdsi.github.io/PhenotypeR/reference/index.html">reference index</a> and in <a href="https://dpa-pde-oxford.quarto.pub/phenotyper-200a/#/title-slide">this other tutorial</a>.</p>
+<p>We will see the results in a Shiny App, please, make sure that you have the necessary resources to run a shiny app in R.</p>
+<section id="running-phenotyper" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="running-phenotyper"><span class="header-section-number">4.1</span> 1. Running PhenotypeR</h3>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(PhenotypeR)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># A folder on the local file system to store results</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>outputDir <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Results"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Study parameters -----------------------------------------------------</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>MinCellCount <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="co"># Less than 5 counts because small numbers are a danger to privacy</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(outputDir)) {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(outputDir)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">createLogger</span>(outputDir, dbName)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="st">"Starting diagnostics"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="st">"Creating phenotype cohort"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">bind</span>(cdm<span class="sc">$</span>semaglutide, cdm<span class="sc">$</span>ap_cohort, cdm<span class="sc">$</span>t2dm_cohort, <span class="at">name =</span> <span class="st">"all_cohorts"</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Run phenotypeR -------------------------------------------------------</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="st">"Running PhenotypeR"</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>phen_all_cohorts <span class="ot">&lt;-</span> <span class="fu">phenotypeDiagnostics</span>(</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  cdm<span class="sc">$</span>all_cohorts_table,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">diagnostics =</span> <span class="fu">c</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"databaseDiagnostics"</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"codelistDiagnostics"</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cohortDiagnostics"</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"populationDiagnostics"</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">survival =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohortSample =</span> <span class="dv">7000</span>, <span class="co"># You can adapt these numbers as you wish and depending</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">matchedSample =</span> <span class="dv">3000</span>, <span class="co"># on your sample size</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">populationSample =</span> <span class="fl">1e+05</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Export all the results -----------------------------------------</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="st">"Exporting results"</span>)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>PhenotypeR<span class="sc">::</span><span class="fu">exportSummarisedResult</span>(</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  phen_all_cohorts,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileName =</span> <span class="fu">paste0</span>(<span class="st">"phenotypeR_results_{cdm_name}_{date}.csv"</span>),</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> outputDir,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">minCellCount =</span> MinCellCount</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="st">"Finishing diagnostics zipping results"</span>)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="fu">zip</span>(</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">zipfile =</span> <span class="fu">here</span>(outputDir, <span class="fu">paste0</span>(<span class="st">"phenotypeResults-"</span>, dbName, <span class="st">".zip"</span>)),</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">files =</span> <span class="fu">list.files</span>(outputDir),</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">root =</span> outputDir</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co"># To see your results in a Shiny App -----------------------</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> omopgenerics<span class="sc">::</span><span class="fu">importSummarisedResult</span>(</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">here</span>(<span class="st">"Results"</span>),</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># folder containing your CSV</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>PhenotypeR<span class="sc">::</span><span class="fu">shinyDiagnostics</span>(results, <span class="at">directory =</span> <span class="st">"Results"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -733,36 +779,136 @@ Explanation
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>If overlap is high
+Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>High overlap between exposure cohorts means your cohort exit criteria are not correctly excluding patients who switch between agents. For example, if a patient switches from liraglutide to semaglutide, they should exit the liraglutide cohort at the switch date and — if their second entry passes the washout criterion — enter the semaglutide cohort. Failure to handle this correctly leads to immortal time and misclassification bias.</p>
+<p>When the Shiny project opens, you can run the command <code>shiny::runApp()</code> and the app will open on your R browser!</p>
 </div>
 </div>
-<hr>
 </section>
-<section id="exporting-diagnostics-results" class="level2" data-number="9">
-<h2 data-number="9" class="anchored" data-anchor-id="exporting-diagnostics-results"><span class="header-section-number">9</span> Exporting diagnostics results</h2>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all diagnostic results</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>all_diagnostics <span class="ot">&lt;-</span> omopgenerics<span class="sc">::</span><span class="fu">bind</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  count_result,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  attrition_result,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  char_result,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  lsc_result,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  overlap_result</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  omopgenerics<span class="sc">::</span><span class="fu">suppress</span>(<span class="at">minCellCount =</span> <span class="dv">5</span>)  <span class="co"># privacy protection</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Export for sharing with study team</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all_diagnostics, <span class="st">"results/diagnostics.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<section id="interpreting-the-results" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="interpreting-the-results"><span class="header-section-number">4.2</span> 2. Interpreting the results</h3>
+<section id="cohort-counts-and-attrition" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="cohort-counts-and-attrition"><span class="header-section-number">4.2.1</span> Cohort counts and attrition</h4>
+<p>The first diagnostic is always: how many patients are in the cohort, and how many were lost at each step?</p>
+<blockquote class="blockquote">
+<p><strong>Our study:</strong> A well-specified attrition table for the semaglutide cohort might look like this:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Remaining N</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Initial drug exposure records</td>
+<td>45,210</td>
+</tr>
+<tr class="even">
+<td>First entry per person</td>
+<td>12,847</td>
+</tr>
+<tr class="odd">
+<td>≥ 365 days prior observation</td>
+<td>11,203</td>
+</tr>
+<tr class="even">
+<td>No prior GLP-1 RA (washout)</td>
+<td>9,841</td>
+</tr>
+<tr class="odd">
+<td>T2DM diagnosis before index</td>
+<td>8,654</td>
+</tr>
+<tr class="even">
+<td>Age ≥ 18</td>
+<td>8,640</td>
+</tr>
+<tr class="odd">
+<td>Index date 2023–2024</td>
+<td>6,112</td>
+</tr>
+</tbody>
+</table>
+<p>If the washout step removes more than 60% of patients, we need to think whether this makes sense. It may indicate that your concept set is too broad and is capturing repeat prescriptions of the same episode, or that the database has many prevalent users.</p>
+</blockquote>
+<p><strong>Quick check:</strong> Your attrition table shows 10,000 patients after <code>requireIsFirstEntry()</code> but only 200 after <code>requirePriorDrugWashout(days = 365)</code>. What does this most likely indicate? <select class="webex-select"><option value="blank"></option><option value="">The drug is rarely prescribed in this database</option><option value="answer">Most drug users in this database might be prevalent users, not new users</option><option value="">The washout period is too short</option><option value="">The washout period is too large, we have to start by washout = 90 days</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>When the vast majority of patients are excluded by the washout criterion, it means most patients who appear in the database with this drug already had prior exposure, i.e., they are <strong>prevalent users</strong>. This is common for drugs that have been on the market for many years. The new-user design deliberately excludes these patients to avoid prevalent-user bias, but it does reduce your study population substantially. This is a design trade-off, not a bug.</p>
 </div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Additionally, we need to consider the fact that we usually can only recover drug <em>prescriptions</em>, not the fact that the subjects in our cohort are actually taking the drug. This is constraining, and we need to bear in mind when setting a washout period the usual time between prescriptions.</p>
+</div>
+</div>
+</section>
+<section id="codelist-diagnostics-1" class="level4" data-number="4.2.2">
+<h4 data-number="4.2.2" class="anchored" data-anchor-id="codelist-diagnostics-1"><span class="header-section-number">4.2.2</span> Codelist diagnostics</h4>
+<p>The cohort code use can help us see whether relevant codes have been introduced or whether there are substances that we are including that we might want to avoid. At the same time, the orphan codes tag allows us to see potentially missed concepts that might be relevant for our study.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/phenotypeR_codeuse.png" class="img-fluid figure-img"></p>
+<figcaption>Figure. Code use obtained with PhenotypeR for the concepts included in a simulated type 2 diabetis mellitus cohort.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the semaglutide exposure cohort, you expect to see Ozempic (injectable) and Rybelsus (oral) as the most used concepts. If you see unexpected concepts (which you should not because you have reviewed the list with a pharmacist, right?) your concept set needs revision.</p>
+</div>
+</div>
+</section>
+<section id="baseline-and-large-scale-characteristics" class="level4" data-number="4.2.3">
+<h4 data-number="4.2.3" class="anchored" data-anchor-id="baseline-and-large-scale-characteristics"><span class="header-section-number">4.2.3</span> Baseline and large-scale characteristics</h4>
+<p>When seeing the baseline characteristics and large-scale characteristics of your cohorts, you will be able to see whether the patients included in each cohort differ substantially between them. In our study, for example, we might see that patients receiving semaglutide and tirzepatide differ substantially. When doing the comparisons between GLP-1 RA for the safety part of our study, we need to take this into account, as it is the core confounder that we can have in our study “Are the five GLP-1 RA cohorts comparable at baseline, or do they differ systematically in ways that could explain any observed difference in pancreatitis risk?”</p>
+<p>Large-scale characteristics are also nice because you can see the top concepts of conditions, drugs, measurements and all other domains recorded for your cohorts. If you are making a just-males cohort and you see that one of your top concepts is pregnancy, there might be something wrong with your cohort definition. You might also identify comorbidities, comedication or previous conditions that might affect the risk of your outcome of interest.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Watch out for large-scale characteristics, you might identify potential confounders!</p>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/phenotypeR_charac.png" class="img-fluid figure-img"></p>
+<figcaption>Figure. Top concepts in a simulated type 2 diabetis mellitus cohort obtained from the large-scale characterisation section of PhenotypeR.</figcaption>
+</figure>
+</div>
+</section>
+<section id="cohort-overlap" class="level4" data-number="4.2.4">
+<h4 data-number="4.2.4" class="anchored" data-anchor-id="cohort-overlap"><span class="header-section-number">4.2.4</span> Cohort overlap</h4>
+<p>High overlap between exposure cohorts when you do not expect that could mean that your cohort exit criteria are not correctly excluding patients who switch between agents. For example, if a patient switches from liraglutide to semaglutide, they should exit the liraglutide cohort at the switch date and enter the semaglutide cohort. Failure to handle this correctly leads to immortal time and misclassification bias.</p>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

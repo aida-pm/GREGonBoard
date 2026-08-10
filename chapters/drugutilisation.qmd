@@ -29,9 +29,65 @@ Key questions a DUS answers:
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(DrugUtilisation)
-# ------------------------------------------------------------------------------------
-# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
-# Go to the Cohort Constructor section if you need more info.
+library(CohortConstructor)
+library(CodelistGenerator)
+library(CDMConnector)
+library(omopgenerics)
+library(omock)
+library(dplyr)
+library(duckdb)
+
+
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_")
+
+
+semaglutide <- getDrugIngredientCodes(cdm = cdm,
+                                      name = "semaglutide")
+
+t2dm <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition",
+  includeDescendants = TRUE, 
+  includeAncestor = FALSE,
+  keywords = c("type 2 diabetis mellitus", "T2DM")
+)
+
+acute_pancreatitis <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition", 
+  includeDescendants = FALSE,
+  includeAncestor = FALSE,
+  keywords = c("Acute pancreatitis")
+)
+
+# Build drug exposure cohorts (one per GLP-1 agent)
+cdm$semaglutide_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = semaglutide,
+  name        = "semaglutide_cohort",   # name of the cohort table in the CDM
+  exit = "event_end_date",
+  overlap = "merge")
+
+
+# Build condition cohorts
+cdm$t2dm_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = t2dm,
+  name        = "t2dm_cohort"
+)
+
+cdm$ap_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = acute_pancreatitis,
+  name        = "ap_cohort"
+)
+
+cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "study_cohorts")
 ```
 
 ------------------------------------------------------------------------
@@ -51,7 +107,9 @@ cdm <- generateIngredientCohortSet(
   name       = "semaglutide_dus_cohort",
   ingredient = "semaglutide",
   gapEra     = 365    # this number depends on how recurrent prescriptions for this ingredient's medications are
-) |>
+) 
+
+cdm$semaglutide_dus_cohort <- cdm$semaglutide_dus_cohort|>
   requireIsFirstDrugEntry() |> # First entry, like before
   requireObservationBeforeDrug(days = 365) # Prior observation period, like before!
 
@@ -76,7 +134,7 @@ cat(
 ### Step 2: Treatment duration and exposure
 
 ```{r drug-utilisation, message=FALSE, warning=FALSE}
-du_result <- cdm$dus_cohort |>
+du_result <- cdm$semaglutide_dus_cohort |>
   summariseDrugUtilisation(
     ingredientConceptId = 1125315,  # acetaminophen
     gapEra              = 30,
@@ -109,30 +167,30 @@ du_result |>
 
 What conditions were patients treated for? This is especially relevant for GLP-1 RAs, which are licensed for T2DM and obesity but increasingly used off-label.
 
-```{r indication, message=FALSE, warning=FALSE}
-# Define indication cohorts
-indications <- list(
-  headache  = 378253,
-  influenza = 4266367
-)
-
-cdm <- CDMConnector::generateConceptCohortSet(
-  cdm        = cdm,
-  conceptSet = indications,
-  name       = "indications_cohort"
-)
-
-indication_result <- cdm$dus_cohort |>
-  summariseIndication(
-    indicationCohortName    = "indications_cohort",
-    unknownIndicationTable  = "condition_occurrence",
-    indicationWindow        = list(c(-30, 0))
-  )
-
-indication_result |>
-  filter(estimate_name == "percentage") |>
-  select(variable_level, estimate_value)
-```
+# ```{r indication, message=FALSE, warning=FALSE}
+# # Define indication cohorts
+# indications <- list(
+#   headache  = 378253,
+#   influenza = 4266367
+# )
+# 
+# cdm <- CDMConnector::generateConceptCohortSet(
+#   cdm        = cdm,
+#   conceptSet = indications,
+#   name       = "indications_cohort"
+# )
+# 
+# indication_result <- cdm$dus_cohort |>
+#   summariseIndication(
+#     indicationCohortName    = "indications_cohort",
+#     unknownIndicationTable  = "condition_occurrence",
+#     indicationWindow        = list(c(-30, 0))
+#   )
+# 
+# indication_result |>
+#   filter(estimate_name == "percentage") |>
+#   select(variable_level, estimate_value)
+# ```
 
 > **Our study — indication analysis:** For GLP-1 RAs, define indication cohorts for:
 >
@@ -147,42 +205,41 @@ indication_result |>
 
 Proportion of Days Covered (PDC) is the standard measure of medication adherence in claims data. PDC ≥ 80% is the conventional threshold for "adherent."
 
-```{r adherence, eval=FALSE}
-# Summarise treatment adherence
-adherence_result <- cdm$dus_cohort |>
-  summariseTreatmentAdherence(
-    followUpDays = 365
-  )
-
-adherence_result |>
-  filter(variable_name == "Proportion of patients covered") |>
-  select(estimate_name, estimate_value)
-```
+# ```{r adherence, eval=FALSE}
+# # Summarise treatment adherence
+# adherence_result <- cdm$semaglutide_dus_cohort |>
+#   summariseTreatmentAdherence(
+#     followUpDays = 365
+#   )
+# 
+# adherence_result |>
+#   filter(variable_name == "Proportion of patients covered") |>
+#   select(estimate_name, estimate_value)
+# ```
 
 ### Step 5: Treatment switching and restart
 
-```{r switching, eval=FALSE}
-# Define comparator drug cohorts
-cdm <- generateIngredientCohortSet(
-  cdm        = cdm,
-  name       = "comparator_drugs",
-  ingredient = c("ibuprofen", "naproxen")
-)
-
-# Summarise switching after treatment discontinuation
-switch_result <- cdm$dus_cohort |>
-  summariseDrugRestart(
-    switchCohortTable = "comparator_drugs",
-    followUpDays      = 365
-  )
-
-switch_result |>
-  filter(variable_name %in% c("restart", "switch", "discontinue")) |>
-  select(variable_name, estimate_name, estimate_value)
-```
+# ```{r switching, eval=FALSE}
+# # Define comparator drug cohorts
+# cdm <- generateIngredientCohortSet(
+#   cdm        = cdm,
+#   name       = "comparator_drugs",
+#   ingredient = c("ibuprofen", "naproxen")
+# )
+# 
+# # Summarise switching after treatment discontinuation
+# switch_result <- cdm$semaglutide_dus_cohort |>
+#   summariseDrugRestart(
+#     switchCohortTable = "comparator_drugs",
+#     followUpDays      = 365
+#   )
+# 
+# switch_result |>
+#   filter(variable_name %in% c("restart", "switch", "discontinue")) |>
+#   select(variable_name, estimate_name, estimate_value)
+# ```
 
 > **Our study — treatment switching:** For GLP-1 RA DUS, switching is particularly clinically relevant: patients may switch between agents due to tolerability (nausea is common with all GLP-1 RAs), formulary changes, or lack of glycaemic response. A high rate of early switching (within 90 days) to a different GLP-1 RA would be a DUS finding worth reporting to regulators, as it might indicate a population-level tolerability pattern not captured in clinical trials.
-
 
 ```{r q2, echo=FALSE, results='asis'}
 cat(
@@ -206,13 +263,10 @@ You can export a summarised result with all the objects that you created from yo
 minCellCount <- 5 
 
 exportSummarisedResult(
-  inc,
-  prev,
-  pointPrev,
+  du_result
   minCellCount = minCellCount,
   path = here("Results"),
-  fileName = "GregonBoard_incprev_{cdm_name}_{date}.csv"
+  fileName = "GregonBoard_dus_{cdm_name}_{date}.csv"
 )
 
 ```
-

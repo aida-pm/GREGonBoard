@@ -55,10 +55,64 @@ In this chapter we will work with the [IncidencePrevalence package](https://darw
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(IncidencePrevalence)
-study_cohorts <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "all_cohorts_table")
-# ------------------------------------------------------------------------------------
-# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
-# Go to the Cohort Constructor section if you need more info.
+library(CohortConstructor)
+library(CodelistGenerator)
+library(CDMConnector)
+library(omopgenerics)
+library(omock)
+library(dplyr)
+library(duckdb)
+
+
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_")
+
+
+semaglutide <- getDrugIngredientCodes(cdm = cdm,
+                                      name = "semaglutide")
+
+t2dm <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition",
+  includeDescendants = TRUE, 
+  includeAncestor = FALSE,
+  keywords = c("type 2 diabetis mellitus", "T2DM")
+)
+
+acute_pancreatitis <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition", 
+  includeDescendants = FALSE,
+  includeAncestor = FALSE,
+  keywords = c("Acute pancreatitis")
+)
+
+# Build drug exposure cohorts (one per GLP-1 agent)
+cdm$semaglutide_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = semaglutide,
+  name        = "semaglutide_cohort",   # name of the cohort table in the CDM
+  exit = "event_end_date",
+  overlap = "merge")
+
+
+# Build condition cohorts
+cdm$t2dm_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = t2dm,
+  name        = "t2dm_cohort"
+)
+
+cdm$ap_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = acute_pancreatitis,
+  name        = "ap_cohort"
+)
+cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "study_cohorts")
 ```
 
 ------------------------------------------------------------------------
@@ -108,7 +162,7 @@ The outcome cohort identifies who experienced the event. For incidence, we need 
 
 ### Step 3: Estimate incidence rates
 
-```{r incidence, message=FALSE, warning=FALSE}
+```{r incidence, message=FALSE, warning=FALSE, eval = F}
 inc <- estimateIncidence(
   cdm             = cdm,
   denominatorTable = "denominator", # or t2dm + each GLP1-RA
@@ -145,7 +199,7 @@ Do not hesitate to contact the data providers and even discuss results with them
 
 ### Step 4: Estimate prevalence
 
-```{r prevalence, message=FALSE, warning=FALSE}
+```{r prevalence, message=FALSE, warning=FALSE, eval = F}
 prev <- estimatePeriodPrevalence(
   cdm              = cdm,
   denominatorTable = "denominator", # or t2dm + each GLP1-RA
@@ -170,7 +224,7 @@ Use `estimatePointPrevalence()` when you want a snapshot on a specific date (use
 
 To obtain results stratified by age or sex, you only need to include them in your cohort definitions. To include stratification by an additional group, you can add this variable to your functions: `strata = list()` listing the groups by which you want to stratify (and you should have defined them previously).
 
-```{r q2, echo=FALSE, results='asis'}
+```{r q3, echo=FALSE, results='asis'}
 cat(
   "**Quick check:** The way we have written it in code, are we stratifying incidence and prevalence by age and sex?",
   mcq(c(
@@ -188,7 +242,7 @@ cat(
 
 You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is [OmopViewer](https://ohdsi.github.io/OmopViewer/) but [visOmopResults](https://darwin-eu.github.io/visOmopResults/) and each package own functions allow for it too.
 
-```{r export, eval=FALSE}
+```{r export, eval=FALSE, eval = F}
 # Suppress small cell counts before sharing
 minCellCount <- 5 
 

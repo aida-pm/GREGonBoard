@@ -42,11 +42,66 @@ Characterisation studies are used in three distinct contexts in pharmacoepidemio
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(CohortCharacteristics)
+library(CohortConstructor)
+library(CodelistGenerator)
+library(CDMConnector)
+library(omopgenerics)
+library(omock)
+library(dplyr)
+library(duckdb)
 
-study_cohorts <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "all_cohorts_table")
-# ------------------------------------------------------------------------------------
-# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
-# Go to the Cohort Constructor section if you need more info.
+
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_")
+
+
+semaglutide <- getDrugIngredientCodes(cdm = cdm,
+                                      name = "semaglutide")
+
+t2dm <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition",
+  includeDescendants = TRUE, 
+  includeAncestor = FALSE,
+  keywords = c("type 2 diabetis mellitus", "T2DM")
+)
+
+acute_pancreatitis <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition", 
+  includeDescendants = FALSE,
+  includeAncestor = FALSE,
+  keywords = c("Acute pancreatitis")
+)
+
+# Build drug exposure cohorts (one per GLP-1 agent)
+cdm$semaglutide_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = semaglutide,
+  name        = "semaglutide_cohort",   # name of the cohort table in the CDM
+  exit = "event_end_date",
+  overlap = "merge")
+
+
+# Build condition cohorts
+cdm$t2dm_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = t2dm,
+  name        = "t2dm_cohort"
+)
+
+cdm$ap_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = acute_pancreatitis,
+  name        = "ap_cohort"
+)
+
+cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "study_cohorts")
+
 ```
 
 ------------------------------------------------------------------------

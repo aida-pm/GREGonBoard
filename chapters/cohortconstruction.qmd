@@ -74,9 +74,9 @@ The most common starting point is `conceptCohort()`: define a cohort by the pres
 
 ```{r concept-cohort, eval=FALSE}
 library(CohortConstructor)
-
+  
 # Build drug exposure cohorts (one per GLP-1 agent)
-cdm <- conceptCohort(
+cdm$semaglutide_cohort <- conceptCohort(
   cdm         = cdm,
   conceptSet  = semaglutide,
   name        = "semaglutide_cohort",   # name of the cohort table in the CDM
@@ -85,19 +85,19 @@ cdm <- conceptCohort(
 
 
 # Build condition cohorts
-cdm <- conceptCohort(
+cdm$t2dm_cohort <- conceptCohort(
   cdm         = cdm,
   conceptSet  = t2dm,
-  name        = "t2dm_cohort",
-  domain      = "condition"
+  name        = "t2dm_cohort"
 )
 
-cdm <- conceptCohort(
+cdm$ap_cohort <- conceptCohort(
   cdm         = cdm,
   conceptSet  = acute_pancreatitis,
-  name        = "ap_cohort",
-  domain      = "condition"
+  name        = "ap_cohort"
 )
+
+
 ```
 
 > **Our study:** We create five separate exposure cohorts, one per GLP-1 RA ingredient. The `conceptCohort()` function creates one cohort entry per drug exposure episode per patient. The next steps will apply the new-user and other inclusion criteria.

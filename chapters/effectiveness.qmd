@@ -34,10 +34,65 @@ The methods in this chapter align with the ICH E9(R1) estimand framework and the
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(CohortSurvival)
 library(CohortMethod)
-study_cohorts <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "all_cohorts_table")
-# ------------------------------------------------------------------------------------
-# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
-# Go to the Cohort Constructor section if you need more info.
+library(CohortConstructor)
+library(CodelistGenerator)
+library(CDMConnector)
+library(omopgenerics)
+library(omock)
+library(dplyr)
+library(duckdb)
+
+
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_")
+
+
+semaglutide <- getDrugIngredientCodes(cdm = cdm,
+                                      name = "semaglutide")
+
+t2dm <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition",
+  includeDescendants = TRUE, 
+  includeAncestor = FALSE,
+  keywords = c("type 2 diabetis mellitus", "T2DM")
+)
+
+acute_pancreatitis <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition", 
+  includeDescendants = FALSE,
+  includeAncestor = FALSE,
+  keywords = c("Acute pancreatitis")
+)
+
+# Build drug exposure cohorts (one per GLP-1 agent)
+cdm$semaglutide_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = semaglutide,
+  name        = "semaglutide_cohort",   # name of the cohort table in the CDM
+  exit = "event_end_date",
+  overlap = "merge")
+
+
+# Build condition cohorts
+cdm$t2dm_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = t2dm,
+  name        = "t2dm_cohort"
+)
+
+cdm$ap_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = acute_pancreatitis,
+  name        = "ap_cohort"
+)
+
+cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "study_cohorts")
 ```
 
 ::: callout-tip
@@ -69,16 +124,16 @@ Before writing any code, state the estimand precisely (ICH E9(R1)):
 
 ## Step 1: Define covariates for propensity score
 
-```{r covariates, eval=FALSE}
-# FeatureExtraction defines which baseline features go into the PS model
-covariateSettings <- FeatureExtraction::createDefaultCovariateSettings(
-  excludedCovariateConceptIds  = c(
-    # Exclude concepts that are proxies for treatment assignment
-    # (e.g., the drug itself, its class members)
-  ),
-  addDescendantsToExclude      = TRUE
-)
-```
+<!-- ```{r covariates, eval=FALSE} -->
+<!-- # FeatureExtraction defines which baseline features go into the PS model -->
+<!-- covariateSettings <- FeatureExtraction::createDefaultCovariateSettings( -->
+<!--   excludedCovariateConceptIds  = c( -->
+<!--     # Exclude concepts that are proxies for treatment assignment -->
+<!--     # (e.g., the drug itself, its class members) -->
+<!--   ), -->
+<!--   addDescendantsToExclude      = TRUE -->
+<!-- ) -->
+<!-- ``` -->
 
 The default covariate settings extract thousands of binary features from the 365-day pre-index window: all conditions, drugs, procedures, and measurements. The LASSO regression will select the subset that is informative for predicting treatment assignment.
 
@@ -86,72 +141,72 @@ The default covariate settings extract thousands of binary features from the 365
 
 ## Step 2: Specify the CohortMethod analysis
 
-```{r cohort-method-spec, eval=FALSE}
-# Build the analysis specification
-cmAnalysis <- CohortMethod::createCmAnalysis(
-  analysisId        = 1,
-  description       = "Semaglutide vs Liraglutide — AP outcome — PS matching",
+<!-- ```{r cohort-method-spec, eval=FALSE} -->
+<!-- # Build the analysis specification -->
+<!-- cmAnalysis <- CohortMethod::createCmAnalysis( -->
+<!--   analysisId        = 1, -->
+<!--   description       = "Semaglutide vs Liraglutide — AP outcome — PS matching", -->
 
-  # Propensity score model
-  createStudyPopArgs = CohortMethod::createCreateStudyPopulationArgs(
-    removeSubjectsWithPriorOutcome = TRUE,   # exclude prior AP
-    priorOutcomeLookback           = 99999,
-    riskWindowStart                = 0,
-    startAnchor                    = "cohort start",
-    riskWindowEnd                  = 1095,   # 3 years
-    endAnchor                      = "cohort start",
-    minDaysAtRisk                  = 1
-  ),
+<!--   # Propensity score model -->
+<!--   createStudyPopArgs = CohortMethod::createCreateStudyPopulationArgs( -->
+<!--     removeSubjectsWithPriorOutcome = TRUE,   # exclude prior AP -->
+<!--     priorOutcomeLookback           = 99999, -->
+<!--     riskWindowStart                = 0, -->
+<!--     startAnchor                    = "cohort start", -->
+<!--     riskWindowEnd                  = 1095,   # 3 years -->
+<!--     endAnchor                      = "cohort start", -->
+<!--     minDaysAtRisk                  = 1 -->
+<!--   ), -->
 
-  # Fit propensity score using LASSO logistic regression
-  fitOutcomeModelArgs = CohortMethod::createFitOutcomeModelArgs(
-    modelType        = "cox",
-    stratified       = TRUE    # stratified Cox on matched pairs
-  )
-)
-```
+<!--   # Fit propensity score using LASSO logistic regression -->
+<!--   fitOutcomeModelArgs = CohortMethod::createFitOutcomeModelArgs( -->
+<!--     modelType        = "cox", -->
+<!--     stratified       = TRUE    # stratified Cox on matched pairs -->
+<!--   ) -->
+<!-- ) -->
+<!-- ``` -->
 
 ------------------------------------------------------------------------
 
 ## Step 3: Propensity score estimation and matching
 
-```{r ps-matching, eval=FALSE}
-# Extract cohorts and covariates
-cohortMethodData <- CohortMethod::getDbCohortMethodData(
-  connectionDetails      = connectionDetails,
-  cdmDatabaseSchema      = "omop_cdm",
-  targetId               = 1,    # semaglutide cohort_definition_id
-  comparatorId           = 2,    # liraglutide cohort_definition_id
-  outcomeIds             = 3,    # acute pancreatitis outcome cohort
-  exposureDatabaseSchema = "results",
-  exposureTable          = "glp1_cohorts",
-  outcomeDatabaseSchema  = "results",
-  outcomeTable           = "ap_cohort",
-  covariateSettings      = covariateSettings
-)
-
-# Create study population
-studyPop <- CohortMethod::createStudyPopulation(
-  cohortMethodData       = cohortMethodData,
-  outcomeId              = 3,
-  removeSubjectsWithPriorOutcome = TRUE,
-  riskWindowStart        = 0,
-  riskWindowEnd          = 1095
-)
-
-# Estimate propensity score (LASSO logistic regression via Cyclops)
-ps <- CohortMethod::createPs(
-  cohortMethodData = cohortMethodData,
-  population       = studyPop
-)
-
-# Plot PS distribution — check for overlap before matching
-CohortMethod::plotPs(ps,
-  scale         = "preference",
-  showCountsLabel = TRUE,
-  showAucLabel    = TRUE
-)
-```
+# ```{r ps-matching, eval=FALSE}
+# # Extract cohorts and covariates
+# cohortMethodData <- CohortMethod::getDbCohortMethodData(
+#   connectionDetails      = connectionDetails,
+#   cdmDatabaseSchema      = "omop_cdm",
+#   targetId               = 1,    # semaglutide cohort_definition_id
+#   comparatorId           = 2,    # liraglutide cohort_definition_id
+#   outcomeIds             = 3,    # acute pancreatitis outcome cohort
+#   exposureDatabaseSchema = "results",
+#   exposureTable          = "glp1_cohorts",
+#   outcomeDatabaseSchema  = "results",
+#   outcomeTable           = "ap_cohort",
+#   covariateSettings      = covariateSettings
+# )
+# 
+# # Create study population
+# studyPop <- CohortMethod::createStudyPopulation(
+#   cohortMethodData       = cohortMethodData,
+#   outcomeId              = 3,
+#   removeSubjectsWithPriorOutcome = TRUE,
+#   riskWindowStart        = 0,
+#   riskWindowEnd          = 1095
+# )
+# 
+# # Estimate propensity score (LASSO logistic regression via Cyclops)
+# ps <- CohortMethod::createPs(
+#   cohortMethodData = cohortMethodData,
+#   population       = studyPop
+# )
+# 
+# # Plot PS distribution — check for overlap before matching
+# CohortMethod::plotPs(ps,
+#   scale         = "preference",
+#   showCountsLabel = TRUE,
+#   showAucLabel    = TRUE
+# )
+# ```
 
 ::: callout-tip
 ## The preference score plot is your most important diagnostic
@@ -159,22 +214,22 @@ CohortMethod::plotPs(ps,
 Before matching, plot the propensity score distributions of the two cohorts on the **preference score** scale (which re-scales the PS to account for prevalence differences). If the distributions do not overlap substantially, matching is impossible for a large fraction of patients — you have an equipoise problem and your causal estimate will be extrapolating outside the region of common support.
 :::
 
-```{r matching, eval=FALSE}
-# 1:1 nearest-neighbour matching on log PS
-matchedPop <- CohortMethod::matchOnPs(
-  population      = ps,
-  caliper         = 0.2,           # 0.2 SD of log PS
-  caliperScale    = "standardized logit",
-  maxRatio        = 1              # 1:1 matching
-)
+<!-- ```{r matching, eval=FALSE} -->
+<!-- # 1:1 nearest-neighbour matching on log PS -->
+<!-- matchedPop <- CohortMethod::matchOnPs( -->
+<!--   population      = ps, -->
+<!--   caliper         = 0.2,           # 0.2 SD of log PS -->
+<!--   caliperScale    = "standardized logit", -->
+<!--   maxRatio        = 1              # 1:1 matching -->
+<!-- ) -->
 
-# Check balance after matching
-bal <- CohortMethod::computeCovariateBalance(matchedPop, cohortMethodData)
-CohortMethod::plotCovariateBalanceScatterPlot(bal,
-  showCovariateCountLabel = TRUE,
-  showMaxLabel            = TRUE
-)
-```
+<!-- # Check balance after matching -->
+<!-- bal <- CohortMethod::computeCovariateBalance(matchedPop, cohortMethodData) -->
+<!-- CohortMethod::plotCovariateBalanceScatterPlot(bal, -->
+<!--   showCovariateCountLabel = TRUE, -->
+<!--   showMaxLabel            = TRUE -->
+<!-- ) -->
+<!-- ``` -->
 
 > **Our study:** After 1:1 matching, we expect the Love plot to show all covariates with SMD below 0.1. If several covariates remain above 0.1 after matching, consider switching to IPTW or adding interaction terms to the propensity score model.
 
@@ -182,19 +237,19 @@ CohortMethod::plotCovariateBalanceScatterPlot(bal,
 
 ## Step 4: Outcome model (Cox regression)
 
-```{r cox, eval=FALSE}
-# Fit stratified Cox model on matched pairs
-outcomeModel <- CohortMethod::fitOutcomeModel(
-  population       = matchedPop,
-  cohortMethodData = cohortMethodData,
-  outcomeId        = 3,
-  modelType        = "cox",
-  stratified       = TRUE    # condition on matched pairs
-)
+<!-- ```{r cox, eval=FALSE} -->
+<!-- # Fit stratified Cox model on matched pairs -->
+<!-- outcomeModel <- CohortMethod::fitOutcomeModel( -->
+<!--   population       = matchedPop, -->
+<!--   cohortMethodData = cohortMethodData, -->
+<!--   outcomeId        = 3, -->
+<!--   modelType        = "cox", -->
+<!--   stratified       = TRUE    # condition on matched pairs -->
+<!-- ) -->
 
-summary(outcomeModel)
-# Key output: HR (95% CI), p-value
-```
+<!-- summary(outcomeModel) -->
+<!-- # Key output: HR (95% CI), p-value -->
+<!-- ``` -->
 
 ------------------------------------------------------------------------
 
@@ -202,45 +257,45 @@ summary(outcomeModel)
 
 This is the step that distinguishes a rigorous OHDSI analysis from a conventional pharmacoepidemiology study. Negative controls are outcomes where we know (from clinical reasoning) that the exposure has no causal effect. If our analysis pipeline has systematic error (residual confounding, outcome misclassification, time-at-risk misspecification), the negative control estimates will not be centred on a HR of 1.0.
 
-```{r negative-controls, eval=FALSE}
-# Negative control outcomes (conditions causally unrelated to GLP-1 RAs)
-# e.g. ingrown toenail, ankle sprain, foreign body in ear
-negativeControlIds <- c(
-  440448,  # ingrown nail
-  81151,   # ankle sprain
-  374914   # foreign body in ear
-  # ... typically 50-100 negative controls
-)
+<!-- ```{r negative-controls, eval=FALSE} -->
+<!-- # Negative control outcomes (conditions causally unrelated to GLP-1 RAs) -->
+<!-- # e.g. ingrown toenail, ankle sprain, foreign body in ear -->
+<!-- negativeControlIds <- c( -->
+<!--   440448,  # ingrown nail -->
+<!--   81151,   # ankle sprain -->
+<!--   374914   # foreign body in ear -->
+<!--   # ... typically 50-100 negative controls -->
+<!-- ) -->
 
-# Run the same analysis pipeline on all negative controls
-ncResults <- CohortMethod::runCmAnalyses(
-  connectionDetails = connectionDetails,
-  # ... same settings as primary analysis
-  # ... but with outcomeIds = negativeControlIds
-)
+<!-- # Run the same analysis pipeline on all negative controls -->
+<!-- ncResults <- CohortMethod::runCmAnalyses( -->
+<!--   connectionDetails = connectionDetails, -->
+<!--   # ... same settings as primary analysis -->
+<!--   # ... but with outcomeIds = negativeControlIds -->
+<!-- ) -->
 
-# Fit calibration model
-nullDist <- EmpiricalCalibration::fitMcmcNull(
-  logRr   = ncResults$logRr,
-  seLogRr = ncResults$seLogRr
-)
+<!-- # Fit calibration model -->
+<!-- nullDist <- EmpiricalCalibration::fitMcmcNull( -->
+<!--   logRr   = ncResults$logRr, -->
+<!--   seLogRr = ncResults$seLogRr -->
+<!-- ) -->
 
-# Plot the null distribution
-EmpiricalCalibration::plotCalibrationEffect(
-  logRrNegatives  = ncResults$logRr,
-  seLogRrNegatives = ncResults$seLogRr,
-  logRrPositives  = log(outcomeModel$outcomeModelTreatmentEstimate$estimate),
-  seLogRrPositives = outcomeModel$outcomeModelTreatmentEstimate$logRrSe
-)
+<!-- # Plot the null distribution -->
+<!-- EmpiricalCalibration::plotCalibrationEffect( -->
+<!--   logRrNegatives  = ncResults$logRr, -->
+<!--   seLogRrNegatives = ncResults$seLogRr, -->
+<!--   logRrPositives  = log(outcomeModel$outcomeModelTreatmentEstimate$estimate), -->
+<!--   seLogRrPositives = outcomeModel$outcomeModelTreatmentEstimate$logRrSe -->
+<!-- ) -->
 
-# Apply calibration to the primary estimate
-calibratedEstimate <- EmpiricalCalibration::calibrateP(
-  null    = nullDist,
-  logRr   = log(outcomeModel$outcomeModelTreatmentEstimate$estimate),
-  seLogRr = outcomeModel$outcomeModelTreatmentEstimate$logRrSe
-)
-calibratedEstimate
-```
+<!-- # Apply calibration to the primary estimate -->
+<!-- calibratedEstimate <- EmpiricalCalibration::calibrateP( -->
+<!--   null    = nullDist, -->
+<!--   logRr   = log(outcomeModel$outcomeModelTreatmentEstimate$estimate), -->
+<!--   seLogRr = outcomeModel$outcomeModelTreatmentEstimate$logRrSe -->
+<!-- ) -->
+<!-- calibratedEstimate -->
+<!-- ``` -->
 
 > **Our study:** If the negative control estimates are systematically shifted above HR = 1.0 (suggesting our analysis over-estimates risk), this means there is residual confounding — semaglutide users are sicker than liraglutide users in ways our propensity score did not fully capture. The calibrated HR corrects for this bias empirically. A calibrated p-value above the threshold after this correction means the primary finding is not robust to systematic error.
 
@@ -264,13 +319,13 @@ cat(
 
 ## Step 6: Kaplan-Meier plot
 
-```{r km-plot, eval=FALSE}
-CohortMethod::plotKaplanMeier(
-  population  = matchedPop,
-  outcomeId   = 3,
-  confidenceIntervals = TRUE
-)
-```
+<!-- ```{r km-plot, eval=FALSE} -->
+<!-- CohortMethod::plotKaplanMeier( -->
+<!--   population  = matchedPop, -->
+<!--   outcomeId   = 3, -->
+<!--   confidenceIntervals = TRUE -->
+<!-- ) -->
+<!-- ``` -->
 
 ------------------------------------------------------------------------
 
@@ -296,17 +351,17 @@ cat(
 
 You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is [OmopViewer](https://ohdsi.github.io/OmopViewer/) but [visOmopResults](https://darwin-eu.github.io/visOmopResults/) and each package own functions allow for it too.
 
-```{r export, eval=FALSE}
-# Suppress small cell counts before sharing
-minCellCount <- 5 
+<!-- ```{r export, eval=FALSE} -->
+<!-- # Suppress small cell counts before sharing -->
+<!-- minCellCount <- 5  -->
 
-exportSummarisedResult(
-  inc,
-  prev,
-  pointPrev,
-  minCellCount = minCellCount,
-  path = here("Results"),
-  fileName = "GregonBoard_incprev_{cdm_name}_{date}.csv"
-)
+<!-- exportSummarisedResult( -->
+<!--   inc, -->
+<!--   prev, -->
+<!--   pointPrev, -->
+<!--   minCellCount = minCellCount, -->
+<!--   path = here("Results"), -->
+<!--   fileName = "GregonBoard_incprev_{cdm_name}_{date}.csv" -->
+<!-- ) -->
 
-```
+<!-- ``` -->

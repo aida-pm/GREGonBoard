@@ -58,7 +58,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -310,7 +329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/incidenceprevalence.html">Incidence-Prevalence</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/incidenceprevalence.html">Incidence-Prevalence</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -416,6 +435,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phenotyping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/atlas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ATLAS</span></a>
   </div>
@@ -428,8 +453,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/phenotyping.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Phenotyping</span></a>
+  <a href="../chapters/codelistgenerator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Codelist Generator</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/cohortconstruction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cohort Construction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -459,7 +490,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/effectiveness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">From description to causal inference</span></a>
+ <span class="menu-text">Estimating effectiveness</span></a>
   </div>
 </li>
       </ul>
@@ -491,15 +522,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#incidence-vs.-prevalence-the-epidemiological-distinction" id="toc-incidence-vs.-prevalence-the-epidemiological-distinction" class="nav-link active" data-scroll-target="#incidence-vs.-prevalence-the-epidemiological-distinction"><span class="header-section-number">1</span> Incidence vs.&nbsp;prevalence — the epidemiological distinction</a></li>
-  <li><a href="#the-incidenceprevalence-package" id="toc-the-incidenceprevalence-package" class="nav-link" data-scroll-target="#the-incidenceprevalence-package"><span class="header-section-number">2</span> The <code>IncidencePrevalence</code> package</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">3</span> Setup</a></li>
-  <li><a href="#step-1-define-the-denominator-population" id="toc-step-1-define-the-denominator-population" class="nav-link" data-scroll-target="#step-1-define-the-denominator-population"><span class="header-section-number">4</span> Step 1: Define the denominator population</a></li>
-  <li><a href="#step-2-define-the-outcome-cohort" id="toc-step-2-define-the-outcome-cohort" class="nav-link" data-scroll-target="#step-2-define-the-outcome-cohort"><span class="header-section-number">5</span> Step 2: Define the outcome cohort</a></li>
-  <li><a href="#step-3-estimate-incidence-rates" id="toc-step-3-estimate-incidence-rates" class="nav-link" data-scroll-target="#step-3-estimate-incidence-rates"><span class="header-section-number">6</span> Step 3: Estimate incidence rates</a></li>
-  <li><a href="#step-4-estimate-prevalence" id="toc-step-4-estimate-prevalence" class="nav-link" data-scroll-target="#step-4-estimate-prevalence"><span class="header-section-number">7</span> Step 4: Estimate prevalence</a></li>
-  <li><a href="#stratification-and-subgroup-analyses" id="toc-stratification-and-subgroup-analyses" class="nav-link" data-scroll-target="#stratification-and-subgroup-analyses"><span class="header-section-number">8</span> Stratification and subgroup analyses</a></li>
-  <li><a href="#suppression-and-export" id="toc-suppression-and-export" class="nav-link" data-scroll-target="#suppression-and-export"><span class="header-section-number">9</span> Suppression and export</a></li>
+  <li><a href="#incidence-and-prevalence" id="toc-incidence-and-prevalence" class="nav-link active" data-scroll-target="#incidence-and-prevalence"><span class="header-section-number">1</span> Incidence and prevalence</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
+  <li><a href="#example-pipeline" id="toc-example-pipeline" class="nav-link" data-scroll-target="#example-pipeline"><span class="header-section-number">3</span> Example pipeline</a>
+  <ul class="collapse">
+  <li><a href="#step-1-define-the-denominator-population" id="toc-step-1-define-the-denominator-population" class="nav-link" data-scroll-target="#step-1-define-the-denominator-population"><span class="header-section-number">3.1</span> Step 1: Define the denominator population</a></li>
+  <li><a href="#step-2-define-the-outcome-cohort" id="toc-step-2-define-the-outcome-cohort" class="nav-link" data-scroll-target="#step-2-define-the-outcome-cohort"><span class="header-section-number">3.2</span> Step 2: Define the outcome cohort</a></li>
+  <li><a href="#step-3-estimate-incidence-rates" id="toc-step-3-estimate-incidence-rates" class="nav-link" data-scroll-target="#step-3-estimate-incidence-rates"><span class="header-section-number">3.3</span> Step 3: Estimate incidence rates</a></li>
+  <li><a href="#step-4-estimate-prevalence" id="toc-step-4-estimate-prevalence" class="nav-link" data-scroll-target="#step-4-estimate-prevalence"><span class="header-section-number">3.4</span> Step 4: Estimate prevalence</a></li>
+  </ul></li>
+  <li><a href="#exporting-the-results" id="toc-exporting-the-results" class="nav-link" data-scroll-target="#exporting-the-results"><span class="header-section-number">4</span> Exporting the results</a></li>
+  <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography"><span class="header-section-number">5</span> Bibliography</a></li>
   </ul>
 </nav>
     </div>
@@ -507,7 +540,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/atlas.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/incidenceprevalence.html">Incidence-Prevalence</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/phenotyping.html">Design &amp; Execution</a></li><li class="breadcrumb-item"><a href="../chapters/incidenceprevalence.html">Incidence-Prevalence</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Incidence-Prevalence</h1>
 </div>
@@ -526,9 +559,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="incidence-vs.-prevalence-the-epidemiological-distinction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="incidence-vs.-prevalence-the-epidemiological-distinction"><span class="header-section-number">1</span> Incidence vs.&nbsp;prevalence — the epidemiological distinction</h2>
-<p>Before running any code, it is worth being precise about what these two measures actually mean, because they answer fundamentally different questions.</p>
+<section id="incidence-and-prevalence" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="incidence-and-prevalence"><span class="header-section-number">1</span> Incidence and prevalence</h2>
+<p>Before running any code, it is worth being precise about what these two measures actually mean, because they answer to different questions.</p>
 <p><strong>Prevalence</strong> answers: <em>what proportion of the population has this condition at a given point in time (or during a given period)?</em> It captures both old and new cases.</p>
 <p><strong>Incidence</strong> answers: <em>at what rate are new cases occurring in the at-risk population?</em> It captures only new events in people who did not previously have the condition.</p>
 <table class="caption-top table">
@@ -567,25 +600,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<p>Sometimes we do not have the population at risk and our denominator changes to the overall population. Let’s think of the following example, in which we have a population with an underlying disease (population 1), a target population eligible to receive treatment (population 2) and an actually treated population (population 3). Incidence and prevalence would be as follows:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/prevalence.png" class="img-fluid figure-img"></p>
+<figcaption>Figure. Prevalence calculation in our example.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/incidence.png" class="img-fluid figure-img"></p>
+<figcaption>Figure. Incidence calculation in our example.</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>For regulators and HTA bodies
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Incidence rates are the most relevant measure for safety signal quantification and for risk-benefit assessments — they express how many events occur per 1,000 (or 100,000) patient-years and can be directly compared across populations and time periods. Prevalence is more relevant for burden-of-disease and healthcare resource utilisation analyses.</p>
+<p>Incidence rates are the most relevant measure for safety signal quantification and for risk-benefit assessments, they can be directly compared across populations and time periods. Prevalence is more relevant for burden-of-disease and healthcare resource utilisation analyses.</p>
 </div>
 </div>
-<hr>
-</section>
-<section id="the-incidenceprevalence-package" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="the-incidenceprevalence-package"><span class="header-section-number">2</span> The <code>IncidencePrevalence</code> package</h2>
-<p>The <code>IncidencePrevalence</code> package implements a principled, auditable workflow for computing these measures using OMOP CDM data. It was developed by the DARWIN EU Coordination Centre and is the standard tool for incidence/prevalence analyses across the OHDSI network.</p>
-<p>The workflow always has three steps:</p>
+<p>In this chapter we will work with the <a href="https://darwin-eu.github.io/IncidencePrevalence/">IncidencePrevalence package</a>. The workflow always has three steps:</p>
 <pre><code>1. Generate the DENOMINATOR cohort (who is at risk and when?)
         ↓
 2. Generate the OUTCOME cohort (who had the event?)
@@ -593,188 +634,157 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 3. Estimate incidence / prevalence using these two cohorts</code></pre>
 <hr>
 </section>
-<section id="setup" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="setup"><span class="header-section-number">3</span> Setup</h2>
+<section id="setup" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="setup"><span class="header-section-number">2</span> Setup</h2>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(IncidencePrevalence)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CDMConnector)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a synthetic CDM with realistic outcome prevalence</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> IncidencePrevalence<span class="sc">::</span><span class="fu">mockIncidencePrevalence</span>(</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampleSize      =</span> <span class="dv">50000</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">outPre          =</span> <span class="fl">0.05</span>,       <span class="co"># 5% of population will have the outcome</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">minOutcomeDays  =</span> <span class="dv">1</span>,</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxOutcomeDays  =</span> <span class="dv">365</span>,</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">earliestObservationStartDate =</span> <span class="fu">as.Date</span>(<span class="st">"2015-01-01"</span>),</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">latestObservationStartDate   =</span> <span class="fu">as.Date</span>(<span class="st">"2021-01-01"</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>cdm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortConstructor)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CodelistGenerator)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CDMConnector)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omopgenerics)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omock)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(duckdb)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">requireEunomia</span>()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>(), <span class="at">dbdir =</span> <span class="fu">eunomiaDir</span>())</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">cdmFromCon</span>(db, </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cdmSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writeSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writePrefix =</span> <span class="st">"greg_"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>semaglutide <span class="ot">&lt;-</span> <span class="fu">getDrugIngredientCodes</span>(<span class="at">cdm =</span> cdm,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">name =</span> <span class="st">"semaglutide"</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>t2dm <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"type 2 diabetis mellitus"</span>, <span class="st">"T2DM"</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>acute_pancreatitis <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>, </span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"Acute pancreatitis"</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Build drug exposure cohorts (one per GLP-1 agent)</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>semaglutide_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> semaglutide,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"semaglutide_cohort"</span>,   <span class="co"># name of the cohort table in the CDM</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">exit =</span> <span class="st">"event_end_date"</span>,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">overlap =</span> <span class="st">"merge"</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Build condition cohorts</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>t2dm_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> t2dm,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"t2dm_cohort"</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>ap_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> acute_pancreatitis,</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"ap_cohort"</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">bind</span>(cdm<span class="sc">$</span>semaglutide_cohort, cdm<span class="sc">$</span>t2dm_cohort, cdm<span class="sc">$</span>ap_cohort, <span class="at">name =</span> <span class="st">"study_cohorts"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <hr>
 </section>
-<section id="step-1-define-the-denominator-population" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="step-1-define-the-denominator-population"><span class="header-section-number">4</span> Step 1: Define the denominator population</h2>
-<p>The denominator defines who is at risk and for how long. You can restrict by age, sex, and a calendar study period.</p>
+<section id="example-pipeline" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="example-pipeline"><span class="header-section-number">3</span> Example pipeline</h2>
+<p>In this tutorial we will provide an example on how to calculate incidence and prevalence with <code>IncidencePrevalence</code>, but further documentation can be found in the <a href="https://darwin-eu.github.io/IncidencePrevalence/">package documentation</a>, with all available functions in its <a href="https://darwin-eu.github.io/IncidencePrevalence/reference/index.html">reference index</a> and in <a href="https://dpa-pde-oxford.quarto.pub/incidenceprevalence-c13b/#/title-slide">this other tutorial</a>.</p>
+<section id="step-1-define-the-denominator-population" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="step-1-define-the-denominator-population"><span class="header-section-number">3.1</span> Step 1: Define the denominator population</h3>
+<p>The denominator defines who is at risk and for how long. You can restrict by age, sex, and a calendar study period. An “overall population” denominator for our study would be, if we wanted to stratify incidence and prevalence by age group (18-44, 45-64, 65+) and sex.:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">generateDenominatorCohortSet</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm                    =</span> cdm,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">name                   =</span> <span class="st">"denominator"</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohortDateRange        =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2017-01-01"</span>, <span class="st">"2020-12-31"</span>)),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">cohortDateRange        =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2023-01-01"</span>, <span class="st">"2025-12-31"</span>)),</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ageGroup               =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">44</span>), <span class="fu">c</span>(<span class="dv">45</span>, <span class="dv">64</span>), <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">150</span>)),</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sex                    =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Both"</span>),</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">daysPriorObservation   =</span> <span class="dv">365</span>   <span class="co"># require 1 year washout</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># How many denominator cohorts were created?</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cohortCount</span>(cdm<span class="sc">$</span>denominator)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">daysPriorObservation   =</span> <span class="dv">365</span> <span class="co"># coherent with the numerator cohort</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 9 × 3
-  cohort_definition_id number_records number_subjects
-                 &lt;int&gt;          &lt;int&gt;           &lt;int&gt;
-1                    1           6185            6185
-2                    2           6267            6267
-3                    3          12452           12452
-4                    4           5218            5218
-5                    5           5318            5318
-6                    6          10536           10536
-7                    7           8460            8460
-8                    8           8425            8425
-9                    9          16885           16885</code></pre>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
 </div>
 </div>
-<blockquote class="blockquote">
-<p><strong>Our study:</strong> The denominator for the acute pancreatitis incidence analysis is the type 2 diabetes population. We define it as all T2DM patients with at least 365 days of prior observation, observed between 1 January 2023 and 31 December 2025, stratified by age group (18–44, 45–64, 65+) and sex.</p>
-</blockquote>
+<div class="callout-body-container callout-body">
+<p>In our study, the denominator for the acute pancreatitis incidence analysis would be the type 2 diabetes population taking a GLP-1 RA, if we consider “population at risk”.</p>
+</div>
+</div>
 <p><strong>Quick check:</strong> Why do we require 365 days of prior observation in the denominator?</p>
 <p><select class="webex-select"><option value="blank"></option><option value="">To ensure patients have had time to develop the outcome</option><option value="answer">To exclude patients who may have had the outcome before the study period (washout), ensuring we only capture truly new (incident) cases</option><option value="">Because the IncidencePrevalence package requires it</option><option value="">To match the follow-up period of 365 days</option></select></p>
 <div class="webex-solution">
 <button>
 Explanation
 </button>
-<p>The washout period (<code>daysPriorObservation</code>) ensures that patients entering the denominator did not already have the outcome before their observation window began. Without it, we would count as “incident” cases patients who actually had a pre-existing condition — inflating the incidence rate. This is especially important for acute pancreatitis, where a patient admitted to hospital before the study period should not be counted as a new case.</p>
+<p>The washout period (<code>daysPriorObservation</code>) ensures that patients entering the denominator did not already have the outcome before their observation window began. We want to discard them from the denominator because we could not include those patients in the numerator neither.</p>
 </div>
-<hr>
 </section>
-<section id="step-2-define-the-outcome-cohort" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="step-2-define-the-outcome-cohort"><span class="header-section-number">5</span> Step 2: Define the outcome cohort</h2>
-<p>The outcome cohort identifies who experienced the event. For incidence, we need the <strong>first</strong> event per person during the at-risk period.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The mockIncidencePrevalence function pre-generates an outcome cohort</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># In a real study, you would create it from conceptCohort() or ATLAS</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the outcome cohort exists</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>outcome <span class="sc">|&gt;</span> <span class="fu">cohortCount</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 3
-  cohort_definition_id number_records number_subjects
-                 &lt;int&gt;          &lt;int&gt;           &lt;int&gt;
-1                    1           2500            2500</code></pre>
-</div>
-</div>
-<p>In a real study, you would build the acute pancreatitis outcome cohort:</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortConstructor)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Acute pancreatitis — inpatient / emergency only (higher specificity)</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> CohortConstructor<span class="sc">::</span><span class="fu">conceptCohort</span>(</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm        =</span> cdm,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet =</span> <span class="fu">list</span>(<span class="at">acute_pancreatitis =</span> <span class="fu">c</span>(<span class="dv">197456</span>)),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">name       =</span> <span class="st">"ap_outcome"</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">domain     =</span> <span class="st">"condition"</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>) </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Restrict to inpatient / emergency care settings</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>ap_outcome <span class="ot">&lt;-</span> cdm<span class="sc">$</span>ap_outcome <span class="sc">|&gt;</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requireTableIntersect</span>(</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">tableName    =</span> <span class="st">"visit_occurrence"</span>,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">window       =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">indexDate    =</span> <span class="st">"cohort_start_date"</span>,</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># visit_concept_id 9201 = inpatient, 9203 = emergency</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">conceptSet   =</span> <span class="fu">list</span>(<span class="at">inpatient_emergency =</span> <span class="fu">c</span>(<span class="dv">9201</span>, <span class="dv">9203</span>)),</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">name         =</span> <span class="st">"ap_outcome"</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<hr>
-</section>
-<section id="step-3-estimate-incidence-rates" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="step-3-estimate-incidence-rates"><span class="header-section-number">6</span> Step 3: Estimate incidence rates</h2>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>inc <span class="ot">&lt;-</span> <span class="fu">estimateIncidence</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm             =</span> cdm,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"outcome"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,          <span class="co"># estimate per calendar year</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeWashout   =</span> <span class="dv">365</span>,              <span class="co"># exclude patients with prior outcome</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">repeatedEvents   =</span> <span class="cn">FALSE</span>             <span class="co"># first event only per person</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># # View results</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># incidenceAttrition(inc)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotIncidence</span>(inc,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">facet  =</span> <span class="fu">c</span>(<span class="st">"denominator_age_group"</span>),</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> <span class="st">"denominator_sex"</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="incidenceprevalence_files/figure-html/plot-incidence-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
+<section id="step-2-define-the-outcome-cohort" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="step-2-define-the-outcome-cohort"><span class="header-section-number">3.2</span> Step 2: Define the outcome cohort</h3>
+<p>The outcome cohort identifies who experienced the event. For incidence, we need the <strong>first</strong> event per person during the at-risk period. For prevalence, all events are valid.</p>
 <blockquote class="blockquote">
-<p><strong>Our study:</strong> Expected crude incidence of acute pancreatitis in a T2DM population is approximately 2–5 per 1,000 person-years. If your estimated rate is an order of magnitude higher, this indicates outcome misclassification — most likely because your outcome concept set is too broad and is capturing chronic pancreatitis follow-up visits or history codes. If it is zero or near-zero, check that your outcome concept IDs are correctly mapped in the OMOP vocabulary of your specific database.</p>
+<p>In our example, this would be the ap_cohort we already created.</p>
 </blockquote>
-<hr>
 </section>
-<section id="step-4-estimate-prevalence" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="step-4-estimate-prevalence"><span class="header-section-number">7</span> Step 4: Estimate prevalence</h2>
+<section id="step-3-estimate-incidence-rates" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="step-3-estimate-incidence-rates"><span class="header-section-number">3.3</span> Step 3: Estimate incidence rates</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>prev <span class="ot">&lt;-</span> <span class="fu">estimatePeriodPrevalence</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm              =</span> cdm,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"outcome"</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fullContribution =</span> <span class="cn">FALSE</span>   <span class="co"># patients contribute partial periods at edges</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPrevalence</span>(prev,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">facet  =</span> <span class="st">"denominator_age_group"</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> <span class="st">"denominator_sex"</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>inc <span class="ot">&lt;-</span> <span class="fu">estimateIncidence</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm             =</span> cdm,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>, <span class="co"># or t2dm + each GLP1-RA</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"ap_cohort"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,       <span class="co"># estimate per calendar year</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeWashout   =</span> <span class="dv">365</span>,           <span class="co"># exclude patients with prior outcome</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">repeatedEvents   =</span> <span class="cn">FALSE</span>          <span class="co"># first event only per person</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="incidenceprevalence_files/figure-html/prevalence-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
 </div>
 </div>
+<div class="callout-body-container callout-body">
+<p><strong>Our study:</strong> The expected crude incidence of acute pancreatitis in a T2DM population is approximately 3-6 per 1,000 person-years<span class="citation" data-cites="GonzalezPerez2010"><sup><a href="#ref-GonzalezPerez2010" role="doc-biblioref">1</a></sup></span>. If your estimated rate is an order of magnitude higher, something happened. The most probable reason is outcome misclassification, most likely because your outcome concept set is too broad and is capturing chronic pancreatitis follow-up visits or history codes. If it is zero or near-zero, check that your outcome concept IDs are correctly mapped in the OMOP vocabulary of your specific database.</p>
+</div>
+</div>
+<p><strong>Quick check:</strong> Your incidence rate estimate for acute pancreatitis is 45 per 1,000 person-years in the T2DM population. The published literature reports 3-6 per 1,000. What should you do first?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">Accept the result, your database may have a sicker population</option><option value="">Talk to the data providers to see if they have an issue with the data</option><option value="answer">Investigate the outcome concept set, you are likely capturing chronic pancreatitis, history codes, or outpatient follow-up visits as incident events</option><option value="">Check your code, maybe you are multiplying by 10 where you should not!</option></select></p>
+<div class="webex-solution">
+<button>
+Explanation
+</button>
+<p>An incidence rate 10-20× higher than published estimates is almost always a signal of outcome phenotype misclassification. The most common cause in OMOP databases is that the concept set captures too many non-incident events. For example, SNOMED descendants that include chronic pancreatitis, billing codes used for follow-up visits after a previously diagnosed episode, or codes used as rule-outs rather than confirmed diagnoses. The correct response is to review your concept set and restrict your events.</p>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -782,54 +792,82 @@ Explanation
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Point prevalence vs period prevalence
+Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Use <code>estimatePointPrevalence()</code> when you want a snapshot on a specific date (e.g.&nbsp;1 January each year — useful for burden-of-disease estimates). Use <code>estimatePeriodPrevalence()</code> when you want to capture anyone with the condition during a time window (e.g.&nbsp;any quarter — useful for healthcare utilisation studies).</p>
+<p>Do not hesitate to contact the data providers and even discuss results with them if they do not make sense! First, make sure that it is not a coding and/or phenotyping error, but if results do not make sense after careful revision of everything that could have gone wrong with your data analysis pipeline, perhaps something happens with the data that you are not considering! Not that it is wrong, or wrongly mapped. Perhaps using a system which you had not considered!</p>
 </div>
 </div>
-<hr>
 </section>
-<section id="stratification-and-subgroup-analyses" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="stratification-and-subgroup-analyses"><span class="header-section-number">8</span> Stratification and subgroup analyses</h2>
+<section id="step-4-estimate-prevalence" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="step-4-estimate-prevalence"><span class="header-section-number">3.4</span> Step 4: Estimate prevalence</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stratify by year and age group simultaneously</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>inc_stratified <span class="ot">&lt;-</span> <span class="fu">estimateIncidence</span>(</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm              =</span> cdm,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"outcome"</span>,</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeWashout   =</span> <span class="dv">365</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Table output for sharing</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tableIncidenceRates</span>(inc_stratified, <span class="at">type =</span> <span class="st">"flextable"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>prev <span class="ot">&lt;-</span> <span class="fu">estimatePeriodPrevalence</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm              =</span> cdm,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>, <span class="co"># or t2dm + each GLP1-RA</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"ap_cohort"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fullContribution =</span> <span class="cn">FALSE</span>   <span class="co"># patients contribute partial periods at edges</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>pointPrev <span class="ot">&lt;-</span> <span class="fu">estimatePointPrevalence</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm              =</span> cdm,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">denominatorTable =</span> <span class="st">"denominator"</span>, <span class="co"># or t2dm + each GLP1-RA</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomeTable     =</span> <span class="st">"ap_cohort"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval         =</span> <span class="st">"years"</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <code>estimatePointPrevalence()</code> when you want a snapshot on a specific date (useful for burden-of-disease estimates). Use <code>estimatePeriodPrevalence()</code> when you want to capture anyone with the condition during a time window (useful for healthcare utilisation studies).</p>
+</div>
+</div>
+<section id="stratification-and-subgroup-analyses" class="level4" data-number="3.4.1">
+<h4 data-number="3.4.1" class="anchored" data-anchor-id="stratification-and-subgroup-analyses"><span class="header-section-number">3.4.1</span> Stratification and subgroup analyses</h4>
+<p>To obtain results stratified by age or sex, you only need to include them in your cohort definitions. To include stratification by an additional group, you can add this variable to your functions: <code>strata = list()</code> listing the groups by which you want to stratify (and you should have defined them previously).</p>
+<p><strong>Quick check:</strong> The way we have written it in code, are we stratifying incidence and prevalence by age and sex? <select class="webex-select"><option value="blank"></option><option value="">Yes, but only incidence.</option><option value="">Yes, but only period prevalence.</option><option value="answer">Yes because by design it is included.</option><option value="">No, we would need to specify it.</option></select></p>
 <hr>
 </section>
-<section id="suppression-and-export" class="level2" data-number="9">
-<h2 data-number="9" class="anchored" data-anchor-id="suppression-and-export"><span class="header-section-number">9</span> Suppression and export</h2>
+</section>
+</section>
+<section id="exporting-the-results" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="exporting-the-results"><span class="header-section-number">4</span> Exporting the results</h2>
+<p>You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is <a href="https://ohdsi.github.io/OmopViewer/">OmopViewer</a> but <a href="https://darwin-eu.github.io/visOmopResults/">visOmopResults</a> and each package own functions allow for it too.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress small cell counts before sharing</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> omopgenerics<span class="sc">::</span><span class="fu">bind</span>(inc, prev) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  omopgenerics<span class="sc">::</span><span class="fu">suppress</span>(<span class="at">minCellCount =</span> <span class="dv">5</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results, <span class="st">"results/incidence_prevalence.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress small cell counts before sharing</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>minCellCount <span class="ot">&lt;-</span> <span class="dv">5</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">exportSummarisedResult</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  inc,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  prev,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  pointPrev,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">minCellCount =</span> minCellCount,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">here</span>(<span class="st">"Results"</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileName =</span> <span class="st">"GregonBoard_incprev_{cdm_name}_{date}.csv"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Quick check:</strong> Your incidence rate estimate for acute pancreatitis is 45 per 1,000 person-years in the T2DM population. The published literature reports 2–5 per 1,000. What should you do first?</p>
-<p><select class="webex-select"><option value="blank"></option><option value="">Accept the result — your database may have a sicker population</option><option value="">Restrict the age group to 65+ where pancreatitis is more common</option><option value="answer">Investigate the outcome concept set — the high rate suggests you are likely capturing chronic pancreatitis, history codes, or outpatient follow-up visits as incident events</option><option value="">Increase the washout period to 5 years</option></select></p>
-<div class="webex-solution">
-<button>
-Explanation
-</button>
-<p>An incidence rate 10–20× higher than published estimates is almost always a signal of outcome phenotype misclassification. The most common cause in OMOP databases is that the concept set captures too many non-incident events — for example, SNOMED descendants that include chronic pancreatitis, billing codes used for follow-up visits after a previously diagnosed episode, or codes used as rule-outs rather than confirmed diagnoses. The correct response is to review your concept set in Athena, restrict to inpatient/emergency settings (which dramatically improves specificity for acute conditions), and potentially run CohortDiagnostics to inspect the index event breakdown.</p>
+</section>
+<section id="bibliography" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="bibliography"><span class="header-section-number">5</span> Bibliography</h2>
+<div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-GonzalezPerez2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Gonzalez-Perez A, Schlienger RG, Rodríguez LAG. Acute pancreatitis in association with type 2 diabetes and antidiabetic drugs: A population-based cohort study. <em>Diabetes Care</em>. 2010;33(12):2580-2585. doi:<a href="https://doi.org/10.2337/dc10-0842">10.2337/dc10-0842</a></div>
+</div>
 </div>
 
 

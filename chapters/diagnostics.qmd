@@ -79,34 +79,65 @@ In the OHDSI ecosystem, the diagnostic workflow centres on two tools: **CohortDi
 In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the omock package, like the GiBleed dataset. The documentation of the package is here.
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
+library(CohortConstructor)
+library(CodelistGenerator)
 library(CDMConnector)
 library(omopgenerics)
 library(omock)
 library(dplyr)
 library(duckdb)
 
-# Create synthetic CDM
-cdm <- omock::mockCdmReference() |>
-  omock::mockPerson(nPerson = 2000) |>
-  omock::mockObservationPeriod() |>
-  omock::mockConditionOccurrence() |>
-  omock::mockDrugExposure() |>
-  omock::mockDeath()
 
-# Download mock datasets from omock
-downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
-
-# With Eunomia
 requireEunomia()
 db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
 cdm <- cdmFromCon(db, 
                   cdmSchema = "main", 
                   writeSchema = "main", 
-                  writePrefix = "greg_") # change the prefix at your convenience
+                  writePrefix = "greg_")
 
-# ------------------------------------------------------------------------------------
-# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
-# Go to the Cohort Constructor section if you need more info.
+
+semaglutide <- getDrugIngredientCodes(cdm = cdm,
+                                      name = "semaglutide")
+
+t2dm <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition",
+  includeDescendants = TRUE, 
+  includeAncestor = FALSE,
+  keywords = c("type 2 diabetis mellitus", "T2DM")
+)
+
+acute_pancreatitis <- getCandidateCodes(
+  cdm = cdm,
+  domains = "Condition", 
+  includeDescendants = FALSE,
+  includeAncestor = FALSE,
+  keywords = c("Acute pancreatitis")
+)
+
+# Build drug exposure cohorts (one per GLP-1 agent)
+cdm$semaglutide_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = semaglutide,
+  name        = "semaglutide_cohort",   # name of the cohort table in the CDM
+  exit = "event_end_date",
+  overlap = "merge")
+
+
+# Build condition cohorts
+cdm$t2dm_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = t2dm,
+  name        = "t2dm_cohort"
+)
+
+cdm$ap_cohort <- conceptCohort(
+  cdm         = cdm,
+  conceptSet  = acute_pancreatitis,
+  name        = "ap_cohort"
+)
+
+cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "study_cohorts")
 ```
 
 ------------------------------------------------------------------------
@@ -209,14 +240,13 @@ The first diagnostic is always: how many patients are in the cohort, and how man
 
 ```{r q1, echo=FALSE, results='asis'}
 cat(
-  "**Quick check:** Your attrition table shows 10,000 patients after `requireIsFirstEntry()`",
-  "but only 200 after `requirePriorDrugWashout(days = 365)`. What does this most likely indicate?\n\n",
+  "**Quick check:** Your attrition table shows 10,000 patients after `requireIsFirstEntry()` but only 200 after `requirePriorDrugWashout(days = 365)`. What does this most likely indicate?\n",
   mcq(c(
     "The drug is rarely prescribed in this database",
     answer = "Most drug users in this database might be prevalent users, not new users",
     "The washout period is too short",
-    "The washout period is too large, we have to start by washout = 90 days",
-  )), "\n\n"
+    "The washout period is too large, we have to start by washout = 90 days"
+  )), "\n"
 )
 ```
 
