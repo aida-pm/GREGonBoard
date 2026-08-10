@@ -12,7 +12,7 @@ library(omock)
 
 ## What is a cohort in OMOP?
 
-A cohort is the fundamental unit of analysis in OMOP observational research. Formally, a cohort is a set of persons who satisfy one or more inclusion criteria for a duration of time. In OMOP, every cohort is stored as a table with exactly four columns:
+A cohort will be the fundamental unit of analysis in our studies. It is a set of persons who satisfy one or more inclusion criteria for a duration of time. In OMOP, every cohort is stored as a table with exactly four columns:
 
 | Column | Description |
 |------------------------------------|------------------------------------|
@@ -21,28 +21,26 @@ A cohort is the fundamental unit of analysis in OMOP observational research. For
 | `cohort_start_date` | The date the patient enters the cohort (Day 0 / index date) |
 | `cohort_end_date` | The date the patient exits the cohort |
 
-This simple structure is powerful: one patient can appear multiple times (e.g. multiple treatment episodes), and one table can hold many different cohort definitions simultaneously.
+In this structure, one patient can appear multiple times (e.g. multiple treatment episodes), and one table can hold many different cohort definitions simultaneously.
 
 ::: callout-note
-## Two ways to build cohorts
+## The two ways to build cohorts
 
-**ATLAS**: graphical interface, produces CIRCE-BE JSON → SQL. Best for sharing definitions across a network via JSON export.
+[**ATLAS**](atlas.qmd): it has the graphical interface, and produces a JSON file that can be exported. Suitable for most studies.
 
-**CohortConstructor (R)**: programmatic pipeline using `dplyr`-style syntax. Best for complex multi-step cohort logic, sensitivity analyses, and automated pipelines.
-
-Both produce the same four-column cohort table. They are complementary, not competing.
+**CohortConstructor (R)**: R package developed by OHDSI. Best for complex multi-step cohort logic, sensitivity analyses, and automated pipelines.
 :::
-
-------------------------------------------------------------------------
 
 ## Setup
 
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the omock package, like the GiBleed dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
+
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(CDMConnector)
-library(CohortConstructor)
 library(omopgenerics)
 library(omock)
 library(dplyr)
+library(duckdb)
 
 # Create synthetic CDM
 cdm <- omock::mockCdmReference() |>
@@ -51,51 +49,52 @@ cdm <- omock::mockCdmReference() |>
   omock::mockConditionOccurrence() |>
   omock::mockDrugExposure() |>
   omock::mockDeath()
+
+# Download mock datasets from omock
+downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
+
+# With Eunomia
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_") # change the prefix at your convenience
 ```
 
 ------------------------------------------------------------------------
 
-## Building a cohort from concept sets
+## Example pipeline
 
-The most common starting point is `conceptCohort()`: define a cohort by the presence of a concept (or concept set) in a given domain table.
+In this tutorial we will provide an example on how to build the cohorts for our study with [CohortConstructor](https://ohdsi.github.io/CohortConstructor/), but further documentation can be found in the [package documentation](https://ohdsi.github.io/CohortConstructor/), with all available functions in its [reference index](https://ohdsi.github.io/CohortConstructor/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/cohortconstructorinternaltrainingsep25/#/cohortconstructor) or [this one](https://dpa-pde-oxford.quarto.pub/cohortconstructorrmedicine/#/cohortconstructor).
+
+### 1. Building a cohort from concept sets
+
+The most common starting point is `conceptCohort()`: define a cohort by the presence of a concept (or concept set) in a given domain table. Remember that we have our concept sets already from the [Codelist Generator](codelistgenerator.qmd) section!
 
 ```{r concept-cohort, eval=FALSE}
-# Define concept sets as named lists of concept IDs
-glp1_concepts <- list(
-  semaglutide  = c(2200644),   # RxNorm ingredient
-  liraglutide  = c(1474828),
-  dulaglutide  = c(1551099),
-  exenatide    = c(1544838),
-  tirzepatide  = c(37003518)
-)
-
-t2dm_concepts <- list(
-  type2_diabetes = c(201826)   # SNOMED concept + descendants via ATLAS
-)
-
-ap_concepts <- list(
-  acute_pancreatitis = c(197456)  # SNOMED
-)
+library(CohortConstructor)
 
 # Build drug exposure cohorts (one per GLP-1 agent)
-cdm <- CohortConstructor::conceptCohort(
+cdm <- conceptCohort(
   cdm         = cdm,
-  conceptSet  = glp1_concepts,
-  name        = "glp1_cohorts",   # name of the cohort table in the CDM
-  domain      = "drug"            # look in drug_exposure
-)
+  conceptSet  = semaglutide,
+  name        = "semaglutide_cohort",   # name of the cohort table in the CDM
+  exit = "event_end_date",
+  overlap = "merge")
+
 
 # Build condition cohorts
-cdm <- CohortConstructor::conceptCohort(
+cdm <- conceptCohort(
   cdm         = cdm,
-  conceptSet  = t2dm_concepts,
+  conceptSet  = t2dm,
   name        = "t2dm_cohort",
   domain      = "condition"
 )
 
 cdm <- CohortConstructor::conceptCohort(
   cdm         = cdm,
-  conceptSet  = ap_concepts,
+  conceptSet  = acute_pancreatitis,
   name        = "ap_cohort",
   domain      = "condition"
 )
@@ -103,183 +102,83 @@ cdm <- CohortConstructor::conceptCohort(
 
 > **Our study:** We create five separate exposure cohorts, one per GLP-1 RA ingredient. The `conceptCohort()` function creates one cohort entry per drug exposure episode per patient. The next steps will apply the new-user and other inclusion criteria.
 
-------------------------------------------------------------------------
-
-## Applying inclusion criteria with `requireIsFirstEntry()`
+### 2. Applying inclusion criteria with `require()`
 
 The **new-user design** requires that patients have no prior use of any GLP-1 RA before their index date. We implement this in two steps: first restricting to first entry per person, then requiring no prior exposure.
 
 ```{r first-entry, eval=FALSE}
-# Keep only the first exposure episode per patient
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireIsFirstEntry()
+cdm$semaglutide_cohort <- cdm$semaglutide_cohort |>
+  requireIsFirstEntry() |> # Keep only the first exposure episode per patient
+  requireObservationBeforeDrug(
+    days = 365    # at least 365 days prior observation
+  ) |>
+  requirePriorDrugWashout(
+    days = 365 # Restrict to patients with no prior semaglutide in 365 days before index
+  ) |>
+  requireAge(
+    ageRange = list(c(18, 150)) # Restrict to only adults 
+  )
+  requireInDateRange(
+    dateRange = as.Date(c("2023-01-01", "2025-12-31")) # Restrict to the study period
+  ) 
 ```
 
-::: callout-tip
-## Why first entry only?
-
-Without this restriction, a patient prescribed semaglutide three times would contribute three index dates. This creates immortal time bias and violates the new-user design assumption. Always apply `requireIsFirstEntry()` before any other temporal criteria.
+::: callout-important
+You need to have the 365 days observation period prior to the index date if you want to be able to apply the washout period of 365 days for new use! If you do not have this previous period of observation you are not able to discern whether a previous use has happened in these days.
 :::
 
-------------------------------------------------------------------------
-
-## Requiring prior observation (washout window)
-
-Patients must have sufficient prior observation in the database to apply the washout period and measure baseline covariates:
-
-```{r prior-obs, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireObservationBeforeDrug(
-    days = 365    # at least 365 days prior observation
-  )
-```
-
-------------------------------------------------------------------------
-
-## Requiring no prior exposure (washout)
-
-```{r washout, eval=FALSE}
-# Restrict to patients with no prior GLP-1 RA in 365 days before index
-# This is the core of the new-user design
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requirePriorDrugWashout(
-    days = 365
-  )
-```
-
-------------------------------------------------------------------------
-
-## Requiring presence in another cohort (population criterion)
+### 3. Requiring presence in another cohort
 
 Patients must have a T2DM diagnosis on or before the index date:
 
 ```{r require-cohort, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireCohortIntersect(
+cdm$semaglutide_cohort <- cdm$semaglutide_cohort |>
+  requireCohortIntersect(
     cohortTable      = "t2dm_cohort",
     cohortId         = 1,
     window           = c(-Inf, 0),   # any time before or on index date
     intersections    = c(1, Inf),    # at least 1 intersection required
-    name             = "glp1_cohorts"
+    name             = "semaglutide_cohort"
   )
 ```
 
-------------------------------------------------------------------------
+::: callout-tip
+## The order matters!
 
-## Restricting to a study period
+The order in which you introduce the inclusion criteria will have an impact on your final cohort. When you plot the attrition of the cohort building process, you will see how your sample of patients becomes increasingly restricted by your inclusion criteria. You might decide to be more strict or loose in some criteria depending on that! Try to start by more general rules and become more precise in the end of the pipeline. Or try to implement your most important restriction criteria first.
+:::
 
-```{r date-restrict, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireInDateRange(
-    dateRange = as.Date(c("2023-01-01", "2024-12-31"))
-  )
-```
-
-------------------------------------------------------------------------
-
-## Age restriction
-
-```{r age-restrict, eval=FALSE}
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  CohortConstructor::requireAge(
-    ageRange = list(c(18, 150))   # adults only
-  )
-```
-
-------------------------------------------------------------------------
-
-## Putting the full pipeline together
-
-```{r full-pipeline, eval=FALSE}
-# Full new-user cohort pipeline for GLP-1 RA agents
-cdm <- CohortConstructor::conceptCohort(
-  cdm        = cdm,
-  conceptSet = glp1_concepts,
-  name       = "glp1_cohorts",
-  domain     = "drug"
-) 
-
-cdm$glp1_cohorts <- cdm$glp1_cohorts |>
-  requireIsFirstEntry()             |>
-  requireObservationBeforeDrug(days = 365) |>
-  requirePriorDrugWashout(days = 365)      |>
-  requireCohortIntersect(
-    cohortTable   = "t2dm_cohort",
-    cohortId      = 1,
-    window        = c(-Inf, 0),
-    intersections = c(1, Inf),
-    name          = "glp1_cohorts"
-  ) |>
-  requireAge(ageRange = list(c(18, 150))) |>
-  requireInDateRange(
-    dateRange = as.Date(c("2023-01-01", "2024-12-31"))
-  )
-```
-
-------------------------------------------------------------------------
-
-## Checking cohort counts and attrition
-
-After building the cohort, always inspect the attrition table — it shows how many patients were excluded at each step, which is essential for transparency and for detecting logic errors.
-
-```{r attrition, eval=FALSE}
-library(CohortCharacteristics)
-
-# Cohort counts
-attrition_result <- summariseCohortAttrition(cdm$glp1_cohorts)
-
-# Visualise as a table
-tableCohortAttrition(attrition_result)
-
-# Visualise as a flowchart (for one cohort)
-attrition_result |>
-  filter(group_level == "semaglutide") |>
-  plotCohortAttrition()
-```
-
-> **Our study:** A well-specified attrition table for the semaglutide cohort might look like this:
->
-> | Step                          | Remaining N |
-> |-------------------------------|-------------|
-> | Initial drug exposure records | 45,210      |
-> | First entry per person        | 12,847      |
-> | ≥ 365 days prior observation  | 11,203      |
-> | No prior GLP-1 RA (washout)   | 9,841       |
-> | T2DM diagnosis before index   | 8,654       |
-> | Age ≥ 18                      | 8,640       |
-> | Index date 2023–2024          | 6,112       |
->
-> If the washout step removes more than 60% of patients, this is worth investigating — it may indicate that your concept set is too broad and is capturing repeat prescriptions of the same episode, or that the database has many prevalent users.
-
-```{r q1, echo=FALSE, results='asis'}
+```{r cohortconstr-q, echo=FALSE, results='asis'}
 cat(
-  "**Quick check:** Your attrition table shows 10,000 patients after `requireIsFirstEntry()`",
-  "but only 200 after `requirePriorDrugWashout(days = 365)`. What does this most likely indicate?\n\n",
+  "Do you think that the order that we followed for the construction of the cohort of semaglutide is correct?",
+  "\n\n",
   mcq(c(
-    "The drug is rarely prescribed in this database",
-    answer = "Most drug users in this database are prevalent users, not new users — they had prior prescriptions in the year before their first entry",
-    "The washout period is too short",
-    "There is a bug in the CohortConstructor code"
-  )), "\n\n"
+    "Yes, from general to specific",
+    answer = "Yes, from unavoidable to changeable",
+    "No, you should do the most general criteria first, like date range",
+    "Yes, but I do not understand the order"
+  )),
+  "\n\n"
 )
 ```
 
-`r hide("Explanation")` When the vast majority of patients are excluded by the washout criterion, it means most patients who appear in the database with this drug already had prior exposure — i.e. they are **prevalent users**. This is common for drugs that have been on the market for many years (like liraglutide since 2009 or exenatide since 2006). The new-user design deliberately excludes these patients to avoid prevalent-user bias, but it does reduce your study population substantially. This is a design trade-off, not a bug. `r unhide()`
+`r hide("Explanation")` The order we applied here is from the most unavoidable to the least. We want to define a new-user cohort, therefore restricting to first entry and making sure that the first entry is well-captured is a must. If we would like incident entry and not first entry, we should just remove the `requireIsFirstEntry()` command but all other restrictions apply. Finally, we can more easily adapt the study period than change the age restriction for our study, because this could also be drug/condition dependant. `r unhide()`
 
-------------------------------------------------------------------------
+### 4. Checking cohort counts and attrition
 
-## Exporting cohort definitions
+After building the cohort, we can inspect the attrition table, as it shows how many patients were excluded at each step, which is essential for transparency and for detecting logic errors. You can do that running diagnostics on your cohorts, as you will see in the [Diagnostics](diagnostics.qmd) section.
+
+::: callout-tip
+Always check your attrition table or plot! And make sure to run the appropriate [diagnostics](diagnostics.qmd) to your cohorts!
+:::
+
+## 5. Exporting cohort definitions
 
 ```{r export, eval=FALSE}
 # Export cohort table to a local file for sharing or archiving
-cohort_data <- cdm$glp1_cohorts |> collect()
-write.csv(cohort_data, "results/glp1_cohorts.csv", row.names = FALSE)
+cohort_data <- cdm$semaglutide_cohort |> collect()
+write.csv(cohort_data, "results/semaglutide_cohort.csv", row.names = FALSE)
 
 # Disconnect
-CDMConnector::cdmDisconnect(cdm)
+dbDisconnect(con)
 ```
-
-## References
-
-::: {#refs}
-:::

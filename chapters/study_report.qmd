@@ -10,3 +10,93 @@ format: html
 2.  Find [here](../templates/study_report_template.docx) the template of the study report. You should fill in this template and submit it to GREG for feedback.
 
 In summary, you need to extend your study protocol including the results from your study. You should include the tables and plots that can be extracted from your `summarised_result` object for each pertinent part of the study.
+
+## Sections of the template
+
+::: {.callout-note icon="false"}
+## 1. [Study title](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 2. [Description of the study team](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 3. Data Sources
+:::
+
+::: {.callout-note icon="false"}
+## 4. [Abstract](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 5. List of Abbreviations
+:::
+
+::: {.callout-note icon="false"}
+## 6. [Ammendments and updates](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 7. [Milestones](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 8. [Rationale and background](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 9. [Research question and objectives](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 10. [Research methods](study_protocol.qmd)
+
+- Study type and study design
+
+- Study setting and data sources
+
+- Study period
+
+- Study population with in- and exclusion criteria
+
+- Follow-up
+
+- Variables
+
+- Study size
+
+- Statistical methods
+:::
+
+::: {.callout-note icon="false"}
+## 11. [Data management](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 12. [Quality control](study_protocol.qmd)
+:::
+
+::: {.callout-note icon="false"}
+## 13. Results
+:::
+
+::: {.callout-note icon="false"}
+## 14. Management and Reporting of Adverse Events/Adverse Reactions
+:::
+
+::: {.callout-note icon="false"}
+## 15. Discussion
+:::
+
+::: {.callout-note icon="false"}
+## 16. Conclusion
+:::
+
+::: {.callout-note icon="false"}
+## 17. References
+:::
+
+::: {.callout-note icon="false"}
+## 18. Annexes
+:::

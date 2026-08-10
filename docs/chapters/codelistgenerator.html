@@ -58,26 +58,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -524,17 +505,8 @@ div.csl-indent {
   <ul>
   <li><a href="#what-is-a-concept-set-omop" id="toc-what-is-a-concept-set-omop" class="nav-link active" data-scroll-target="#what-is-a-concept-set-omop"><span class="header-section-number">1</span> What is a concept set OMOP?</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
-  <li><a href="#building-a-cohort-from-concept-sets" id="toc-building-a-cohort-from-concept-sets" class="nav-link" data-scroll-target="#building-a-cohort-from-concept-sets"><span class="header-section-number">3</span> Building a cohort from concept sets</a></li>
-  <li><a href="#applying-inclusion-criteria-with-requireisfirstentry" id="toc-applying-inclusion-criteria-with-requireisfirstentry" class="nav-link" data-scroll-target="#applying-inclusion-criteria-with-requireisfirstentry"><span class="header-section-number">4</span> Applying inclusion criteria with <code>requireIsFirstEntry()</code></a></li>
-  <li><a href="#requiring-prior-observation-washout-window" id="toc-requiring-prior-observation-washout-window" class="nav-link" data-scroll-target="#requiring-prior-observation-washout-window"><span class="header-section-number">5</span> Requiring prior observation (washout window)</a></li>
-  <li><a href="#requiring-no-prior-exposure-washout" id="toc-requiring-no-prior-exposure-washout" class="nav-link" data-scroll-target="#requiring-no-prior-exposure-washout"><span class="header-section-number">6</span> Requiring no prior exposure (washout)</a></li>
-  <li><a href="#requiring-presence-in-another-cohort-population-criterion" id="toc-requiring-presence-in-another-cohort-population-criterion" class="nav-link" data-scroll-target="#requiring-presence-in-another-cohort-population-criterion"><span class="header-section-number">7</span> Requiring presence in another cohort (population criterion)</a></li>
-  <li><a href="#restricting-to-a-study-period" id="toc-restricting-to-a-study-period" class="nav-link" data-scroll-target="#restricting-to-a-study-period"><span class="header-section-number">8</span> Restricting to a study period</a></li>
-  <li><a href="#age-restriction" id="toc-age-restriction" class="nav-link" data-scroll-target="#age-restriction"><span class="header-section-number">9</span> Age restriction</a></li>
-  <li><a href="#putting-the-full-pipeline-together" id="toc-putting-the-full-pipeline-together" class="nav-link" data-scroll-target="#putting-the-full-pipeline-together"><span class="header-section-number">10</span> Putting the full pipeline together</a></li>
-  <li><a href="#checking-cohort-counts-and-attrition" id="toc-checking-cohort-counts-and-attrition" class="nav-link" data-scroll-target="#checking-cohort-counts-and-attrition"><span class="header-section-number">11</span> Checking cohort counts and attrition</a></li>
-  <li><a href="#exporting-cohort-definitions" id="toc-exporting-cohort-definitions" class="nav-link" data-scroll-target="#exporting-cohort-definitions"><span class="header-section-number">12</span> Exporting cohort definitions</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">13</span> References</a></li>
+  <li><a href="#example-pipeline" id="toc-example-pipeline" class="nav-link" data-scroll-target="#example-pipeline"><span class="header-section-number">3</span> Example pipeline</a></li>
+  <li><a href="#exporting-codelists" id="toc-exporting-codelists" class="nav-link" data-scroll-target="#exporting-codelists"><span class="header-section-number">4</span> Exporting codelists</a></li>
   </ul>
 </nav>
     </div>
@@ -578,321 +550,128 @@ Important
 </div>
 </div>
 <p>In practice, a concept set rarely consists of a single concept ID, not even multiple concept IDs from the same domain, like we saw in the <a href="../chapters/phenotyping.html">Phenotyping</a> and <a href="../chapters/atlas.html">ATLAS</a> sections. A concept set that is too broad will capture false-positive patients; one that is too narrow will miss true cases. Both forms of misclassification bias the results in different directions depending on the study design.</p>
+<p>You can build concept sets with the <a href="https://darwin-eu.github.io/CodelistGenerator/">CodelistGenerator</a> package or with <a href="../chapters/atlas.html">ATLAS</a>.</p>
 <blockquote class="blockquote">
-<p><strong>Our study:</strong> We need three concept sets before we can build a single cohort. The <strong>GLP-1 receptor agonist</strong> concept set must capture all five agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The <strong>type 2 diabetes mellitus</strong> concept set must use the SNOMED hierarchy carefully — including the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. The <strong>acute pancreatitis</strong> concept set must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding), a trade-off that is especially consequential for a rare outcome where false positives directly distort the hazard ratio estimate.</p>
+<p><strong>In our example study:</strong></p>
+<p><u>Objectives (as in <a href="../chapters/study_protocol.html">Study Protocol</a>)</u></p>
+<blockquote class="blockquote">
+<ul>
+<li><p>Calculate the yearly prevalence and incidence proportion and density of GLP-1 receptor agonists given as a treatment to type 2 diabetes patients.</p></li>
+<li><p>Characterise the users of each GLP-1 receptor agonists, including sociodemographic, clinical and large-scale characteristics.</p></li>
+<li><p>Define the mean duration of treatment and treatment patterns, including switches, for patients with type 2 diabetes exposed to GLP-1 receptor agonists.</p></li>
+<li><p>Assess the comparative safety of the different GLP-1 receptor agonists against acute pancreatitis outcomes.</p></li>
+</ul>
 </blockquote>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Two ways to build cohorts
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>ATLAS</strong>: graphical interface, produces CIRCE-BE JSON → SQL. Best for sharing definitions across a network via JSON export.</p>
-<p><strong>CohortConstructor (R)</strong>: programmatic pipeline using <code>dplyr</code>-style syntax. Best for complex multi-step cohort logic, sensitivity analyses, and automated pipelines.</p>
-<p>Both produce the same four-column cohort table. They are complementary, not competing.</p>
-</div>
-</div>
+<p>We need several concept sets: one concept set per each of the five <strong>GLP-1 receptor agonist</strong> agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The <strong>type 2 diabetes mellitus</strong> concept set, in which we must include the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. And finally, the <strong>acute pancreatitis</strong> concept set, which must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding).</p>
+</blockquote>
 <hr>
 </section>
 <section id="setup" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="setup"><span class="header-section-number">2</span> Setup</h2>
+<p>In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CDMConnector)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortConstructor)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CodelistGenerator)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omopgenerics)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(omock)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create synthetic CDM</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> omock<span class="sc">::</span><span class="fu">mockCdmReference</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockPerson</span>(<span class="at">nPerson =</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockObservationPeriod</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockConditionOccurrence</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockDrugExposure</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockDeath</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(duckdb)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create synthetic CDM</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> omock<span class="sc">::</span><span class="fu">mockCdmReference</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockPerson</span>(<span class="at">nPerson =</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockObservationPeriod</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockConditionOccurrence</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockDrugExposure</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  omock<span class="sc">::</span><span class="fu">mockDeath</span>()</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># With Eunomia</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">requireEunomia</span>()</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>(), <span class="at">dbdir =</span> <span class="fu">eunomiaDir</span>())</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">cdmFromCon</span>(db, </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cdmSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writeSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writePrefix =</span> <span class="st">"greg_"</span>) <span class="co"># change the prefix at your convenience</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<hr>
 </section>
-<section id="building-a-cohort-from-concept-sets" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="building-a-cohort-from-concept-sets"><span class="header-section-number">3</span> Building a cohort from concept sets</h2>
-<p>The most common starting point is <code>conceptCohort()</code>: define a cohort by the presence of a concept (or concept set) in a given domain table.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define concept sets as named lists of concept IDs</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>glp1_concepts <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">semaglutide  =</span> <span class="fu">c</span>(<span class="dv">2200644</span>),   <span class="co"># RxNorm ingredient</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">liraglutide  =</span> <span class="fu">c</span>(<span class="dv">1474828</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">dulaglutide  =</span> <span class="fu">c</span>(<span class="dv">1551099</span>),</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">exenatide    =</span> <span class="fu">c</span>(<span class="dv">1544838</span>),</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">tirzepatide  =</span> <span class="fu">c</span>(<span class="dv">37003518</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>t2dm_concepts <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">type2_diabetes =</span> <span class="fu">c</span>(<span class="dv">201826</span>)   <span class="co"># SNOMED concept + descendants via ATLAS</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>ap_concepts <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">acute_pancreatitis =</span> <span class="fu">c</span>(<span class="dv">197456</span>)  <span class="co"># SNOMED</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Build drug exposure cohorts (one per GLP-1 agent)</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> CohortConstructor<span class="sc">::</span><span class="fu">conceptCohort</span>(</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> glp1_concepts,</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"glp1_cohorts"</span>,   <span class="co"># name of the cohort table in the CDM</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">domain      =</span> <span class="st">"drug"</span>            <span class="co"># look in drug_exposure</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Build condition cohorts</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> CohortConstructor<span class="sc">::</span><span class="fu">conceptCohort</span>(</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> t2dm_concepts,</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"t2dm_cohort"</span>,</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">domain      =</span> <span class="st">"condition"</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> CohortConstructor<span class="sc">::</span><span class="fu">conceptCohort</span>(</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> ap_concepts,</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"ap_cohort"</span>,</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">domain      =</span> <span class="st">"condition"</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<blockquote class="blockquote">
-<p><strong>Our study:</strong> We create five separate exposure cohorts, one per GLP-1 RA ingredient. The <code>conceptCohort()</code> function creates one cohort entry per drug exposure episode per patient. The next steps will apply the new-user and other inclusion criteria.</p>
-</blockquote>
-<hr>
-</section>
-<section id="applying-inclusion-criteria-with-requireisfirstentry" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="applying-inclusion-criteria-with-requireisfirstentry"><span class="header-section-number">4</span> Applying inclusion criteria with <code>requireIsFirstEntry()</code></h2>
-<p>The <strong>new-user design</strong> requires that patients have no prior use of any GLP-1 RA before their index date. We implement this in two steps: first restricting to first entry per person, then requiring no prior exposure.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only the first exposure episode per patient</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>glp1_cohorts <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requireIsFirstEntry</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
+<section id="example-pipeline" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="example-pipeline"><span class="header-section-number">3</span> Example pipeline</h2>
+<p>In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the <a href="https://darwin-eu.github.io/CodelistGenerator/">package documentation</a>, with all available functions in its<a href="https://darwin-eu.github.io/CodelistGenerator/reference/index.html">reference index</a> and in <a href="https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide">this other tutorial</a>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Why first entry only?
+Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Without this restriction, a patient prescribed semaglutide three times would contribute three index dates. This creates immortal time bias and violates the new-user design assumption. Always apply <code>requireIsFirstEntry()</code> before any other temporal criteria.</p>
+<p>Always check the <a href="https://darwin-eu.github.io/CodelistGenerator/reference/index.html">reference index</a> of a package because there is where you will see all available functions of the package and really understand all its potential! Are you able to do the concept sets with R for our example study by yourself?</p>
 </div>
 </div>
-<hr>
-</section>
-<section id="requiring-prior-observation-washout-window" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="requiring-prior-observation-washout-window"><span class="header-section-number">5</span> Requiring prior observation (washout window)</h2>
-<p>Patients must have sufficient prior observation in the database to apply the washout period and measure baseline covariates:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>glp1_cohorts <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requireObservationBeforeDrug</span>(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">days =</span> <span class="dv">365</span>    <span class="co"># at least 365 days prior observation</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>semaglutide <span class="ot">&lt;-</span> <span class="fu">getDrugIngredientCodes</span>(<span class="at">cdm =</span> cdm,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">doseForm =</span> <span class="cn">NULL</span>, <span class="co"># Do you want a specific Dose Form?</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">doseUnit =</span> <span class="cn">NULL</span>, <span class="co"># Do you want a specific Dose Unit?</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">routeCategory =</span> <span class="cn">NULL</span>, <span class="co"># Do you want a specific route?</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">ingredientRange =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">Inf</span>), <span class="co"># Do you want a specific combination of drugs or only single ingredients?</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">name =</span> <span class="st">"semaglutide"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>t2dm <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>, <span class="co"># add appropriate domains</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>, <span class="co"># To add descendants or not is your choice!</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"type 2 diabetis mellitus"</span>, <span class="st">"T2DM"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>acute_pancreatitis <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>, <span class="co"># add appropriate domains</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">FALSE</span>, <span class="co"># To add descendants or not is your choice!</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"Acute pancreatitis"</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<hr>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Always review</strong> with a pharmacist/clinician/other professionals the concept sets that CodelistGenerator produced to make sure that your final list actually covers everything that is needed to define the concepts that you are trying to capture!</p>
+</div>
+</div>
+Do we need to include other domains in the T2DM or acute pancreatitis conditions concept sets?
+<div id="radio_RLGSPICDAH" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_RLGSPICDAH" value=""> <span>No, because we are defining conditions.</span></label><label><input type="radio" autocomplete="off" name="radio_RLGSPICDAH" value="answer"> <span>It is not necessary, but we might make a more complete definition if we include other concepts like drug exposures or measurements that might be related to the conditions.</span></label><label><input type="radio" autocomplete="off" name="radio_RLGSPICDAH" value=""> <span>Yes, we should always include all domains because that is the way to make the most complete definition of all concepts.</span></label>
+</div>
 </section>
-<section id="requiring-no-prior-exposure-washout" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="requiring-no-prior-exposure-washout"><span class="header-section-number">6</span> Requiring no prior exposure (washout)</h2>
+<section id="exporting-codelists" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="exporting-codelists"><span class="header-section-number">4</span> Exporting codelists</h2>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Restrict to patients with no prior GLP-1 RA in 365 days before index</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the core of the new-user design</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>glp1_cohorts <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requirePriorDrugWashout</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">days =</span> <span class="dv">365</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export your codelists following this command</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>directory <span class="ot">&lt;-</span> <span class="st">"path_to_your_desired_directory"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">exportCodelist</span>(semaglutide, directory, <span class="at">type =</span> <span class="st">"csv"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">exportCodelist</span>(t2dm, directory, <span class="at">type =</span> <span class="st">"csv"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">exportCodelist</span>(acute_pancreatitis, directory, <span class="at">type =</span> <span class="st">"csv"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnect</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-</div>
-<hr>
-</section>
-<section id="requiring-presence-in-another-cohort-population-criterion" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="requiring-presence-in-another-cohort-population-criterion"><span class="header-section-number">7</span> Requiring presence in another cohort (population criterion)</h2>
-<p>Patients must have a T2DM diagnosis on or before the index date:</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>glp1_cohorts <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requireCohortIntersect</span>(</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cohortTable      =</span> <span class="st">"t2dm_cohort"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">cohortId         =</span> <span class="dv">1</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">window           =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">0</span>),   <span class="co"># any time before or on index date</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">intersections    =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">Inf</span>),    <span class="co"># at least 1 intersection required</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">name             =</span> <span class="st">"glp1_cohorts"</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<hr>
-</section>
-<section id="restricting-to-a-study-period" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="restricting-to-a-study-period"><span class="header-section-number">8</span> Restricting to a study period</h2>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>glp1_cohorts <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requireInDateRange</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dateRange =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2023-01-01"</span>, <span class="st">"2024-12-31"</span>))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<hr>
-</section>
-<section id="age-restriction" class="level2" data-number="9">
-<h2 data-number="9" class="anchored" data-anchor-id="age-restriction"><span class="header-section-number">9</span> Age restriction</h2>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>glp1_cohorts <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  CohortConstructor<span class="sc">::</span><span class="fu">requireAge</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ageRange =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">150</span>))   <span class="co"># adults only</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<hr>
-</section>
-<section id="putting-the-full-pipeline-together" class="level2" data-number="10">
-<h2 data-number="10" class="anchored" data-anchor-id="putting-the-full-pipeline-together"><span class="header-section-number">10</span> Putting the full pipeline together</h2>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Full new-user cohort pipeline for GLP-1 RA agents</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> CohortConstructor<span class="sc">::</span><span class="fu">conceptCohort</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm        =</span> cdm,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet =</span> glp1_concepts,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">name       =</span> <span class="st">"glp1_cohorts"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">domain     =</span> <span class="st">"drug"</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>) </span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>glp1_cohorts <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requireIsFirstEntry</span>()             <span class="sc">|&gt;</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requireObservationBeforeDrug</span>(<span class="at">days =</span> <span class="dv">365</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requirePriorDrugWashout</span>(<span class="at">days =</span> <span class="dv">365</span>)      <span class="sc">|&gt;</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requireCohortIntersect</span>(</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">cohortTable   =</span> <span class="st">"t2dm_cohort"</span>,</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">cohortId      =</span> <span class="dv">1</span>,</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">window        =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">0</span>),</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">intersections =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">Inf</span>),</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">name          =</span> <span class="st">"glp1_cohorts"</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requireAge</span>(<span class="at">ageRange =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">150</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">requireInDateRange</span>(</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">dateRange =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2023-01-01"</span>, <span class="st">"2024-12-31"</span>))</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<hr>
-</section>
-<section id="checking-cohort-counts-and-attrition" class="level2" data-number="11">
-<h2 data-number="11" class="anchored" data-anchor-id="checking-cohort-counts-and-attrition"><span class="header-section-number">11</span> Checking cohort counts and attrition</h2>
-<p>After building the cohort, always inspect the attrition table — it shows how many patients were excluded at each step, which is essential for transparency and for detecting logic errors.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortCharacteristics)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Cohort counts</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>attrition_result <span class="ot">&lt;-</span> <span class="fu">summariseCohortAttrition</span>(cdm<span class="sc">$</span>glp1_cohorts)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise as a table</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tableCohortAttrition</span>(attrition_result)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise as a flowchart (for one cohort)</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>attrition_result <span class="sc">|&gt;</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group_level <span class="sc">==</span> <span class="st">"semaglutide"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotCohortAttrition</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<blockquote class="blockquote">
-<p><strong>Our study:</strong> A well-specified attrition table for the semaglutide cohort might look like this:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Step</th>
-<th>Remaining N</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Initial drug exposure records</td>
-<td>45,210</td>
-</tr>
-<tr class="even">
-<td>First entry per person</td>
-<td>12,847</td>
-</tr>
-<tr class="odd">
-<td>≥ 365 days prior observation</td>
-<td>11,203</td>
-</tr>
-<tr class="even">
-<td>No prior GLP-1 RA (washout)</td>
-<td>9,841</td>
-</tr>
-<tr class="odd">
-<td>T2DM diagnosis before index</td>
-<td>8,654</td>
-</tr>
-<tr class="even">
-<td>Age ≥ 18</td>
-<td>8,640</td>
-</tr>
-<tr class="odd">
-<td>Index date 2023–2024</td>
-<td>6,112</td>
-</tr>
-</tbody>
-</table>
-<p>If the washout step removes more than 60% of patients, this is worth investigating — it may indicate that your concept set is too broad and is capturing repeat prescriptions of the same episode, or that the database has many prevalent users.</p>
-</blockquote>
-<p><strong>Quick check:</strong> Your attrition table shows 10,000 patients after <code>requireIsFirstEntry()</code> but only 200 after <code>requirePriorDrugWashout(days = 365)</code>. What does this most likely indicate?</p>
-<p><select class="webex-select"><option value="blank"></option><option value="">The drug is rarely prescribed in this database</option><option value="answer">Most drug users in this database are prevalent users, not new users — they had prior prescriptions in the year before their first entry</option><option value="">The washout period is too short</option><option value="">There is a bug in the CohortConstructor code</option></select></p>
-<div class="webex-solution">
-<button>
-Explanation
-</button>
-<p>When the vast majority of patients are excluded by the washout criterion, it means most patients who appear in the database with this drug already had prior exposure — i.e.&nbsp;they are <strong>prevalent users</strong>. This is common for drugs that have been on the market for many years (like liraglutide since 2009 or exenatide since 2006). The new-user design deliberately excludes these patients to avoid prevalent-user bias, but it does reduce your study population substantially. This is a design trade-off, not a bug.</p>
-</div>
-<hr>
-</section>
-<section id="exporting-cohort-definitions" class="level2" data-number="12">
-<h2 data-number="12" class="anchored" data-anchor-id="exporting-cohort-definitions"><span class="header-section-number">12</span> Exporting cohort definitions</h2>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export cohort table to a local file for sharing or archiving</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cohort_data <span class="ot">&lt;-</span> cdm<span class="sc">$</span>glp1_cohorts <span class="sc">|&gt;</span> <span class="fu">collect</span>()</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(cohort_data, <span class="st">"results/glp1_cohorts.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnect</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>CDMConnector<span class="sc">::</span><span class="fu">cdmDisconnect</span>(cdm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-</section>
-<section id="references" class="level2" data-number="13">
-<h2 data-number="13" class="anchored" data-anchor-id="references"><span class="header-section-number">13</span> References</h2>
-<div id="refs" role="list">
-
 </div>
 
 

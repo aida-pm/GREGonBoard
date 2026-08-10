@@ -1294,7 +1294,7 @@
     "href": "chapters/study_report.html",
     "title": "Study Report",
     "section": "",
-    "text": "First of all, go back to your study outline. You do not start from scratch!\nFind here the template of the study protocol. You should fill in this template and submit it to GREG for feedback.",
+    "text": "First of all, go back to your study protocol. You do not start from scratch! The protocol is the basis to the study report.\nFind here the template of the study report. You should fill in this template and submit it to GREG for feedback.\n\nIn summary, you need to extend your study protocol including the results from your study. You should include the tables and plots that can be extracted from your summarised_result object for each pertinent part of the study.",
     "crumbs": [
       "Home",
       "Reporting a study",
@@ -1306,7 +1306,7 @@
     "href": "chapters/study_report.html#doing-a-study-report",
     "title": "Study Report",
     "section": "",
-    "text": "First of all, go back to your study outline. You do not start from scratch!\nFind here the template of the study protocol. You should fill in this template and submit it to GREG for feedback.",
+    "text": "First of all, go back to your study protocol. You do not start from scratch! The protocol is the basis to the study report.\nFind here the template of the study report. You should fill in this template and submit it to GREG for feedback.\n\nIn summary, you need to extend your study protocol including the results from your study. You should include the tables and plots that can be extracted from your summarised_result object for each pertinent part of the study.",
     "crumbs": [
       "Home",
       "Reporting a study",
@@ -1318,7 +1318,7 @@
     "href": "chapters/codelistgenerator.html",
     "title": "Codelist Generator",
     "section": "",
-    "text": "A concept set is the fundamental vocabulary unit of any OMOP study. At its most basic, it is a named collection of standard concept IDs grouped together because they collectively represent a single clinical idea relevant to your research question. A concept set is not a list of ICD-10 codes, SNOMED terms, or RxNorm strings: it is a list of OMOP standard concept IDs, which are the normalised, source-agnostic representations that the ETL process maps all original source codes into.\n\n\n\n\n\n\nImportant\n\n\n\nThis distinction is critical! If your study site records a diagnosis using ICD-10 code E11.9 (Type 2 diabetes mellitus without complications), and another site uses the Read code C10F, both are (or should be) mapped during the ETL to the same OMOP standard concept ID for type 2 diabetes mellitus (SNOMED 201826). A concept set defined using that standard ID will therefore capture patients from both sites identically, regardless of the original coding system used!\n\n\nIn practice, a concept set rarely consists of a single concept ID, not even multiple concept IDs from the same domain, like we saw in the Phenotyping and ATLAS sections. A concept set that is too broad will capture false-positive patients; one that is too narrow will miss true cases. Both forms of misclassification bias the results in different directions depending on the study design.\n\nOur study: We need three concept sets before we can build a single cohort. The GLP-1 receptor agonist concept set must capture all five agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The type 2 diabetes mellitus concept set must use the SNOMED hierarchy carefully — including the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. The acute pancreatitis concept set must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding), a trade-off that is especially consequential for a rare outcome where false positives directly distort the hazard ratio estimate.\n\n\n\n\n\n\n\nNoteTwo ways to build cohorts\n\n\n\nATLAS: graphical interface, produces CIRCE-BE JSON → SQL. Best for sharing definitions across a network via JSON export.\nCohortConstructor (R): programmatic pipeline using dplyr-style syntax. Best for complex multi-step cohort logic, sensitivity analyses, and automated pipelines.\nBoth produce the same four-column cohort table. They are complementary, not competing.",
+    "text": "A concept set is the fundamental vocabulary unit of any OMOP study. At its most basic, it is a named collection of standard concept IDs grouped together because they collectively represent a single clinical idea relevant to your research question. A concept set is not a list of ICD-10 codes, SNOMED terms, or RxNorm strings: it is a list of OMOP standard concept IDs, which are the normalised, source-agnostic representations that the ETL process maps all original source codes into.\n\n\n\n\n\n\nImportant\n\n\n\nThis distinction is critical! If your study site records a diagnosis using ICD-10 code E11.9 (Type 2 diabetes mellitus without complications), and another site uses the Read code C10F, both are (or should be) mapped during the ETL to the same OMOP standard concept ID for type 2 diabetes mellitus (SNOMED 201826). A concept set defined using that standard ID will therefore capture patients from both sites identically, regardless of the original coding system used!\n\n\nIn practice, a concept set rarely consists of a single concept ID, not even multiple concept IDs from the same domain, like we saw in the Phenotyping and ATLAS sections. A concept set that is too broad will capture false-positive patients; one that is too narrow will miss true cases. Both forms of misclassification bias the results in different directions depending on the study design.\nYou can build concept sets with the CodelistGenerator package or with ATLAS.\n\nIn our example study:\nObjectives (as in Study Protocol)\n\n\nCalculate the yearly prevalence and incidence proportion and density of GLP-1 receptor agonists given as a treatment to type 2 diabetes patients.\nCharacterise the users of each GLP-1 receptor agonists, including sociodemographic, clinical and large-scale characteristics.\nDefine the mean duration of treatment and treatment patterns, including switches, for patients with type 2 diabetes exposed to GLP-1 receptor agonists.\nAssess the comparative safety of the different GLP-1 receptor agonists against acute pancreatitis outcomes.\n\n\nWe need several concept sets: one concept set per each of the five GLP-1 receptor agonist agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The type 2 diabetes mellitus concept set, in which we must include the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. And finally, the acute pancreatitis concept set, which must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding).",
     "crumbs": [
       "Home",
       "Design & Execution",
@@ -1342,7 +1342,7 @@
     "href": "chapters/codelistgenerator.html#setup",
     "title": "Codelist Generator",
     "section": "2 Setup",
-    "text": "2 Setup\n\n\nCode\nlibrary(CDMConnector)\nlibrary(CohortConstructor)\nlibrary(omopgenerics)\nlibrary(omock)\nlibrary(dplyr)\n\n# Create synthetic CDM\ncdm &lt;- omock::mockCdmReference() |&gt;\n  omock::mockPerson(nPerson = 2000) |&gt;\n  omock::mockObservationPeriod() |&gt;\n  omock::mockConditionOccurrence() |&gt;\n  omock::mockDrugExposure() |&gt;\n  omock::mockDeath()",
+    "text": "2 Setup\nIn this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset.\n\n\nCode\nlibrary(CDMConnector)\nlibrary(CodelistGenerator)\nlibrary(omopgenerics)\nlibrary(omock)\nlibrary(dplyr)\nlibrary(duckdb)\n\n# Create synthetic CDM\ncdm &lt;- omock::mockCdmReference() |&gt;\n  omock::mockPerson(nPerson = 2000) |&gt;\n  omock::mockObservationPeriod() |&gt;\n  omock::mockConditionOccurrence() |&gt;\n  omock::mockDrugExposure() |&gt;\n  omock::mockDeath()\n\n# With Eunomia\nrequireEunomia()\ndb &lt;- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())\ncdm &lt;- cdmFromCon(db, \n                  cdmSchema = \"main\", \n                  writeSchema = \"main\", \n                  writePrefix = \"greg_\") # change the prefix at your convenience",
     "crumbs": [
       "Home",
       "Design & Execution",
@@ -1473,8 +1473,8 @@
     "objectID": "chapters/codelistgenerator.html#references",
     "href": "chapters/codelistgenerator.html#references",
     "title": "Codelist Generator",
-    "section": "13 References",
-    "text": "13 References",
+    "section": "5 References",
+    "text": "5 References",
     "crumbs": [
       "Home",
       "Design & Execution",
@@ -1690,11 +1690,263 @@
     "href": "chapters/codelistgenerator.html#what-is-a-concept-set-omop",
     "title": "Codelist Generator",
     "section": "",
-    "text": "A concept set is the fundamental vocabulary unit of any OMOP study. At its most basic, it is a named collection of standard concept IDs grouped together because they collectively represent a single clinical idea relevant to your research question. A concept set is not a list of ICD-10 codes, SNOMED terms, or RxNorm strings: it is a list of OMOP standard concept IDs, which are the normalised, source-agnostic representations that the ETL process maps all original source codes into.\n\n\n\n\n\n\nImportant\n\n\n\nThis distinction is critical! If your study site records a diagnosis using ICD-10 code E11.9 (Type 2 diabetes mellitus without complications), and another site uses the Read code C10F, both are (or should be) mapped during the ETL to the same OMOP standard concept ID for type 2 diabetes mellitus (SNOMED 201826). A concept set defined using that standard ID will therefore capture patients from both sites identically, regardless of the original coding system used!\n\n\nIn practice, a concept set rarely consists of a single concept ID, not even multiple concept IDs from the same domain, like we saw in the Phenotyping and ATLAS sections. A concept set that is too broad will capture false-positive patients; one that is too narrow will miss true cases. Both forms of misclassification bias the results in different directions depending on the study design.\n\nOur study: We need three concept sets before we can build a single cohort. The GLP-1 receptor agonist concept set must capture all five agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The type 2 diabetes mellitus concept set must use the SNOMED hierarchy carefully — including the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. The acute pancreatitis concept set must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding), a trade-off that is especially consequential for a rare outcome where false positives directly distort the hazard ratio estimate.\n\n\n\n\n\n\n\nNoteTwo ways to build cohorts\n\n\n\nATLAS: graphical interface, produces CIRCE-BE JSON → SQL. Best for sharing definitions across a network via JSON export.\nCohortConstructor (R): programmatic pipeline using dplyr-style syntax. Best for complex multi-step cohort logic, sensitivity analyses, and automated pipelines.\nBoth produce the same four-column cohort table. They are complementary, not competing.",
+    "text": "A concept set is the fundamental vocabulary unit of any OMOP study. At its most basic, it is a named collection of standard concept IDs grouped together because they collectively represent a single clinical idea relevant to your research question. A concept set is not a list of ICD-10 codes, SNOMED terms, or RxNorm strings: it is a list of OMOP standard concept IDs, which are the normalised, source-agnostic representations that the ETL process maps all original source codes into.\n\n\n\n\n\n\nImportant\n\n\n\nThis distinction is critical! If your study site records a diagnosis using ICD-10 code E11.9 (Type 2 diabetes mellitus without complications), and another site uses the Read code C10F, both are (or should be) mapped during the ETL to the same OMOP standard concept ID for type 2 diabetes mellitus (SNOMED 201826). A concept set defined using that standard ID will therefore capture patients from both sites identically, regardless of the original coding system used!\n\n\nIn practice, a concept set rarely consists of a single concept ID, not even multiple concept IDs from the same domain, like we saw in the Phenotyping and ATLAS sections. A concept set that is too broad will capture false-positive patients; one that is too narrow will miss true cases. Both forms of misclassification bias the results in different directions depending on the study design.\nYou can build concept sets with the CodelistGenerator package or with ATLAS.\n\nIn our example study:\nObjectives (as in Study Protocol)\n\n\nCalculate the yearly prevalence and incidence proportion and density of GLP-1 receptor agonists given as a treatment to type 2 diabetes patients.\nCharacterise the users of each GLP-1 receptor agonists, including sociodemographic, clinical and large-scale characteristics.\nDefine the mean duration of treatment and treatment patterns, including switches, for patients with type 2 diabetes exposed to GLP-1 receptor agonists.\nAssess the comparative safety of the different GLP-1 receptor agonists against acute pancreatitis outcomes.\n\n\nWe need several concept sets: one concept set per each of the five GLP-1 receptor agonist agents of interest at the ingredient level with descendants, to ensure every branded formulation and dose strength is included. The type 2 diabetes mellitus concept set, in which we must include the T2DM concept and its descendants, but explicitly excluding any concepts that overlap with type 1 diabetes or secondary diabetes, to avoid misclassifying the population. And finally, the acute pancreatitis concept set, which must balance sensitivity (capturing all truly incident cases) against specificity (excluding chronic pancreatitis follow-up visits and historical coding).",
     "crumbs": [
       "Home",
       "Design & Execution",
       "Codelist Generator"
+    ]
+  },
+  {
+    "objectID": "chapters/codelistgenerator.html#example-pipeline",
+    "href": "chapters/codelistgenerator.html#example-pipeline",
+    "title": "Codelist Generator",
+    "section": "3 Example pipeline",
+    "text": "3 Example pipeline\nIn this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the package documentation, with all available functions in itsreference index and in this other tutorial.\n\n\n\n\n\n\nTip\n\n\n\nAlways check the reference index of a package because there is where you will see all available functions of the package and really understand all its potential! Are you able to do the concept sets with R for our example study by yourself?\n\n\n\n\nCode\nsemaglutide &lt;- getDrugIngredientCodes(cdm = cdm,\n                                      doseForm = NULL, # Do you want a specific Dose Form?\n                                      doseUnit = NULL, # Do you want a specific Dose Unit?\n                                      routeCategory = NULL, # Do you want a specific route?\n                                      ingredientRange = c(1, Inf), # Do you want a specific combination of drugs or only single ingredients?\n                                      name = \"semaglutide\")\n\nt2dm &lt;- getCandidateCodes(\n  cdm = cdm,\n  domains = \"Condition\", # add appropriate domains\n  includeDescendants = TRUE, # To add descendants or not is your choice!\n  includeAncestor = FALSE,\n  keywords = c(\"type 2 diabetis mellitus\", \"T2DM\")\n)\n\nacute_pancreatitis &lt;- getCandidateCodes(\n  cdm = cdm,\n  domains = \"Condition\", # add appropriate domains\n  includeDescendants = FALSE, # To add descendants or not is your choice!\n  includeAncestor = FALSE,\n  keywords = c(\"Acute pancreatitis\")\n)\n\n\n\n\n\n\n\n\nWarning\n\n\n\nAlways review with a pharmacist/clinician/other professionals the concept sets that CodelistGenerator produced to make sure that your final list actually covers everything that is needed to define the concepts that you are trying to capture!\n\n\nDo we need to include other domains in the T2DM or acute pancreatitis conditions concept sets?\n\n No, because we are defining conditions. It is not necessary, but we might make a more complete definition if we include other concepts like drug exposures or measurements that might be related to the conditions. Yes, we should always include all domains because that is the way to make the most complete definition of all concepts.",
+    "crumbs": [
+      "Home",
+      "Design & Execution",
+      "Codelist Generator"
+    ]
+  },
+  {
+    "objectID": "chapters/codelistgenerator.html#exporting-codelists",
+    "href": "chapters/codelistgenerator.html#exporting-codelists",
+    "title": "Codelist Generator",
+    "section": "4 Exporting codelists",
+    "text": "4 Exporting codelists\n\n\nCode\n# Export your codelists following this command\ndirectory &lt;- \"path_to_your_desired_directory\"\nexportCodelist(semaglutide, directory, type = \"csv\")\nexportCodelist(t2dm, directory, type = \"csv\")\nexportCodelist(acute_pancreatitis, directory, type = \"csv\")\n\n# Disconnect\ndbDisconnect(con)",
+    "crumbs": [
+      "Home",
+      "Design & Execution",
+      "Codelist Generator"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#sections-of-the-template",
+    "href": "chapters/study_report.html#sections-of-the-template",
+    "title": "Study Report",
+    "section": "2 Sections of the template",
+    "text": "2 Sections of the template\n\n\n\n\n\n\nNote1. Study title\n\n\n\n\n\n\n\n\n\n\n\n\nNote2. Description of the study team\n\n\n\n\n\n\n\n\n\n\n\n\nNote3. Data Sources\n\n\n\n\n\n\n\n\n\n\n\n\nNote4. Abstract\n\n\n\n\n\n\n\n\n\n\n\n\nNote5. List of Abbreviations\n\n\n\n\n\n\n\n\n\n\n\n\nNote6. Ammendments and updates\n\n\n\n\n\n\n\n\n\n\n\n\nNote7. Milestones\n\n\n\n\n\n\n\n\n\n\n\n\nNote8. Rationale and background\n\n\n\n\n\n\n\n\n\n\n\n\nNote9. Research question and objectives\n\n\n\n\n\n\n\n\n\n\n\n\nNote10. Research methods\n\n\n\n\nStudy type and study design\nStudy setting and data sources\nStudy period\nStudy population with in- and exclusion criteria\nFollow-up\nVariables\nStudy size\nStatistical methods\n\n\n\n\n\n\n\n\n\nNote11. Data management\n\n\n\n\n\n\n\n\n\n\n\n\nNote12. Quality control\n\n\n\n\n\n\n\n\n\n\n\n\nNote13. Results\n\n\n\n\n\n\n\n\n\n\n\n\nNote14. Management and Reporting of Adverse Events/Adverse Reactions\n\n\n\n\n\n\n\n\n\n\n\n\nNote15. Discussion\n\n\n\n\n\n\n\n\n\n\n\n\nNote16. Conclusion\n\n\n\n\n\n\n\n\n\n\n\n\nNote17. References\n\n\n\n\n\n\n\n\n\n\n\n\nNote18. Annexes",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#study-title",
+    "href": "chapters/study_report.html#study-title",
+    "title": "Study Report",
+    "section": "3 1. Study title",
+    "text": "3 1. Study title",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#description-of-the-study-team",
+    "href": "chapters/study_report.html#description-of-the-study-team",
+    "title": "Study Report",
+    "section": "4 2. Description of the study team",
+    "text": "4 2. Description of the study team",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#data-sources",
+    "href": "chapters/study_report.html#data-sources",
+    "title": "Study Report",
+    "section": "5 3. Data Sources",
+    "text": "5 3. Data Sources",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#abstract",
+    "href": "chapters/study_report.html#abstract",
+    "title": "Study Report",
+    "section": "6 4. Abstract",
+    "text": "6 4. Abstract",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#list-of-abbreviations",
+    "href": "chapters/study_report.html#list-of-abbreviations",
+    "title": "Study Report",
+    "section": "7 5. List of Abbreviations",
+    "text": "7 5. List of Abbreviations",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#ammendments-and-updates",
+    "href": "chapters/study_report.html#ammendments-and-updates",
+    "title": "Study Report",
+    "section": "8 6. Ammendments and updates",
+    "text": "8 6. Ammendments and updates",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#milestones",
+    "href": "chapters/study_report.html#milestones",
+    "title": "Study Report",
+    "section": "9 7. Milestones",
+    "text": "9 7. Milestones",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#rationale-and-background",
+    "href": "chapters/study_report.html#rationale-and-background",
+    "title": "Study Report",
+    "section": "10 8. Rationale and background",
+    "text": "10 8. Rationale and background",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#research-question-and-objectives",
+    "href": "chapters/study_report.html#research-question-and-objectives",
+    "title": "Study Report",
+    "section": "11 9. Research question and objectives",
+    "text": "11 9. Research question and objectives",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#research-methods",
+    "href": "chapters/study_report.html#research-methods",
+    "title": "Study Report",
+    "section": "12 10. Research methods",
+    "text": "12 10. Research methods\n\nStudy type and study design\nStudy setting and data sources\nStudy period\nStudy population with in- and exclusion criteria\nFollow-up\nVariables\nStudy size\nStatistical methods",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#data-management",
+    "href": "chapters/study_report.html#data-management",
+    "title": "Study Report",
+    "section": "13 11. Data management",
+    "text": "13 11. Data management",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#quality-control",
+    "href": "chapters/study_report.html#quality-control",
+    "title": "Study Report",
+    "section": "14 12. Quality control",
+    "text": "14 12. Quality control",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#results",
+    "href": "chapters/study_report.html#results",
+    "title": "Study Report",
+    "section": "15 13. Results",
+    "text": "15 13. Results",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#management-and-reporting-of-adverse-eventsadverse-reactions",
+    "href": "chapters/study_report.html#management-and-reporting-of-adverse-eventsadverse-reactions",
+    "title": "Study Report",
+    "section": "16 14. Management and Reporting of Adverse Events/Adverse Reactions",
+    "text": "16 14. Management and Reporting of Adverse Events/Adverse Reactions",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#discussion",
+    "href": "chapters/study_report.html#discussion",
+    "title": "Study Report",
+    "section": "17 15. Discussion",
+    "text": "17 15. Discussion",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#conclusion",
+    "href": "chapters/study_report.html#conclusion",
+    "title": "Study Report",
+    "section": "18 16. Conclusion",
+    "text": "18 16. Conclusion",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#references",
+    "href": "chapters/study_report.html#references",
+    "title": "Study Report",
+    "section": "19 17. References",
+    "text": "19 17. References",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
+    ]
+  },
+  {
+    "objectID": "chapters/study_report.html#annexes",
+    "href": "chapters/study_report.html#annexes",
+    "title": "Study Report",
+    "section": "20 18. Annexes",
+    "text": "20 18. Annexes",
+    "crumbs": [
+      "Home",
+      "Reporting a study",
+      "Study Report"
     ]
   }
 ]

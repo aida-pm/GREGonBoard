@@ -46,7 +46,11 @@ cdm <- mockDrugUtilisation(numberIndividual = 500)
 
 ------------------------------------------------------------------------
 
-## Step 1: Create a drug cohort
+## Example pipeline
+
+In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).
+
+Step 1: Create a drug cohort
 
 The `DrugUtilisation` package provides `generateIngredientCohortSet()` as its primary cohort creation function. It creates drug era cohorts, collapsing consecutive prescription records with gaps below a specified threshold.
 

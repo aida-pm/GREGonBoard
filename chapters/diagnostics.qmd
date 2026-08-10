@@ -13,7 +13,7 @@ Running an analysis on a poorly specified cohort is worse than running no analys
 
 In the OHDSI/DARWIN EU ecosystem, the diagnostic workflow centres on two tools: **CohortDiagnostics** for population-level phenotype evaluation, and **CohortCharacteristics** for detailed baseline description. Think of these as your study's quality control layer.
 
----
+------------------------------------------------------------------------
 
 ## Setup
 
@@ -41,9 +41,13 @@ cdm <- DrugUtilisation::generateIngredientCohortSet(
 )
 ```
 
----
+------------------------------------------------------------------------
 
-## 1. Cohort counts and attrition
+## Example pipeline
+
+In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).
+
+1\. Cohort counts and attrition
 
 The first diagnostic is always: how many patients are in the cohort, and how many were lost at each step?
 
@@ -62,10 +66,38 @@ attrition_result |>
   plotCohortAttrition()
 ```
 
-> **Our study:** Review the attrition for each of the five GLP-1 RA cohorts side by side. Pay particular attention to whether the washout step removes a disproportionate fraction of patients in older agents (exenatide, liraglutide) compared to newer ones (tirzepatide). If so, this is expected — older drugs have more prevalent users by definition.
+>
+> **Our study:** A well-specified attrition table for the semaglutide cohort might look like this:
+>
+> | Step                          | Remaining N |
+> |-------------------------------|-------------|
+> | Initial drug exposure records | 45,210      |
+> | First entry per person        | 12,847      |
+> | ≥ 365 days prior observation  | 11,203      |
+> | No prior GLP-1 RA (washout)   | 9,841       |
+> | T2DM diagnosis before index   | 8,654       |
+> | Age ≥ 18                      | 8,640       |
+> | Index date 2023–2024          | 6,112       |
+>
+> If the washout step removes more than 60% of patients, this is worth investigating — it may indicate that your concept set is too broad and is capturing repeat prescriptions of the same episode, or that the database has many prevalent users.
+>
+> ------------------------------------------------------------------------
 
----
 
+```{r q1, echo=FALSE, results='asis'}
+cat(
+  "**Quick check:** Your attrition table shows 10,000 patients after `requireIsFirstEntry()`",
+  "but only 200 after `requirePriorDrugWashout(days = 365)`. What does this most likely indicate?\n\n",
+  mcq(c(
+    "The drug is rarely prescribed in this database",
+    answer = "Most drug users in this database are prevalent users, not new users — they had prior prescriptions in the year before their first entry",
+    "The washout period is too short",
+    "There is a bug in the CohortConstructor code"
+  )), "\n\n"
+)
+```
+
+`r hide("Explanation")` When the vast majority of patients are excluded by the washout criterion, it means most patients who appear in the database with this drug already had prior exposure — i.e. they are **prevalent users**. This is common for drugs that have been on the market for many years (like liraglutide since 2009 or exenatide since 2006). The new-user design deliberately excludes these patients to avoid prevalent-user bias, but it does reduce your study population substantially. This is a design trade-off, not a bug. `r unhide()`
 ## 2. Index event breakdown
 
 The index event breakdown tells you which specific concepts are driving cohort entry. For a drug cohort, this shows which branded products or formulations account for the most index dates.
@@ -86,12 +118,13 @@ index_result <- cdm$glp1_cohorts |>
 tableTopLargeScaleCharacteristics(index_result)
 ```
 
-::: {.callout-note}
+::: callout-note
 ## What to look for
+
 For the semaglutide exposure cohort, you expect to see Ozempic (injectable) and Rybelsus (oral) as the dominant index concepts. If you see unexpected concepts — for example, a weight-loss branded product like Wegovy being excluded when you wanted to include it — your concept set needs revision.
 :::
 
----
+------------------------------------------------------------------------
 
 ## 3. Time distributions
 
@@ -111,7 +144,7 @@ plotCohortTiming(
 
 > **Our study:** The distribution of prior observation time should show a minimum of 365 days (our washout + observation requirement). If you see patients with fewer than 365 days, your `requireObservationBeforeDrug()` criterion was not applied correctly. The distribution of post-index time tells you how much follow-up you have — if most patients have less than 6 months of follow-up, your 3-year HR estimate will be very imprecise.
 
----
+------------------------------------------------------------------------
 
 ## 4. Baseline characteristics
 
@@ -141,7 +174,7 @@ char_result |>
   )
 ```
 
----
+------------------------------------------------------------------------
 
 ## 5. Large-scale characteristics — the SMD plot
 
@@ -184,11 +217,9 @@ cat(
 )
 ```
 
-`r hide("Explanation")`
-An SMD of 0.32 is well above the conventional threshold of 0.1, meaning hypertriglyceridaemia is meaningfully more prevalent in one exposure group than the other. Since hypertriglyceridaemia is also an independent risk factor for acute pancreatitis, it meets the definition of a confounder — it is associated with both treatment assignment and the outcome. It must be included in the propensity score model or adjusted for in the outcome model. Excluding patients with hypertriglyceridaemia would change your target population and invalidate the generalisability of your results.
-`r unhide()`
+`r hide("Explanation")` An SMD of 0.32 is well above the conventional threshold of 0.1, meaning hypertriglyceridaemia is meaningfully more prevalent in one exposure group than the other. Since hypertriglyceridaemia is also an independent risk factor for acute pancreatitis, it meets the definition of a confounder — it is associated with both treatment assignment and the outcome. It must be included in the propensity score model or adjusted for in the outcome model. Excluding patients with hypertriglyceridaemia would change your target population and invalidate the generalisability of your results. `r unhide()`
 
----
+------------------------------------------------------------------------
 
 ## 6. Cohort overlap
 
@@ -200,12 +231,13 @@ tableCohortOverlap(overlap_result)
 plotCohortOverlap(overlap_result, uniqueCombinations = TRUE)
 ```
 
-::: {.callout-tip}
+::: callout-tip
 ## If overlap is high
+
 High overlap between exposure cohorts means your cohort exit criteria are not correctly excluding patients who switch between agents. For example, if a patient switches from liraglutide to semaglutide, they should exit the liraglutide cohort at the switch date and — if their second entry passes the washout criterion — enter the semaglutide cohort. Failure to handle this correctly leads to immortal time and misclassification bias.
 :::
 
----
+------------------------------------------------------------------------
 
 ## Exporting diagnostics results
 

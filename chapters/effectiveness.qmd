@@ -58,7 +58,10 @@ Unlike the DARWIN EU packages (CDMConnector-based), CohortMethod uses `DatabaseC
 
 ------------------------------------------------------------------------
 
-## The target estimand
+## Example pipeline
+
+In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).\
+The target estimand
 
 Before writing any code, state the estimand precisely (ICH E9(R1)):
 
