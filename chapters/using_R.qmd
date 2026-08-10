@@ -20,7 +20,7 @@ ATLAS is a powerful graphical interface, but it has limits: complex cohort manip
 The key architectural principle of the OMOPverse is that **you never need to change your analysis code when you change your database**. Whether your data lives in DuckDB, PostgreSQL, SQL Server, Snowflake, or Redshift, the same R functions work identically because the packages use `dbplyr` to translate R code into database-specific SQL at runtime.
 
 ::: callout-tip
-You can check what are SQL databases [here](https://cloud.google.com/discover/what-are-sql-databases).
+You can check what are SQL databases [here](https://cloud.google.com/discover/what-are-sql-databases). And find a global OMOP CDM analytics tutorial [here](https://dpa-pde-oxford.quarto.pub/omop-cdm-analytics/#/title-slide).
 :::
 
 ::: callout-note

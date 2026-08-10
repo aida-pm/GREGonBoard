@@ -34,30 +34,6 @@ Key questions a DUS answers:
 ## Setup
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
-library(CDMConnector)
-library(omopgenerics)
-library(omock)
-library(dplyr)
-library(duckdb)
-
-# Create synthetic CDM
-cdm <- omock::mockCdmReference() |>
-  omock::mockPerson(nPerson = 2000) |>
-  omock::mockObservationPeriod() |>
-  omock::mockConditionOccurrence() |>
-  omock::mockDrugExposure() |>
-  omock::mockDeath()
-
-# Download mock datasets from omock
-downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
-
-# With Eunomia
-requireEunomia()
-db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
-cdm <- cdmFromCon(db, 
-                  cdmSchema = "main", 
-                  writeSchema = "main", 
-                  writePrefix = "greg_") # change the prefix at your convenience
 
 # ------------------------------------------------------------------------------------
 # Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!

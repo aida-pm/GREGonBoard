@@ -15,7 +15,7 @@ library(omock)
 A cohort will be the fundamental unit of analysis in our studies. It is a set of persons who satisfy one or more inclusion criteria for a duration of time. In OMOP, every cohort is stored as a table with exactly four columns:
 
 | Column | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | `cohort_definition_id` | Integer identifying which cohort definition this row belongs to |
 | `subject_id` | The `person_id` of the patient |
 | `cohort_start_date` | The date the patient enters the cohort (Day 0 / index date) |
@@ -92,7 +92,7 @@ cdm <- conceptCohort(
   domain      = "condition"
 )
 
-cdm <- CohortConstructor::conceptCohort(
+cdm <- conceptCohort(
   cdm         = cdm,
   conceptSet  = acute_pancreatitis,
   name        = "ap_cohort",
