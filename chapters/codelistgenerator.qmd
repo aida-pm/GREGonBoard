@@ -42,7 +42,7 @@ You can build concept sets with the [CodelistGenerator](https://darwin-eu.github
 
 ## Setup
 
-In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the omock package, like the GiBleed dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the `omock` package, like the `GiBleed` dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(CDMConnector)
@@ -74,7 +74,7 @@ cdm <- cdmFromCon(db,
 
 ## Example pipeline
 
-In this tutorial we will provide an example on how to build the concept sets for our study with [CodelistGenerator](https://darwin-eu.github.io/CodelistGenerator/), but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).
+In this tutorial we will provide an example on how to build the concept sets for our study with `CodelistGenerator`, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).
 
 ::: callout-tip
 Always check the [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) of a package because there is where you will see all available functions of the package and really understand all its potential! Are you able to do the concept sets with R for our example study by yourself?

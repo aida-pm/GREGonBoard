@@ -290,4 +290,23 @@ cat(
 )
 ```
 
-`r hide("Explanation")` A HR of 0.87 with a 95% CI of 0.71–1.06 means the confidence interval includes 1.0 (no difference). The calibrated p-value of 0.18 is above any conventional threshold for statistical significance. The correct conclusion is that we found no statistically significant difference in acute pancreatitis risk between the two agents. The point estimate is directionally consistent with a small advantage for semaglutide, but the evidence is insufficient to conclude a true difference exists. This is a clinically important null finding — it provides reassurance that both agents carry similar pancreatitis risk in real-world T2DM populations. `r unhide()`--- title: "Effectiveness" format: html ---
+`r hide("Explanation")` A HR of 0.87 with a 95% CI of 0.71–1.06 means the confidence interval includes 1.0 (no difference). The calibrated p-value of 0.18 is above any conventional threshold for statistical significance. The correct conclusion is that we found no statistically significant difference in acute pancreatitis risk between the two agents. The point estimate is directionally consistent with a small advantage for semaglutide, but the evidence is insufficient to conclude a true difference exists. This is a clinically important null finding — it provides reassurance that both agents carry similar pancreatitis risk in real-world T2DM populations. `r unhide()`
+
+## Exporting the results
+
+You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is [OmopViewer](https://ohdsi.github.io/OmopViewer/) but [visOmopResults](https://darwin-eu.github.io/visOmopResults/) and each package own functions allow for it too.
+
+```{r export, eval=FALSE}
+# Suppress small cell counts before sharing
+minCellCount <- 5 
+
+exportSummarisedResult(
+  inc,
+  prev,
+  pointPrev,
+  minCellCount = minCellCount,
+  path = here("Results"),
+  fileName = "GregonBoard_incprev_{cdm_name}_{date}.csv"
+)
+
+```

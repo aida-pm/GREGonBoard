@@ -11,15 +11,9 @@ library(DrugUtilisation)
 
 ## What is a drug utilisation study?
 
-A drug utilisation study (DUS) describes *how* a drug is used in clinical practice — who receives it, at what dose, for how long, for what indications, and in what combinations. The World Health Organization defines drug utilisation as "the marketing, distribution, prescription and use of drugs in a society, with special emphasis on the resulting medical, social and economic consequences."
+A drug utilisation study (DUS) describes *how* a drug is used in clinical practice: who receives it, at what dose, for how long, for what indications, and in what combinations.
 
-DUS are not causal analyses. They do not estimate the effect of a drug on an outcome. Their purpose is to characterise real-world prescribing patterns, and they are a key regulatory tool: the EMA and national competent authorities regularly commission DUS as post-authorisation safety studies (PASS) to monitor whether a drug is being used as intended.
-
-::: callout-note
-## When is a DUS required?
-
-Under EU Regulation 536/2014 and Directive 2001/83/EC, a marketing authorisation holder may be required to conduct a DUS as part of a Risk Management Plan (RMP) or as a post-authorisation obligation. DARWIN EU® has delivered multiple DUS across its network for EMA-mandated studies, all using the OMOP CDM and the `DrugUtilisation` package.
-:::
+**DUS are not causal analyses.** They [do not estimate the effect of a drug on an outcome]{.underline}. Their purpose is to describe, or characterise, real-world prescribing patterns. They are a key regulatory tool, regularly commissioned as post-authorisation safety studies (PASS) to monitor whether a drug is being used as intended.
 
 Key questions a DUS answers:
 
@@ -34,7 +28,7 @@ Key questions a DUS answers:
 ## Setup
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
-
+library(DrugUtilisation)
 # ------------------------------------------------------------------------------------
 # Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
 # Go to the Cohort Constructor section if you need more info.
@@ -44,49 +38,42 @@ Key questions a DUS answers:
 
 ## Example pipeline
 
-In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).
+In this tutorial we will provide an example on how to do a DUS with `DrugUtilisation`, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/DrugUtilisation/), with all available functions in its [reference index](https://darwin-eu.github.io/DrugUtilisation/reference/index.html) and in [this other tutorial](https://darwin-eu.github.io/DrugUtilisation/tutorial/#/title-slide) or [this training](https://oxford-pharmacoepi.github.io/HDS-DrugTraining/).
 
-Step 1: Create a drug cohort
+### Step 1: Create a drug cohort
 
-The `DrugUtilisation` package provides `generateIngredientCohortSet()` as its primary cohort creation function. It creates drug era cohorts, collapsing consecutive prescription records with gaps below a specified threshold.
+The `DrugUtilisation` package provides `generateIngredientCohortSet()` as its primary cohort creation function. It creates drug cohorts, collapsing consecutive prescription records with gaps below a specified threshold.
 
 ```{r create-cohort, message=FALSE, warning=FALSE}
-# Create a cohort of acetaminophen users
-# (proxy for our GLP-1 RA cohort in the real study)
+# Create semaglutide cohort as ingredient
 cdm <- generateIngredientCohortSet(
   cdm        = cdm,
-  name       = "dus_cohort",
-  ingredient = "acetaminophen",
-  gapEra     = 30    # collapse records with <30-day gaps into one era
-)
+  name       = "semaglutide_dus_cohort",
+  ingredient = "semaglutide",
+  gapEra     = 365    # this number depends on how recurrent prescriptions for this ingredient's medications are
+) |>
+  requireIsFirstDrugEntry() |> # First entry, like before
+  requireObservationBeforeDrug(days = 365) # Prior observation period, like before!
 
-# Restrict to first episode (new-user design)
-cdm$dus_cohort <- cdm$dus_cohort |>
-  requireIsFirstDrugEntry() |>
-  requireObservationBeforeDrug(days = 365)
-
-cohortCount(cdm$dus_cohort)
 ```
 
-> **Our study — creating GLP-1 RA drug cohorts:** In the real analysis, we use a gap era of 30 days for once-weekly agents (semaglutide, dulaglutide, tirzepatide) and 7 days for twice-daily agents (exenatide immediate release). This reflects the expected prescription patterns and avoids artificially splitting continuous treatment episodes due to minor dispensing gaps.
+> **Our study:** we have already done our cohorts for GLP-1 RA with the `conceptCohort()` function. There is no need to repeat that. These are two different options: the `generateIngredientCohortSet()` allows you to go for ingredient level, while the `conceptCohort()` allows you to use specific products and dose forms.
 
 ```{r q1, echo=FALSE, results='asis'}
 cat(
-  "**Quick check:** What does `gapEra = 30` mean in `generateIngredientCohortSet()`?\n\n",
+  "**Quick check:** What does `gapEra = 365` mean in `generateIngredientCohortSet()`?\n\n",
   mcq(c(
-    "Patients must have 30 days of observation before the drug start",
-    answer = "Drug exposure records with fewer than 30 days between the end of one record and the start of the next are collapsed into a single continuous era",
-    "The drug cohort is restricted to the first 30 days of treatment",
-    "Only prescriptions lasting at least 30 days are included"
+    "Patients must have 365 days of observation before the drug start",
+    answer = "Drug exposure records with fewer than 365 days between the end of one record and the start of the next are collapsed into a single continuous era",
+    "The drug cohort is restricted to the first 365 days of treatment",
+    "Only prescriptions lasting at least 365 days are included"
   )), "\n\n"
 )
 ```
 
 `r hide("Explanation")` `gapEra` controls the **era collapsing** logic. In claims or dispensing data, a patient on a once-weekly drug might have their 4-week prescription record end on day 28 and the next refill start on day 30 — a 2-day gap. Without era collapsing, these would appear as two separate drug eras (treatment discontinuation + restart). With `gapEra = 30`, gaps of fewer than 30 days are bridged, producing one continuous treatment era. The appropriate gap depends on the drug's dosing frequency and the data source's dispensing patterns. `r unhide()`
 
-------------------------------------------------------------------------
-
-## Step 2: Treatment duration and exposure
+### Step 2: Treatment duration and exposure
 
 ```{r drug-utilisation, message=FALSE, warning=FALSE}
 du_result <- cdm$dus_cohort |>
@@ -118,9 +105,7 @@ du_result |>
 > | Initial daily dose (mg) | Whether patients are initiated at the recommended starting dose |
 > | Cumulative dose (mg) | Total drug exposure over the follow-up period |
 
-------------------------------------------------------------------------
-
-## Step 3: Indications for use
+### Step 3: Indications for use
 
 What conditions were patients treated for? This is especially relevant for GLP-1 RAs, which are licensed for T2DM and obesity but increasingly used off-label.
 
@@ -158,9 +143,7 @@ indication_result |>
 >
 > A high proportion of "no identifiable coded indication" may reflect coding limitations rather than true off-label use — many GPs do not re-code T2DM at every prescribing event.
 
-------------------------------------------------------------------------
-
-## Step 4: Treatment adherence
+### Step 4: Treatment adherence
 
 Proportion of Days Covered (PDC) is the standard measure of medication adherence in claims data. PDC ≥ 80% is the conventional threshold for "adherent."
 
@@ -176,9 +159,7 @@ adherence_result |>
   select(estimate_name, estimate_value)
 ```
 
-------------------------------------------------------------------------
-
-## Step 5: Treatment switching and restart
+### Step 5: Treatment switching and restart
 
 ```{r switching, eval=FALSE}
 # Define comparator drug cohorts
@@ -202,19 +183,6 @@ switch_result |>
 
 > **Our study — treatment switching:** For GLP-1 RA DUS, switching is particularly clinically relevant: patients may switch between agents due to tolerability (nausea is common with all GLP-1 RAs), formulary changes, or lack of glycaemic response. A high rate of early switching (within 90 days) to a different GLP-1 RA would be a DUS finding worth reporting to regulators, as it might indicate a population-level tolerability pattern not captured in clinical trials.
 
-------------------------------------------------------------------------
-
-## Combine and share results
-
-```{r combine, message=FALSE, warning=FALSE}
-# all_results <- omopgenerics::bind(
-#   du_result,
-#   indication_result
-# ) |>
-#   omopgenerics::suppress(minCellCount = 5)
-# 
-# write.csv(all_results, "results/drug_utilisation.csv", row.names = FALSE)
-```
 
 ```{r q2, echo=FALSE, results='asis'}
 cat(
@@ -226,3 +194,25 @@ cat(
 ```
 
 `r hide("Explanation")` Not necessarily. In routine clinical databases, many patients with chronic conditions like T2DM do not have their diagnosis re-coded at every GP visit or prescription event. The absence of a recent coded diagnosis in the 30-day window does not mean the diagnosis is absent — it may simply not have been recorded recently. Looking at a wider window (e.g. any T2DM code ever in the patient's history) typically reveals a much higher proportion with documented indication. The "no identifiable coded indication" category in a DUS is therefore best interpreted as a lower bound on true off-label use, not as the actual off-label rate. `r unhide()`
+
+------------------------------------------------------------------------
+
+## Exporting the results
+
+You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is [OmopViewer](https://ohdsi.github.io/OmopViewer/) but [visOmopResults](https://darwin-eu.github.io/visOmopResults/) and each package own functions allow for it too.
+
+```{r export, eval=FALSE}
+# Suppress small cell counts before sharing
+minCellCount <- 5 
+
+exportSummarisedResult(
+  inc,
+  prev,
+  pointPrev,
+  minCellCount = minCellCount,
+  path = here("Results"),
+  fileName = "GregonBoard_incprev_{cdm_name}_{date}.csv"
+)
+
+```
+

@@ -26,15 +26,15 @@ library(ggplot2)
 
 ## What is a characterisation study?
 
-A characterisation study describes *who is in a cohort* — their demographics, comorbidities, medications, procedures, and healthcare utilisation at and around the index date. It does not make any causal claims. It answers the question: **what does this population look like?**
+A characterisation study describes *who is in a cohort*, it is a **descriptive** study. It includes cohort demographics, comorbidities, medications, procedures, and healthcare utilisation at and around the index date. It [does not make any causal claims]{.underline}. It answers the question: what does this population look like?
 
 Characterisation studies are used in three distinct contexts in pharmacoepidemiology:
 
-1.  **Disease natural history** — describe the clinical profile of patients with a condition over time
-2.  **Treatment utilisation** — describe who receives a drug, under what circumstances, and with what co-treatments
-3.  **Baseline comparability** — compare cohorts prior to a causal analysis to assess confounding and guide propensity score specification
+1.  **Disease natural history**: to describe the clinical profile of patients with a condition over time
+2.  **Treatment utilisation**: to describe who receives a drug, under what circumstances, and with what co-treatments
+3.  **Baseline comparability**: to compare cohorts prior to a causal analysis to assess confounding and guide propensity score specification
 
-> **Our study:** Before running the comparative safety analysis of GLP-1 RA agents, we characterise all five exposure cohorts to understand their baseline profiles and identify potential confounders for acute pancreatitis.
+> **In our study:** Before doing the comparative safety analysis of GLP-1 RA agents, we want and need to characterise all five exposure cohorts to understand their baseline profiles and identify potential confounders for acute pancreatitis.
 
 ------------------------------------------------------------------------
 
@@ -53,145 +53,102 @@ study_cohorts <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, na
 
 ## Example pipeline
 
-In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).
+In this tutorial we will provide an example on how to do a descriptive/characterisation study with `CohortCharacteristics`, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CohortCharacteristics/), with all available functions in its [reference index](https://darwin-eu.github.io/CohortCharacteristics/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/cohortcharacteristics-team-training/#/title-slide).
 
-1\. Cohort counts
+### 1. Cohort counts
 
 ```{r counts, message=FALSE, warning=FALSE}
-count_result <- summariseCohortCount(cdm$study_cohorts)
-tableCohortCount(count_result)
+counts <- summariseCohortCount(cdm$study_cohorts)
+tableCohortCount(counts)
 ```
 
-------------------------------------------------------------------------
-
-## 2. Basic demographics
+### 2. Basic demographics
 
 ```{r demographics, message=FALSE, warning=FALSE}
-char_result <- summariseCharacteristics(
+resultsBlc <- summariseCharacteristics(
   cohort   = cdm$study_cohorts,
-  ageGroup = list(c(0, 17), c(18, 44), c(45, 64), c(65, 79), c(80, 150))
+  ageGroup = list(c(18, 44), c(45, 64), c(65, 150))
 )
-
-tableCharacteristics(char_result)
 ```
 
-```{r age-plot, message=FALSE, warning=FALSE}
-char_result |>
-  filter(variable_name == "Age") |>
-  plotCharacteristics(
-    plotType = "boxplot",
-    colour   = "cohort_name"
-  )
-```
+### 3. Large-scale characteristics
 
-> **Our study:** Key demographics to report for each GLP-1 RA cohort:
->
-> - **Age** (mean, SD, and distribution by age group)
-> - **Sex** (proportion female)
-> - **Calendar year of index date** (to describe temporal trends in prescribing)
-> - **BMI** (if available as a measurement — tirzepatide is preferentially prescribed to more obese patients, which is directly relevant to pancreatitis risk)
-
-------------------------------------------------------------------------
-
-## 3. Large-scale characteristics
-
-Large-scale characterisation reports the prevalence of *every* condition, drug, and procedure in a specified time window around the index date. This produces potentially thousands of features and is the standard approach in OHDSI network studies.
+Large-scale characterisation reports the prevalence of *every* domain (condition, drug, procedure...) in a specified time window around the index date. This produces potentially thousands of features. We can also look for the most common ones in our cohorts!
 
 ```{r lsc, message=FALSE, warning=FALSE}
-lsc_result <- cdm$study_cohorts |>
+resultsLsc <- cdm$study_cohorts |>
   summariseLargeScaleCharacteristics(
-    window           = list(c(-365, -1), c(0, 0), c(1, 30)),
-    eventInWindow    = c("condition_occurrence", "drug_exposure"),
+    window           = list(c(-365, -1), c(0, 0), c(1, 30)), # We usually add multiple time windows in which to assess ls characteristics
+    eventInWindow    = c("condition_occurrence", "drug_exposure"), # You can add all desired domains
     minimumFrequency = 0.01
   )
-
-tableTopLargeScaleCharacteristics(lsc_result)
-```
-
-```{r lsc-plot, message=FALSE, warning=FALSE}
-lsc_result |>
-  filter(strata_level == "overall") |>
-  plotLargeScaleCharacteristics()
 ```
 
 ::: callout-note
-## Three time windows
+## Why those time windows?
 
-- `c(-365, -1)` — the year prior to index: captures baseline comorbidities and prior medications (covariates for confounding adjustment)
-- `c(0, 0)` — the index date itself: captures what was coded at the time of drug initiation (the index event breakdown)
-- `c(1, 30)` — the 30 days after index: captures early treatment patterns and complications (not used for baseline characterisation, but useful for drug utilisation analyses)
+- `c(-365, -1)` or the year prior to index: captures baseline comorbidities and prior medications (covariates for confounding adjustment)
+- `c(0, 0)` or the index date itself: captures what was coded at the time of drug initiation (the index event breakdown)
+- `c(1, 30)` or the 30 days after index: captures early treatment patterns and complications (not used for baseline characterisation, but useful for drug utilisation analyses)
 :::
 
-------------------------------------------------------------------------
+### 4. Comparing cohorts: the SMD
 
-## 4. Comparing cohorts — the SMD
-
-When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA study), we compute the standardised mean difference for each covariate:
+When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD) [@Nguyen2024] for each covariate. Any covariate with SMD $\ge$ 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characte
 
 ```{r smd, message=FALSE, warning=FALSE}
-# smd_result <- lsc_result |>
-#   plotComparedLargeScaleCharacteristics(
-#     reference = "warfarin",
-#     colour    = "variable_level"
-#   )
-# smd_result
+resultsSmd <- resultsLsc |>
+  plotComparedLargeScaleCharacteristics(
+    reference = "semaglutide",
+    colour    = "variable_level"
+  )
 ```
-
-> **Our study:** For the comparative analysis, we would compare each GLP-1 RA agent against semaglutide as the reference. Any covariate with SMD \> 0.1 is a candidate for inclusion in the propensity score model. Important covariates to watch for in the pancreatitis study:
->
-> | Covariate                   | Why it matters for AP risk        |
-> |-----------------------------|-----------------------------------|
-> | Hypertriglyceridaemia       | Direct risk factor for AP         |
-> | Alcohol use disorder        | Strong AP risk factor             |
-> | Cholelithiasis (gallstones) | Leading cause of AP               |
-> | Prior pancreatitis          | Strongest predictor of recurrence |
-> | BMI / obesity               | Metabolic AP risk                 |
-> | Corticosteroid use          | Drug-induced AP risk              |
 
 ```{r q1, echo=FALSE, results='asis'}
 cat(
   "**Quick check:** You are characterising the five GLP-1 RA cohorts.",
   "You find that 28% of exenatide users have a prior record of cholelithiasis,",
-  "compared to 11% of semaglutide users. What is the SMD approximately,",
-  "and what should you do?\n\n",
+  "compared to 11% of semaglutide users. This is an SMD of 0.47. What should you do?\n",
   mcq(c(
-    "SMD ≈ 0.17 — borderline, can be ignored if the outcome is not hepatobiliary",
-    "SMD ≈ 0.17 — adjust in the outcome model only",
-    answer = "SMD ≈ 0.47 — large imbalance; include cholelithiasis in the propensity score model since it is a strong confounder for AP",
-    "SMD ≈ 0.47 — exclude all patients with cholelithiasis from both cohorts"
+    "Borderline, can be ignored if the outcome is not hepatobiliary",
+    "Borderline, adjust in the outcome model only",
+    answer = "SLarge imbalance, include cholelithiasis in the propensity score model since it is a strong confounder for AP",
+    "Large imbalance, exclude all patients with cholelithiasis from both cohorts"
   )), "\n\n"
 )
 ```
 
-`r hide("Explanation")` The SMD for a binary variable is approximately (p1 - p2) / sqrt((p1(1-p1) + p2(1-p2)) / 2). Here: (0.28 - 0.11) / sqrt((0.28×0.72 + 0.11×0.89)/2) ≈ 0.17 / 0.36 ≈ 0.47. This is a large imbalance. Since cholelithiasis (gallstones) is the most common cause of acute pancreatitis worldwide, this is a strong confounder — it is both differentially distributed between the cohorts and directly causes the outcome. It must be included in the propensity score model. Excluding patients with cholelithiasis would change the target population and invalidate generalisation of the results. `r unhide()`
+`r hide("Explanation")` The SMD ≈ 0.47, this is a large imbalance. Since cholelithiasis (gallstones) is the most common cause of acute pancreatitis worldwide, this is a strong confounder, because not only it is differentially distributed between the cohorts but also directly causes the outcome. It must be included in the propensity score model. Excluding patients with cholelithiasis would change the target population and invalidate generalisation of the results. `r unhide()`
 
-------------------------------------------------------------------------
+### 5. Cohort overlap
 
-## 5. Cohort overlap and timing
-
-```{r overlap-timing, message=FALSE, warning=FALSE}
-overlap_result <- summariseCohortOverlap(cdm$study_cohorts)
-tableCohortOverlap(overlap_result)
-
-timing_result <- summariseCohortTiming(cdm$study_cohorts)
-tableCohortTiming(timing_result)
+```{r overlap, message=FALSE, warning=FALSE}
+resultsOverlap <- summariseCohortOverlap(cdm$study_cohorts)
 ```
 
 ------------------------------------------------------------------------
 
-## Suppression and export
+## Exporting the results
 
-```{r export, message=FALSE, warning=FALSE}
-# all_char <- omopgenerics::bind(
-#   count_result,
-#   char_result,
-#   lsc_result
-# ) |>
-#   omopgenerics::suppress(minCellCount = 5)
-# 
-# # Export
-# write.csv(all_char, "results/characterisation.csv", row.names = FALSE)
+You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is [OmopViewer](https://ohdsi.github.io/OmopViewer/) but [visOmopResults](https://darwin-eu.github.io/visOmopResults/) and each package own functions allow for it too.
 
-# Disconnect
-DBI::dbDisconnect(con, shutdown = TRUE)
+```{r export, eval=FALSE}
+# Suppress small cell counts before sharing
+minCellCount <- 5 
+
+exportSummarisedResult(
+  resultsBlc,
+  resultsLsc,
+  resultsSmd,
+  resultsOverlap,
+  minCellCount = minCellCount,
+  path = here("Results"),
+  fileName = "GregonBoard_charact_{cdm_name}_{date}.csv"
+)
+
 ```
+
+## Bibliography
+
+::: {#refs}
+:::

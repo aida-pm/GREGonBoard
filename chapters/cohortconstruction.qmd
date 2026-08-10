@@ -33,7 +33,7 @@ In this structure, one patient can appear multiple times (e.g. multiple treatmen
 
 ## Setup
 
-In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the omock package, like the GiBleed dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the `omock` package, like the `GiBleed` dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(CDMConnector)
@@ -66,7 +66,7 @@ cdm <- cdmFromCon(db,
 
 ## Example pipeline
 
-In this tutorial we will provide an example on how to build the cohorts for our study with [CohortConstructor](https://ohdsi.github.io/CohortConstructor/), but further documentation can be found in the [package documentation](https://ohdsi.github.io/CohortConstructor/), with all available functions in its [reference index](https://ohdsi.github.io/CohortConstructor/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/cohortconstructorinternaltrainingsep25/#/cohortconstructor) or [this one](https://dpa-pde-oxford.quarto.pub/cohortconstructorrmedicine/#/cohortconstructor).
+In this tutorial we will provide an example on how to build the cohorts for our study with `CohortConstructor`, but further documentation can be found in the [package documentation](https://ohdsi.github.io/CohortConstructor/), with all available functions in its [reference index](https://ohdsi.github.io/CohortConstructor/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/cohortconstructorinternaltrainingsep25/#/cohortconstructor) or [this one](https://dpa-pde-oxford.quarto.pub/cohortconstructorrmedicine/#/cohortconstructor).
 
 ### 1. Building a cohort from concept sets
 
@@ -164,7 +164,11 @@ cat(
 
 `r hide("Explanation")` The order we applied here is from the most unavoidable to the least. We want to define a new-user cohort, therefore restricting to first entry and making sure that the first entry is well-captured is a must. If we would like incident entry and not first entry, we should just remove the `requireIsFirstEntry()` command but all other restrictions apply. Finally, we can more easily adapt the study period than change the age restriction for our study, because this could also be drug/condition dependant. `r unhide()`
 
-### 4. Checking cohort counts and attrition
+### 4. Finishing details
+
+Here we created simple cohorts that exit at the end of an exposure or observation. We might want to specify other reasons for exit, such as entering another cohort, switching exposures, or even death. You can also do that and be sure to create properly your cohort definitions before continuing with the analyses.
+
+### 5. Checking cohort counts and attrition
 
 After building the cohort, we can inspect the attrition table, as it shows how many patients were excluded at each step, which is essential for transparency and for detecting logic errors. You can do that running diagnostics on your cohorts, as you will see in the [Diagnostics](diagnostics.qmd) section.
 
@@ -172,7 +176,7 @@ After building the cohort, we can inspect the attrition table, as it shows how m
 Always check your attrition table or plot! And make sure to run the appropriate [diagnostics](diagnostics.qmd) to your cohorts!
 :::
 
-## 5. Exporting cohort definitions
+### 6. Exporting cohort definitions
 
 ```{r export, eval=FALSE}
 # Export cohort table to a local file for sharing or archiving
