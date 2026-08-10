@@ -5,9 +5,21 @@ format: html
 
 ```{r setup, include=FALSE}
 library(webexercises)
+install.packages("DBI")
+install.packages("CDMConnector")
+install.packages("duckdb")
+install.packages("PhenotypeR")
+install.packages("remotes")
+# remotes::install_github("OHDSI/CohortDiagnostics")
+library(DBI)
+library(CDMConnector)
+library(duckdb)
+library(PhenotypeR)
+library(remotes)
+# library(CohortDiagnostics)
 ```
 
-## Why diagnostics before analysis?
+## Why to run diagnostics before analysis?
 
 Running an analysis on a poorly specified cohort is worse than running no analysis at all — it produces numbers that look credible but are wrong. Diagnostic tools exist to systematically surface problems with your phenotype algorithms and cohort logic **before** you commit to an analytical result.
 
@@ -16,29 +28,37 @@ In the OHDSI/DARWIN EU ecosystem, the diagnostic workflow centres on two tools: 
 ------------------------------------------------------------------------
 
 ## Setup
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the omock package, like the GiBleed dataset. The documentation of the package is here.
 
-```{r setup-packages, message=FALSE, warning=FALSE}
+``` {r setup-packages, message=FALSE, warning=FALSE}
 library(CDMConnector)
-library(CohortCharacteristics)
 library(omopgenerics)
 library(omock)
-library(DrugUtilisation)
 library(dplyr)
-library(ggplot2)
+library(duckdb)
 
-# Synthetic CDM + cohorts
+# Create synthetic CDM
 cdm <- omock::mockCdmReference() |>
   omock::mockPerson(nPerson = 2000) |>
   omock::mockObservationPeriod() |>
   omock::mockConditionOccurrence() |>
-  omock::mockDrugExposure()
+  omock::mockDrugExposure() |>
+  omock::mockDeath()
 
-# Create a simple drug cohort to use throughout this chapter
-cdm <- DrugUtilisation::generateIngredientCohortSet(
-  cdm        = cdm,
-  name       = "glp1_cohorts",
-  ingredient = c("insulin", "metformin")   # using available mock ingredients
-)
+# Download mock datasets from omock
+downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
+
+# With Eunomia
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_") # change the prefix at your convenience
+
+# ------------------------------------------------------------------------------------
+# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
+# Go to the Cohort Constructor section if you need more info.
 ```
 
 ------------------------------------------------------------------------
