@@ -7,11 +7,16 @@ format: html
 library(webexercises)
 install.packages("IncidencePrevalence")
 library(IncidencePrevalence)
+library(CDMConnector)
+library(omopgenerics)
+library(omock)
+library(dplyr)
+library(duckdb)
 ```
 
-## Incidence vs. prevalence — the epidemiological distinction
+## Incidence and prevalence
 
-Before running any code, it is worth being precise about what these two measures actually mean, because they answer fundamentally different questions.
+Before running any code, it is worth being precise about what these two measures actually mean, because they answer to different questions.
 
 **Prevalence** answers: *what proportion of the population has this condition at a given point in time (or during a given period)?* It captures both old and new cases.
 
@@ -24,10 +29,14 @@ Before running any code, it is worth being precise about what these two measures
 | Incidence proportion | New cases / At-risk persons | What is the risk of developing it? |
 | Incidence rate | New cases / Person-time at risk | At what rate does it occur? |
 
-::: callout-note
-## For regulators and HTA bodies
+Sometimes we do not have the population at risk and our denominator changes to the overall population. Let's think of the following example, in which we have a population with an underlying disease (population 1), a target population eligible to receive treatment (population 2) and an actually treated population (population 3). Incidence and prevalence would be as follows:
 
-Incidence rates are the most relevant measure for safety signal quantification and for risk-benefit assessments — they express how many events occur per 1,000 (or 100,000) patient-years and can be directly compared across populations and time periods. Prevalence is more relevant for burden-of-disease and healthcare resource utilisation analyses.
+![Figure. Prevalence calculation in our example.](/images/prevalence.png){fig-align="center"}
+
+![Figure. Incidence calculation in our example.](/images/incidence.png)
+
+::: callout-note
+Incidence rates are the most relevant measure for safety signal quantification and for risk-benefit assessments, they can be directly compared across populations and time periods. Prevalence is more relevant for burden-of-disease and healthcare resource utilisation analyses.
 :::
 
 ------------------------------------------------------------------------
@@ -51,22 +60,34 @@ The workflow always has three steps:
 ## Setup
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
-library(IncidencePrevalence)
 library(CDMConnector)
+library(omopgenerics)
+library(omock)
 library(dplyr)
-library(ggplot2)
+library(duckdb)
 
-# Generate a synthetic CDM with realistic outcome prevalence
-cdm <- IncidencePrevalence::mockIncidencePrevalence(
-  sampleSize      = 50000,
-  outPre          = 0.05,       # 5% of population will have the outcome
-  minOutcomeDays  = 1,
-  maxOutcomeDays  = 365,
-  earliestObservationStartDate = as.Date("2015-01-01"),
-  latestObservationStartDate   = as.Date("2021-01-01")
-)
+# Create synthetic CDM
+cdm <- omock::mockCdmReference() |>
+  omock::mockPerson(nPerson = 2000) |>
+  omock::mockObservationPeriod() |>
+  omock::mockConditionOccurrence() |>
+  omock::mockDrugExposure() |>
+  omock::mockDeath()
 
-cdm
+# Download mock datasets from omock
+downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
+
+# With Eunomia
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_") # change the prefix at your convenience
+
+# ------------------------------------------------------------------------------------
+# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
+# Go to the Cohort Constructor section if you need more info.
 ```
 
 ------------------------------------------------------------------------

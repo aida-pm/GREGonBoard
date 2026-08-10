@@ -113,9 +113,9 @@ cdm <- cdmFromCon(db,
 
 ## Example pipeline
 
-In this tutorial we will provide an example on how to run diagnostics with PhenotypeR, but further documentation can be found in the [package documentation](https://ohdsi.github.io/PhenotypeR/), with all available functions in its [reference index](https://ohdsi.github.io/PhenotypeR/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/phenotyper-200a/#/title-slide). 
+In this tutorial we will provide an example on how to run diagnostics with PhenotypeR, but further documentation can be found in the [package documentation](https://ohdsi.github.io/PhenotypeR/), with all available functions in its [reference index](https://ohdsi.github.io/PhenotypeR/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/phenotyper-200a/#/title-slide).
 
-We will see the results in a Shiny App, please, make sure that you have the necessary resources to run a shiny app in R. 
+We will see the results in a Shiny App, please, make sure that you have the necessary resources to run a shiny app in R.
 
 ### 1. Running PhenotypeR
 
@@ -230,6 +230,8 @@ Additionally, we need to consider the fact that we usually can only recover drug
 
 The cohort code use can help us see whether relevant codes have been introduced or whether there are substances that we are including that we might want to avoid. At the same time, the orphan codes tag allows us to see potentially missed concepts that might be relevant for our study.
 
+![Figure. Code use obtained with PhenotypeR for the concepts included in a simulated type 2 diabetis mellitus cohort.](/images/phenotypeR_codeuse.png){fig-align="center"}
+
 ::: callout-caution
 For the semaglutide exposure cohort, you expect to see Ozempic (injectable) and Rybelsus (oral) as the most used concepts. If you see unexpected concepts (which you should not because you have reviewed the list with a pharmacist, right?) your concept set needs revision.
 :::
@@ -238,11 +240,13 @@ For the semaglutide exposure cohort, you expect to see Ozempic (injectable) and 
 
 When seeing the baseline characteristics and large-scale characteristics of your cohorts, you will be able to see whether the patients included in each cohort differ substantially between them. In our study, for example, we might see that patients receiving semaglutide and tirzepatide differ substantially. When doing the comparisons between GLP-1 RA for the safety part of our study, we need to take this into account, as it is the core confounder that we can have in our study "Are the five GLP-1 RA cohorts comparable at baseline, or do they differ systematically in ways that could explain any observed difference in pancreatitis risk?"
 
-Large-scale characteristics are also nice because you can see the top concepts of conditions, drugs, measurements and all other domains recorded for your cohorts. If you are making a just-males cohort and you see that one of your top concepts is pregnancy, there might be something wrong with your cohort definition. You might also identify comorbidities, comedication or previous conditions that might affect the risk of your outcome of interest. 
+Large-scale characteristics are also nice because you can see the top concepts of conditions, drugs, measurements and all other domains recorded for your cohorts. If you are making a just-males cohort and you see that one of your top concepts is pregnancy, there might be something wrong with your cohort definition. You might also identify comorbidities, comedication or previous conditions that might affect the risk of your outcome of interest.
 
 ::: callout-tip
 Watch out for large-scale characteristics, you might identify potential confounders!
 :::
+
+![Figure. Top concepts in a simulated type 2 diabetis mellitus cohort obtained from the large-scale characterisation section of PhenotypeR.](/images/phenotypeR_charac.png)
 
 #### Cohort overlap
 

@@ -41,25 +41,34 @@ Characterisation studies are used in three distinct contexts in pharmacoepidemio
 ## Setup
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
-library(CohortCharacteristics)
 library(CDMConnector)
-library(DrugUtilisation)
 library(omopgenerics)
+library(omock)
 library(dplyr)
 library(duckdb)
 
-# Use the Eunomia demo dataset (Synthea-based OMOP data)
-# In your own work, replace this with your real CDM connection
-requireEunomia()
-con <- DBI::dbConnect(duckdb::duckdb(), eunomiaDir())
-cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+# Create synthetic CDM
+cdm <- omock::mockCdmReference() |>
+  omock::mockPerson(nPerson = 2000) |>
+  omock::mockObservationPeriod() |>
+  omock::mockConditionOccurrence() |>
+  omock::mockDrugExposure() |>
+  omock::mockDeath()
 
-# Create two drug cohorts to compare (using available Eunomia drugs)
-cdm <- generateIngredientCohortSet(
-  cdm        = cdm,
-  name       = "study_cohorts",
-  ingredient = c("warfarin", "acetaminophen")
-)
+# Download mock datasets from omock
+downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
+
+# With Eunomia
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_") # change the prefix at your convenience
+
+# ------------------------------------------------------------------------------------
+# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
+# Go to the Cohort Constructor section if you need more info.
 ```
 
 ------------------------------------------------------------------------

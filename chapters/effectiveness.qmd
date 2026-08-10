@@ -31,23 +31,35 @@ The methods in this chapter align with the ICH E9(R1) estimand framework and the
 
 ## Setup
 
-```{r setup-packages, message=FALSE, warning=FALSE, eval=FALSE}
-library(CohortMethod)
-library(Cyclops)         # LASSO logistic regression for PS
-library(DatabaseConnector)
-library(FeatureExtraction)
-library(EmpiricalCalibration)  # negative control calibration
+```{r setup-packages, message=FALSE, warning=FALSE}
+library(CDMConnector)
+library(omopgenerics)
+library(omock)
 library(dplyr)
+library(duckdb)
 
-# CohortMethod works with OHDSI's DatabaseConnector rather than CDMConnector
-# Connection details depend on your database backend
-connectionDetails <- DatabaseConnector::createConnectionDetails(
-  dbms     = "postgresql",
-  server   = Sys.getenv("CDM_SERVER"),
-  user     = Sys.getenv("CDM_USER"),
-  password = Sys.getenv("CDM_PASSWORD"),
-  port     = 5432
-)
+# Create synthetic CDM
+cdm <- omock::mockCdmReference() |>
+  omock::mockPerson(nPerson = 2000) |>
+  omock::mockObservationPeriod() |>
+  omock::mockConditionOccurrence() |>
+  omock::mockDrugExposure() |>
+  omock::mockDeath()
+
+# Download mock datasets from omock
+downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
+
+# With Eunomia
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_") # change the prefix at your convenience
+
+# ------------------------------------------------------------------------------------
+# Remember that we previously created semaglutide_cohort, t2dm_cohort and ap_cohort!
+# Go to the Cohort Constructor section if you need more info.
 ```
 
 ::: callout-tip
