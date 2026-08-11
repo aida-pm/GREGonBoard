@@ -503,26 +503,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-a-drug-utilisation-study" id="toc-what-is-a-drug-utilisation-study" class="nav-link active" data-scroll-target="#what-is-a-drug-utilisation-study"><span class="header-section-number">0.1</span> What is a drug utilisation study?</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">0.2</span> Setup</a></li>
-  <li><a href="#example-pipeline" id="toc-example-pipeline" class="nav-link" data-scroll-target="#example-pipeline"><span class="header-section-number">0.3</span> Example pipeline</a>
+  <li><a href="#what-is-a-drug-utilisation-study" id="toc-what-is-a-drug-utilisation-study" class="nav-link active" data-scroll-target="#what-is-a-drug-utilisation-study"><span class="header-section-number">1</span> What is a drug utilisation study?</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
+  <li><a href="#example-pipeline" id="toc-example-pipeline" class="nav-link" data-scroll-target="#example-pipeline"><span class="header-section-number">3</span> Example pipeline</a>
   <ul class="collapse">
-  <li><a href="#step-1-create-a-drug-cohort" id="toc-step-1-create-a-drug-cohort" class="nav-link" data-scroll-target="#step-1-create-a-drug-cohort"><span class="header-section-number">0.3.1</span> Step 1: Create a drug cohort</a></li>
-  <li><a href="#step-2-treatment-duration-and-exposure" id="toc-step-2-treatment-duration-and-exposure" class="nav-link" data-scroll-target="#step-2-treatment-duration-and-exposure"><span class="header-section-number">0.3.2</span> Step 2: Treatment duration and exposure</a></li>
-  <li><a href="#step-3-indications-for-use" id="toc-step-3-indications-for-use" class="nav-link" data-scroll-target="#step-3-indications-for-use"><span class="header-section-number">0.3.3</span> Step 3: Indications for use</a></li>
+  <li><a href="#step-1-create-a-drug-cohort" id="toc-step-1-create-a-drug-cohort" class="nav-link" data-scroll-target="#step-1-create-a-drug-cohort"><span class="header-section-number">3.1</span> Step 1: Create a drug cohort</a></li>
+  <li><a href="#step-2-treatment-duration-and-exposure" id="toc-step-2-treatment-duration-and-exposure" class="nav-link" data-scroll-target="#step-2-treatment-duration-and-exposure"><span class="header-section-number">3.2</span> Step 2: Treatment duration and exposure</a></li>
+  <li><a href="#step-3-indications-for-use" id="toc-step-3-indications-for-use" class="nav-link" data-scroll-target="#step-3-indications-for-use"><span class="header-section-number">3.3</span> Step 3: Indications for use</a></li>
+  <li><a href="#step-4-treatment-adherence" id="toc-step-4-treatment-adherence" class="nav-link" data-scroll-target="#step-4-treatment-adherence"><span class="header-section-number">3.4</span> Step 4: Treatment adherence</a></li>
+  <li><a href="#step-5-treatment-switching-and-restart" id="toc-step-5-treatment-switching-and-restart" class="nav-link" data-scroll-target="#step-5-treatment-switching-and-restart"><span class="header-section-number">3.5</span> Step 5: Treatment switching and restart</a></li>
   </ul></li>
-  <li><a href="#r-indication-messagefalse-warningfalse-define-indication-cohorts-indications---list-headache-378253-influenza-4266367-cdm---cdmconnectorgenerateconceptcohortset-cdm-cdm-conceptset-indications-name-indications_cohort-indication_result---cdmdus_cohort-summariseindication-indicationcohortname-indications_cohort-unknownindicationtable-condition_occurrence-indicationwindow-listc-30-0-indication_result-filterestimate_name-percentage-selectvariable_level-estimate_value" id="toc-r-indication-messagefalse-warningfalse-define-indication-cohorts-indications---list-headache-378253-influenza-4266367-cdm---cdmconnectorgenerateconceptcohortset-cdm-cdm-conceptset-indications-name-indications_cohort-indication_result---cdmdus_cohort-summariseindication-indicationcohortname-indications_cohort-unknownindicationtable-condition_occurrence-indicationwindow-listc-30-0-indication_result-filterestimate_name-percentage-selectvariable_level-estimate_value" class="nav-link" data-scroll-target="#r-indication-messagefalse-warningfalse-define-indication-cohorts-indications---list-headache-378253-influenza-4266367-cdm---cdmconnectorgenerateconceptcohortset-cdm-cdm-conceptset-indications-name-indications_cohort-indication_result---cdmdus_cohort-summariseindication-indicationcohortname-indications_cohort-unknownindicationtable-condition_occurrence-indicationwindow-listc-30-0-indication_result-filterestimate_name-percentage-selectvariable_level-estimate_value"><span class="header-section-number">1</span> <code>{r indication, message=FALSE, warning=FALSE} # # Define indication cohorts # indications &lt;- list( #   headache  = 378253, #   influenza = 4266367 # ) #  # cdm &lt;- CDMConnector::generateConceptCohortSet( #   cdm        = cdm, #   conceptSet = indications, #   name       = "indications_cohort" # ) #  # indication_result &lt;- cdm$dus_cohort |&gt; #   summariseIndication( #     indicationCohortName    = "indications_cohort", #     unknownIndicationTable  = "condition_occurrence", #     indicationWindow        = list(c(-30, 0)) #   ) #  # indication_result |&gt; #   filter(estimate_name == "percentage") |&gt; #   select(variable_level, estimate_value) #</code></a>
-  <ul class="collapse">
-  <li><a href="#step-4-treatment-adherence" id="toc-step-4-treatment-adherence" class="nav-link" data-scroll-target="#step-4-treatment-adherence"><span class="header-section-number">1.0.1</span> Step 4: Treatment adherence</a></li>
-  </ul></li>
-  <li><a href="#r-adherence-evalfalse-summarise-treatment-adherence-adherence_result---cdmsemaglutide_dus_cohort-summarisetreatmentadherence-followupdays-365-adherence_result-filtervariable_name-proportion-of-patients-covered-selectestimate_name-estimate_value" id="toc-r-adherence-evalfalse-summarise-treatment-adherence-adherence_result---cdmsemaglutide_dus_cohort-summarisetreatmentadherence-followupdays-365-adherence_result-filtervariable_name-proportion-of-patients-covered-selectestimate_name-estimate_value" class="nav-link" data-scroll-target="#r-adherence-evalfalse-summarise-treatment-adherence-adherence_result---cdmsemaglutide_dus_cohort-summarisetreatmentadherence-followupdays-365-adherence_result-filtervariable_name-proportion-of-patients-covered-selectestimate_name-estimate_value"><span class="header-section-number">2</span> <code>{r adherence, eval=FALSE} # # Summarise treatment adherence # adherence_result &lt;- cdm$semaglutide_dus_cohort |&gt; #   summariseTreatmentAdherence( #     followUpDays = 365 #   ) #  # adherence_result |&gt; #   filter(variable_name == "Proportion of patients covered") |&gt; #   select(estimate_name, estimate_value) #</code></a>
-  <ul class="collapse">
-  <li><a href="#step-5-treatment-switching-and-restart" id="toc-step-5-treatment-switching-and-restart" class="nav-link" data-scroll-target="#step-5-treatment-switching-and-restart"><span class="header-section-number">2.0.1</span> Step 5: Treatment switching and restart</a></li>
-  </ul></li>
-  <li><a href="#r-switching-evalfalse-define-comparator-drug-cohorts-cdm---generateingredientcohortset-cdm-cdm-name-comparator_drugs-ingredient-cibuprofen-naproxen-summarise-switching-after-treatment-discontinuation-switch_result---cdmsemaglutide_dus_cohort-summarisedrugrestart-switchcohorttable-comparator_drugs-followupdays-365-switch_result-filtervariable_name-in-crestart-switch-discontinue-selectvariable_name-estimate_name-estimate_value" id="toc-r-switching-evalfalse-define-comparator-drug-cohorts-cdm---generateingredientcohortset-cdm-cdm-name-comparator_drugs-ingredient-cibuprofen-naproxen-summarise-switching-after-treatment-discontinuation-switch_result---cdmsemaglutide_dus_cohort-summarisedrugrestart-switchcohorttable-comparator_drugs-followupdays-365-switch_result-filtervariable_name-in-crestart-switch-discontinue-selectvariable_name-estimate_name-estimate_value" class="nav-link" data-scroll-target="#r-switching-evalfalse-define-comparator-drug-cohorts-cdm---generateingredientcohortset-cdm-cdm-name-comparator_drugs-ingredient-cibuprofen-naproxen-summarise-switching-after-treatment-discontinuation-switch_result---cdmsemaglutide_dus_cohort-summarisedrugrestart-switchcohorttable-comparator_drugs-followupdays-365-switch_result-filtervariable_name-in-crestart-switch-discontinue-selectvariable_name-estimate_name-estimate_value"><span class="header-section-number">3</span> <code>{r switching, eval=FALSE} # # Define comparator drug cohorts # cdm &lt;- generateIngredientCohortSet( #   cdm        = cdm, #   name       = "comparator_drugs", #   ingredient = c("ibuprofen", "naproxen") # ) #  # # Summarise switching after treatment discontinuation # switch_result &lt;- cdm$semaglutide_dus_cohort |&gt; #   summariseDrugRestart( #     switchCohortTable = "comparator_drugs", #     followUpDays      = 365 #   ) #  # switch_result |&gt; #   filter(variable_name %in% c("restart", "switch", "discontinue")) |&gt; #   select(variable_name, estimate_name, estimate_value) #</code></a>
-  <ul class="collapse">
-  <li><a href="#exporting-the-results" id="toc-exporting-the-results" class="nav-link" data-scroll-target="#exporting-the-results"><span class="header-section-number">3.1</span> Exporting the results</a></li>
-  </ul></li>
+  <li><a href="#exporting-the-results" id="toc-exporting-the-results" class="nav-link" data-scroll-target="#exporting-the-results"><span class="header-section-number">4</span> Exporting the results</a></li>
   </ul>
 </nav>
     </div>
@@ -549,8 +540,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="what-is-a-drug-utilisation-study" class="level2" data-number="0.1">
-<h2 data-number="0.1" class="anchored" data-anchor-id="what-is-a-drug-utilisation-study"><span class="header-section-number">0.1</span> What is a drug utilisation study?</h2>
+<section id="what-is-a-drug-utilisation-study" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-a-drug-utilisation-study"><span class="header-section-number">1</span> What is a drug utilisation study?</h2>
 <p>A drug utilisation study (DUS) describes <em>how</em> a drug is used in clinical practice: who receives it, at what dose, for how long, for what indications, and in what combinations.</p>
 <p><strong>DUS are not causal analyses.</strong> They <u>do not estimate the effect of a drug on an outcome</u>. Their purpose is to describe, or characterise, real-world prescribing patterns. They are a key regulatory tool, regularly commissioned as post-authorisation safety studies (PASS) to monitor whether a drug is being used as intended.</p>
 <p>Key questions a DUS answers:</p>
@@ -563,8 +554,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="setup" class="level2" data-number="0.2">
-<h2 data-number="0.2" class="anchored" data-anchor-id="setup"><span class="header-section-number">0.2</span> Setup</h2>
+<section id="setup" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="setup"><span class="header-section-number">2</span> Setup</h2>
+<p>In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the <code>omock</code> package, like the <code>GiBleed</code> dataset. The documentation of the package is <a href="https://ohdsi.github.io/omock/index.html">here</a>.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -577,66 +569,78 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(duckdb)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">requireEunomia</span>()</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>(), <span class="at">dbdir =</span> <span class="fu">eunomiaDir</span>())</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">cdmFromCon</span>(db, </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cdmSchema =</span> <span class="st">"main"</span>, </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writeSchema =</span> <span class="st">"main"</span>, </span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writePrefix =</span> <span class="st">"greg_"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">requireEunomia</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>(), <span class="at">dbdir =</span> <span class="fu">eunomiaDir</span>())</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">cdmFromCon</span>(db, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cdmSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writeSchema =</span> <span class="st">"main"</span>, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">writePrefix =</span> <span class="st">"greg_"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>semaglutide <span class="ot">&lt;-</span> <span class="fu">getDrugIngredientCodes</span>(<span class="at">cdm =</span> cdm,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">name =</span> <span class="st">"semaglutide"</span>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>t2dm <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>,</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"type 2 diabetis mellitus"</span>, <span class="st">"T2DM"</span>)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>acute_pancreatitis <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>, </span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"Acute pancreatitis"</span>)</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Build drug exposure cohorts (one per GLP-1 agent)</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>semaglutide_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> semaglutide,</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"semaglutide_cohort"</span>,   <span class="co"># name of the cohort table in the CDM</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">exit =</span> <span class="st">"event_end_date"</span>,</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">overlap =</span> <span class="st">"merge"</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>semaglutide <span class="ot">&lt;-</span> <span class="fu">getDrugIngredientCodes</span>(<span class="at">cdm =</span> cdm,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">name =</span> <span class="st">"semaglutide"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>t2dm <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"type 2 diabetis mellitus"</span>, <span class="st">"T2DM"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>acute_pancreatitis <span class="ot">&lt;-</span> <span class="fu">getCandidateCodes</span>(</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm =</span> cdm,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">domains =</span> <span class="st">"Condition"</span>, </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeDescendants =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">includeAncestor =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"Acute pancreatitis"</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Build drug exposure cohorts (one per GLP-1 agent)</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>semaglutide_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> semaglutide,</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"semaglutide_cohort"</span>,   <span class="co"># name of the cohort table in the CDM</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">exit =</span> <span class="st">"event_end_date"</span>,</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">overlap =</span> <span class="st">"merge"</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Build condition cohorts</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>t2dm_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> t2dm,</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"t2dm_cohort"</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>ap_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> acute_pancreatitis,</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"ap_cohort"</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">bind</span>(cdm<span class="sc">$</span>semaglutide_cohort, cdm<span class="sc">$</span>t2dm_cohort, cdm<span class="sc">$</span>ap_cohort, <span class="at">name =</span> <span class="st">"study_cohorts"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Build condition cohorts</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>t2dm_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> t2dm,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"t2dm_cohort"</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>ap_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">cdm         =</span> cdm,</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">conceptSet  =</span> acute_pancreatitis,</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">name        =</span> <span class="st">"ap_cohort"</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>cdm <span class="ot">&lt;-</span> <span class="fu">bind</span>(cdm<span class="sc">$</span>semaglutide_cohort, cdm<span class="sc">$</span>t2dm_cohort, cdm<span class="sc">$</span>ap_cohort, <span class="at">name =</span> <span class="st">"study_cohorts"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the CDM you use does not have the <code>concept id</code> that allow you to do the exercises, please, try another CDM or use another substance/disease!</p>
+</div>
 </div>
 <hr>
 </section>
-<section id="example-pipeline" class="level2" data-number="0.3">
-<h2 data-number="0.3" class="anchored" data-anchor-id="example-pipeline"><span class="header-section-number">0.3</span> Example pipeline</h2>
+<section id="example-pipeline" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="example-pipeline"><span class="header-section-number">3</span> Example pipeline</h2>
 <p>In this tutorial we will provide an example on how to do a DUS with <code>DrugUtilisation</code>, but further documentation can be found in the <a href="https://darwin-eu.github.io/DrugUtilisation/">package documentation</a>, with all available functions in its <a href="https://darwin-eu.github.io/DrugUtilisation/reference/index.html">reference index</a> and in <a href="https://darwin-eu.github.io/DrugUtilisation/tutorial/#/title-slide">this other tutorial</a> or <a href="https://oxford-pharmacoepi.github.io/HDS-DrugTraining/">this training</a>.</p>
-<section id="step-1-create-a-drug-cohort" class="level3" data-number="0.3.1">
-<h3 data-number="0.3.1" class="anchored" data-anchor-id="step-1-create-a-drug-cohort"><span class="header-section-number">0.3.1</span> Step 1: Create a drug cohort</h3>
+<section id="step-1-create-a-drug-cohort" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="step-1-create-a-drug-cohort"><span class="header-section-number">3.1</span> Step 1: Create a drug cohort</h3>
 <p>The <code>DrugUtilisation</code> package provides <code>generateIngredientCohortSet()</code> as its primary cohort creation function. It creates drug cohorts, collapsing consecutive prescription records with gaps below a specified threshold.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -663,22 +667,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <button>
 Explanation
 </button>
-<p><code>gapEra</code> controls the <strong>era collapsing</strong> logic. In claims or dispensing data, a patient on a once-weekly drug might have their 4-week prescription record end on day 28 and the next refill start on day 30 — a 2-day gap. Without era collapsing, these would appear as two separate drug eras (treatment discontinuation + restart). With <code>gapEra = 30</code>, gaps of fewer than 30 days are bridged, producing one continuous treatment era. The appropriate gap depends on the drug’s dosing frequency and the data source’s dispensing patterns.</p>
+<p><code>gapEra</code> controls the <strong>era collapsing</strong> logic. In claims or dispensing data, a patient on a once-weekly drug might have their 4-week prescription record end on day 28 and the next refill start on day 30, a 2-day gap. Without era collapsing, these would appear as two separate drug eras (treatment discontinuation + restart). With <code>gapEra = 365</code>, gaps of fewer than 365 days are bridged, producing one continuous treatment era. The appropriate gap depends on the drug’s dosing frequency and the data source’s dispensing patterns.</p>
 </div>
 </section>
-<section id="step-2-treatment-duration-and-exposure" class="level3" data-number="0.3.2">
-<h3 data-number="0.3.2" class="anchored" data-anchor-id="step-2-treatment-duration-and-exposure"><span class="header-section-number">0.3.2</span> Step 2: Treatment duration and exposure</h3>
+<section id="step-2-treatment-duration-and-exposure" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="step-2-treatment-duration-and-exposure"><span class="header-section-number">3.2</span> Step 2: Treatment duration and exposure</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>du_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>semaglutide_dus_cohort <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dus_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>semaglutide_dus_cohort <span class="sc">|&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseDrugUtilisation</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ingredientConceptId =</span> <span class="dv">1125315</span>,  <span class="co"># acetaminophen</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">gapEra              =</span> <span class="dv">30</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ingredientConceptId =</span> <span class="dv">793143</span>,  <span class="co"># semaglutide</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">gapEra              =</span> <span class="dv">365</span>,     <span class="co"># change at convenience</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimates           =</span> <span class="fu">c</span>(<span class="st">"q25"</span>, <span class="st">"median"</span>, <span class="st">"q75"</span>, <span class="st">"mean"</span>, <span class="st">"sd"</span>)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>du_result <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>dus_result <span class="sc">|&gt;</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(variable_name <span class="sc">%in%</span> <span class="fu">c</span>(</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"days prescribed"</span>,</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"days exposed"</span>,</span>
@@ -687,13 +691,9 @@ Explanation
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable_name, estimate_name, estimate_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 0 × 3
-# ℹ 3 variables: variable_name &lt;chr&gt;, estimate_name &lt;chr&gt;, estimate_value &lt;chr&gt;</code></pre>
-</div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Our study — treatment duration metrics to report:</strong></p>
+<p><strong>Exercise!</strong></p>
 <p>For each GLP-1 RA agent, report:</p>
 <table class="caption-top table">
 <colgroup>
@@ -709,7 +709,7 @@ Explanation
 <tbody>
 <tr class="odd">
 <td>Days prescribed (median, IQR)</td>
-<td>The duration of the prescribed course — often longer than actual use</td>
+<td>The duration of the prescribed course</td>
 </tr>
 <tr class="even">
 <td>Days exposed (median, IQR)</td>
@@ -731,68 +731,92 @@ Explanation
 </table>
 </blockquote>
 </section>
-<section id="step-3-indications-for-use" class="level3" data-number="0.3.3">
-<h3 data-number="0.3.3" class="anchored" data-anchor-id="step-3-indications-for-use"><span class="header-section-number">0.3.3</span> Step 3: Indications for use</h3>
+<section id="step-3-indications-for-use" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="step-3-indications-for-use"><span class="header-section-number">3.3</span> Step 3: Indications for use</h3>
 <p>What conditions were patients treated for? This is especially relevant for GLP-1 RAs, which are licensed for T2DM and obesity but increasingly used off-label.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define indication cohorts</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>indications <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">headache  =</span> <span class="dv">378253</span>, <span class="at">influenza =</span> <span class="dv">4266367</span>, <span class="at">t2dm =</span> <span class="dv">201826</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>cdm<span class="sc">$</span>indications_cohort <span class="ot">&lt;-</span> <span class="fu">conceptCohort</span>(<span class="at">cdm =</span> cdm,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">conceptSet =</span> indications,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">name =</span> <span class="st">"indications_cohort"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>indication_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseIndication</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">indicationCohortName =</span> <span class="st">"indications_cohort"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">unknownIndicationTable  =</span> <span class="st">"condition_occurrence"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">indicationWindow        =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">30</span>, <span class="dv">0</span>)) <span class="co"># You can select the most appropriate window for your analysis</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>indication_result <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(estimate_name <span class="sc">==</span> <span class="st">"percentage"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable_level, estimate_value) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>Quick check:</strong> You run the summarise indication function for semaglutide and most of the indications are <code>unknown</code>. What is the most plausible cause?Semaglutide is being used off-label more than what we thought <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select>Indication is not well-recorded in the database <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select>We have not created a good enough indications cohort <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
 </section>
+<section id="step-4-treatment-adherence" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="step-4-treatment-adherence"><span class="header-section-number">3.4</span> Step 4: Treatment adherence</h3>
+<p>The <code>DrugUtilisation</code> package allows you to compute treatment adherence in two different ways: - Proportion of Days Covered (PDC): the standard measure of medication adherence in claims data. PDC ≥ 80% is the conventional threshold for “adherent.” - As a survival analysis using the <code>CohortSurvival</code> package. The function assumes that each cohort entry is a continuous treatment era.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarise treatment adherence</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pdc_adherence_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>semaglutide_dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseProportionOfPatientsCovered</span>(<span class="at">followUpDays =</span> <span class="dv">365</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CohortSurvival)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>surv_adherence_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>semaglutide_dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseDiscontinuationAsSurvival</span>()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># You can plot the results!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 </section>
-<section id="r-indication-messagefalse-warningfalse-define-indication-cohorts-indications---list-headache-378253-influenza-4266367-cdm---cdmconnectorgenerateconceptcohortset-cdm-cdm-conceptset-indications-name-indications_cohort-indication_result---cdmdus_cohort-summariseindication-indicationcohortname-indications_cohort-unknownindicationtable-condition_occurrence-indicationwindow-listc-30-0-indication_result-filterestimate_name-percentage-selectvariable_level-estimate_value" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> <code>{r indication, message=FALSE, warning=FALSE} # # Define indication cohorts # indications &lt;- list( #   headache  = 378253, #   influenza = 4266367 # ) #  # cdm &lt;- CDMConnector::generateConceptCohortSet( #   cdm        = cdm, #   conceptSet = indications, #   name       = "indications_cohort" # ) #  # indication_result &lt;- cdm$dus_cohort |&gt; #   summariseIndication( #     indicationCohortName    = "indications_cohort", #     unknownIndicationTable  = "condition_occurrence", #     indicationWindow        = list(c(-30, 0)) #   ) #  # indication_result |&gt; #   filter(estimate_name == "percentage") |&gt; #   select(variable_level, estimate_value) #</code></h1>
-<blockquote class="blockquote">
-<p><strong>Our study — indication analysis:</strong> For GLP-1 RAs, define indication cohorts for:</p>
-<ul>
-<li><strong>Type 2 diabetes mellitus</strong> (primary licensed indication)</li>
-<li><strong>Obesity / overweight</strong> (licensed for semaglutide/tirzepatide in higher doses)</li>
-<li><strong>Cardiovascular disease</strong> (licensed for some agents with demonstrated CV benefit)</li>
-<li><strong>No identifiable coded indication</strong> (potential off-label use)</li>
-</ul>
-<p>A high proportion of “no identifiable coded indication” may reflect coding limitations rather than true off-label use — many GPs do not re-code T2DM at every prescribing event.</p>
-</blockquote>
-<section id="step-4-treatment-adherence" class="level3" data-number="1.0.1">
-<h3 data-number="1.0.1" class="anchored" data-anchor-id="step-4-treatment-adherence"><span class="header-section-number">1.0.1</span> Step 4: Treatment adherence</h3>
-<p>Proportion of Days Covered (PDC) is the standard measure of medication adherence in claims data. PDC ≥ 80% is the conventional threshold for “adherent.”</p>
-</section>
-</section>
-<section id="r-adherence-evalfalse-summarise-treatment-adherence-adherence_result---cdmsemaglutide_dus_cohort-summarisetreatmentadherence-followupdays-365-adherence_result-filtervariable_name-proportion-of-patients-covered-selectestimate_name-estimate_value" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> <code>{r adherence, eval=FALSE} # # Summarise treatment adherence # adherence_result &lt;- cdm$semaglutide_dus_cohort |&gt; #   summariseTreatmentAdherence( #     followUpDays = 365 #   ) #  # adherence_result |&gt; #   filter(variable_name == "Proportion of patients covered") |&gt; #   select(estimate_name, estimate_value) #</code></h1>
-<section id="step-5-treatment-switching-and-restart" class="level3" data-number="2.0.1">
-<h3 data-number="2.0.1" class="anchored" data-anchor-id="step-5-treatment-switching-and-restart"><span class="header-section-number">2.0.1</span> Step 5: Treatment switching and restart</h3>
-</section>
-</section>
-<section id="r-switching-evalfalse-define-comparator-drug-cohorts-cdm---generateingredientcohortset-cdm-cdm-name-comparator_drugs-ingredient-cibuprofen-naproxen-summarise-switching-after-treatment-discontinuation-switch_result---cdmsemaglutide_dus_cohort-summarisedrugrestart-switchcohorttable-comparator_drugs-followupdays-365-switch_result-filtervariable_name-in-crestart-switch-discontinue-selectvariable_name-estimate_name-estimate_value" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> <code>{r switching, eval=FALSE} # # Define comparator drug cohorts # cdm &lt;- generateIngredientCohortSet( #   cdm        = cdm, #   name       = "comparator_drugs", #   ingredient = c("ibuprofen", "naproxen") # ) #  # # Summarise switching after treatment discontinuation # switch_result &lt;- cdm$semaglutide_dus_cohort |&gt; #   summariseDrugRestart( #     switchCohortTable = "comparator_drugs", #     followUpDays      = 365 #   ) #  # switch_result |&gt; #   filter(variable_name %in% c("restart", "switch", "discontinue")) |&gt; #   select(variable_name, estimate_name, estimate_value) #</code></h1>
-<blockquote class="blockquote">
-<p><strong>Our study — treatment switching:</strong> For GLP-1 RA DUS, switching is particularly clinically relevant: patients may switch between agents due to tolerability (nausea is common with all GLP-1 RAs), formulary changes, or lack of glycaemic response. A high rate of early switching (within 90 days) to a different GLP-1 RA would be a DUS finding worth reporting to regulators, as it might indicate a population-level tolerability pattern not captured in clinical trials.</p>
-</blockquote>
-<p><strong>Quick check:</strong> Your DUS shows that 35% of semaglutide users have no coded T2DM or obesity diagnosis in the 30 days before initiation. Does this mean 35% are receiving the drug off-label?</p>
-<p><select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
-<div class="webex-solution">
-<button>
-Explanation
-</button>
-<p>Not necessarily. In routine clinical databases, many patients with chronic conditions like T2DM do not have their diagnosis re-coded at every GP visit or prescription event. The absence of a recent coded diagnosis in the 30-day window does not mean the diagnosis is absent — it may simply not have been recorded recently. Looking at a wider window (e.g.&nbsp;any T2DM code ever in the patient’s history) typically reveals a much higher proportion with documented indication. The “no identifiable coded indication” category in a DUS is therefore best interpreted as a lower bound on true off-label use, not as the actual off-label rate.</p>
+<section id="step-5-treatment-switching-and-restart" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="step-5-treatment-switching-and-restart"><span class="header-section-number">3.5</span> Step 5: Treatment switching and restart</h3>
+<p>Sometimes, one patient might switch from one treatment to another due to a lot of different causes: secondary effects, treatment failure, economic constraints, new agent introduced in the market… Independently of the reason, treatment switching and restart are valuable information to recover from the data. For our GLP-1 RA DUS, switching is particularly clinically relevant, since patients may switch between agents due to tolerability (nausea is common with all GLP-1 RAs), formulary changes, or lack of glycaemic response. A high rate of early switching (within 90 days) to a different GLP-1 RA would be a DUS finding worth reporting to regulators, as it might indicate a population-level tolerability pattern not captured in clinical trials.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarise switching after treatment discontinuation </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>switch_result <span class="ot">&lt;-</span> cdm<span class="sc">$</span>semaglutide_dus_cohort <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summariseDrugRestart</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">switchCohortTable =</span> <span class="st">"GLP1-RA"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># A cohort that you have had defined with all other GLP1-RA</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">followUpDays      =</span> <span class="dv">365</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <hr>
-<section id="exporting-the-results" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="exporting-the-results"><span class="header-section-number">3.1</span> Exporting the results</h2>
+</section>
+</section>
+<section id="exporting-the-results" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="exporting-the-results"><span class="header-section-number">4</span> Exporting the results</h2>
 <p>You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is <a href="https://ohdsi.github.io/OmopViewer/">OmopViewer</a> but <a href="https://darwin-eu.github.io/visOmopResults/">visOmopResults</a> and each package own functions allow for it too.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress small cell counts before sharing</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>minCellCount <span class="ot">&lt;-</span> <span class="dv">5</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">exportSummarisedResult</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  du_result</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">minCellCount =</span> minCellCount,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">here</span>(<span class="st">"Results"</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileName =</span> <span class="st">"GregonBoard_dus_{cdm_name}_{date}.csv"</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress small cell counts before sharing</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>minCellCount <span class="ot">&lt;-</span> <span class="dv">5</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">exportSummarisedResult</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  dus_result,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  indication_result,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  pdc_adherence_result,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  surv_adherence_result,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  switch_result,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">minCellCount =</span> minCellCount,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">here</span>(<span class="st">"Results"</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileName =</span> <span class="st">"GregonBoard_dus_{cdm_name}_{date}.csv"</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

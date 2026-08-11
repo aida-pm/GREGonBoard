@@ -27,6 +27,8 @@ Key questions a DUS answers:
 
 ## Setup
 
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the `omock` package, like the `GiBleed` dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
+
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(DrugUtilisation)
 library(CohortConstructor)
@@ -36,7 +38,6 @@ library(omopgenerics)
 library(omock)
 library(dplyr)
 library(duckdb)
-
 
 requireEunomia()
 db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
@@ -90,6 +91,10 @@ cdm$ap_cohort <- conceptCohort(
 cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "study_cohorts")
 ```
 
+::: callout-note
+If the CDM you use does not have the `concept id` that allow you to do the exercises, please, try another CDM or use another substance/disease!
+:::
+
 ------------------------------------------------------------------------
 
 ## Example pipeline
@@ -100,7 +105,7 @@ In this tutorial we will provide an example on how to do a DUS with `DrugUtilisa
 
 The `DrugUtilisation` package provides `generateIngredientCohortSet()` as its primary cohort creation function. It creates drug cohorts, collapsing consecutive prescription records with gaps below a specified threshold.
 
-```{r create-cohort, message=FALSE, warning=FALSE}
+```{r create-cohort, message=FALSE, warning=FALSE, eval=FALSE}
 # Create semaglutide cohort as ingredient
 cdm <- generateIngredientCohortSet(
   cdm        = cdm,
@@ -129,19 +134,19 @@ cat(
 )
 ```
 
-`r hide("Explanation")` `gapEra` controls the **era collapsing** logic. In claims or dispensing data, a patient on a once-weekly drug might have their 4-week prescription record end on day 28 and the next refill start on day 30 — a 2-day gap. Without era collapsing, these would appear as two separate drug eras (treatment discontinuation + restart). With `gapEra = 30`, gaps of fewer than 30 days are bridged, producing one continuous treatment era. The appropriate gap depends on the drug's dosing frequency and the data source's dispensing patterns. `r unhide()`
+`r hide("Explanation")` `gapEra` controls the **era collapsing** logic. In claims or dispensing data, a patient on a once-weekly drug might have their 4-week prescription record end on day 28 and the next refill start on day 30, a 2-day gap. Without era collapsing, these would appear as two separate drug eras (treatment discontinuation + restart). With `gapEra = 365`, gaps of fewer than 365 days are bridged, producing one continuous treatment era. The appropriate gap depends on the drug's dosing frequency and the data source's dispensing patterns. `r unhide()`
 
 ### Step 2: Treatment duration and exposure
 
-```{r drug-utilisation, message=FALSE, warning=FALSE}
-du_result <- cdm$semaglutide_dus_cohort |>
+```{r drug-utilisation, message=FALSE, warning=FALSE, eval=FALSE}
+dus_result <- cdm$semaglutide_dus_cohort |>
   summariseDrugUtilisation(
-    ingredientConceptId = 1125315,  # acetaminophen
-    gapEra              = 30,
+    ingredientConceptId = 793143,  # semaglutide
+    gapEra              = 365,     # change at convenience
     estimates           = c("q25", "median", "q75", "mean", "sd")
   )
 
-du_result |>
+dus_result |>
   filter(variable_name %in% c(
     "days prescribed",
     "days exposed",
@@ -151,13 +156,13 @@ du_result |>
   select(variable_name, estimate_name, estimate_value)
 ```
 
-> **Our study — treatment duration metrics to report:**
+> **Exercise!**
 >
 > For each GLP-1 RA agent, report:
 >
 > | Metric | Clinical interpretation |
 > |------------------------------------|------------------------------------|
-> | Days prescribed (median, IQR) | The duration of the prescribed course — often longer than actual use |
+> | Days prescribed (median, IQR) | The duration of the prescribed course |
 > | Days exposed (median, IQR) | The duration of actual drug supply based on dispensing records |
 > | Number of drug eras | Whether patients have multiple treatment episodes (treatment restarts) |
 > | Initial daily dose (mg) | Whether patients are initiated at the recommended starting dose |
@@ -167,90 +172,63 @@ du_result |>
 
 What conditions were patients treated for? This is especially relevant for GLP-1 RAs, which are licensed for T2DM and obesity but increasingly used off-label.
 
-# ```{r indication, message=FALSE, warning=FALSE}
-# # Define indication cohorts
-# indications <- list(
-#   headache  = 378253,
-#   influenza = 4266367
-# )
-# 
-# cdm <- CDMConnector::generateConceptCohortSet(
-#   cdm        = cdm,
-#   conceptSet = indications,
-#   name       = "indications_cohort"
-# )
-# 
-# indication_result <- cdm$dus_cohort |>
-#   summariseIndication(
-#     indicationCohortName    = "indications_cohort",
-#     unknownIndicationTable  = "condition_occurrence",
-#     indicationWindow        = list(c(-30, 0))
-#   )
-# 
-# indication_result |>
-#   filter(estimate_name == "percentage") |>
-#   select(variable_level, estimate_value)
-# ```
+```{r indication, message=FALSE, warning=FALSE, eval = F}
+# Define indication cohorts
+indications <- list(headache  = 378253, influenza = 4266367, t2dm = 201826)
 
-> **Our study — indication analysis:** For GLP-1 RAs, define indication cohorts for:
->
-> - **Type 2 diabetes mellitus** (primary licensed indication)
-> - **Obesity / overweight** (licensed for semaglutide/tirzepatide in higher doses)
-> - **Cardiovascular disease** (licensed for some agents with demonstrated CV benefit)
-> - **No identifiable coded indication** (potential off-label use)
->
-> A high proportion of "no identifiable coded indication" may reflect coding limitations rather than true off-label use — many GPs do not re-code T2DM at every prescribing event.
+cdm$indications_cohort <- conceptCohort(cdm = cdm,
+                                        conceptSet = indications,
+                                        name = "indications_cohort")
+
+indication_result <- cdm$dus_cohort |>
+  summariseIndication(
+    indicationCohortName = "indications_cohort",
+    unknownIndicationTable  = "condition_occurrence",
+    indicationWindow        = list(c(-30, 0)) # You can select the most appropriate window for your analysis
+  )
+
+indication_result |>
+  filter(estimate_name == "percentage") |>
+  select(variable_level, estimate_value) 
+```
+
+```{r tf, echo=FALSE, results='asis'}
+cat("**Quick check:** You run the summarise indication function for semaglutide and most of the indications are `unknown`. What is the most plausible cause?")
+cat("Semaglutide is being used off-label more than what we thought", torf(FALSE))
+cat("Indication is not well-recorded in the database", torf(TRUE))
+cat("We have not created a good enough indications cohort", torf(FALSE))
+```
 
 ### Step 4: Treatment adherence
 
-Proportion of Days Covered (PDC) is the standard measure of medication adherence in claims data. PDC ≥ 80% is the conventional threshold for "adherent."
+The `DrugUtilisation` package allows you to compute treatment adherence in two different ways: - Proportion of Days Covered (PDC): the standard measure of medication adherence in claims data. PDC ≥ 80% is the conventional threshold for "adherent." - As a survival analysis using the `CohortSurvival` package. The function assumes that each cohort entry is a continuous treatment era.
 
-# ```{r adherence, eval=FALSE}
-# # Summarise treatment adherence
-# adherence_result <- cdm$semaglutide_dus_cohort |>
-#   summariseTreatmentAdherence(
-#     followUpDays = 365
-#   )
-# 
-# adherence_result |>
-#   filter(variable_name == "Proportion of patients covered") |>
-#   select(estimate_name, estimate_value)
-# ```
+```{r adherence, eval=FALSE}
+# Summarise treatment adherence
+pdc_adherence_result <- cdm$semaglutide_dus_cohort |>
+  summariseProportionOfPatientsCovered(followUpDays = 365)
+
+library(CohortSurvival)
+surv_adherence_result <- cdm$semaglutide_dus_cohort |>
+  summariseDiscontinuationAsSurvival()
+
+# You can plot the results!
+```
 
 ### Step 5: Treatment switching and restart
 
-# ```{r switching, eval=FALSE}
-# # Define comparator drug cohorts
-# cdm <- generateIngredientCohortSet(
-#   cdm        = cdm,
-#   name       = "comparator_drugs",
-#   ingredient = c("ibuprofen", "naproxen")
-# )
-# 
-# # Summarise switching after treatment discontinuation
-# switch_result <- cdm$semaglutide_dus_cohort |>
-#   summariseDrugRestart(
-#     switchCohortTable = "comparator_drugs",
-#     followUpDays      = 365
-#   )
-# 
-# switch_result |>
-#   filter(variable_name %in% c("restart", "switch", "discontinue")) |>
-#   select(variable_name, estimate_name, estimate_value)
-# ```
+Sometimes, one patient might switch from one treatment to another due to a lot of different causes: secondary effects, treatment failure, economic constraints, new agent introduced in the market... Independently of the reason, treatment switching and restart are valuable information to recover from the data. For our GLP-1 RA DUS, switching is particularly clinically relevant, since patients may switch between agents due to tolerability (nausea is common with all GLP-1 RAs), formulary changes, or lack of glycaemic response. A high rate of early switching (within 90 days) to a different GLP-1 RA would be a DUS finding worth reporting to regulators, as it might indicate a population-level tolerability pattern not captured in clinical trials.
 
-> **Our study — treatment switching:** For GLP-1 RA DUS, switching is particularly clinically relevant: patients may switch between agents due to tolerability (nausea is common with all GLP-1 RAs), formulary changes, or lack of glycaemic response. A high rate of early switching (within 90 days) to a different GLP-1 RA would be a DUS finding worth reporting to regulators, as it might indicate a population-level tolerability pattern not captured in clinical trials.
+```{r switching, eval=FALSE}
+# Summarise switching after treatment discontinuation 
+switch_result <- cdm$semaglutide_dus_cohort |>
+  summariseDrugRestart(
+    switchCohortTable = "GLP1-RA",
+    # A cohort that you have had defined with all other GLP1-RA
+    followUpDays      = 365
+  )
 
-```{r q2, echo=FALSE, results='asis'}
-cat(
-  "**Quick check:** Your DUS shows that 35% of semaglutide users have no coded",
-  "T2DM or obesity diagnosis in the 30 days before initiation.",
-  "Does this mean 35% are receiving the drug off-label?\n\n",
-  torf(FALSE), "\n\n"
-)
 ```
-
-`r hide("Explanation")` Not necessarily. In routine clinical databases, many patients with chronic conditions like T2DM do not have their diagnosis re-coded at every GP visit or prescription event. The absence of a recent coded diagnosis in the 30-day window does not mean the diagnosis is absent — it may simply not have been recorded recently. Looking at a wider window (e.g. any T2DM code ever in the patient's history) typically reveals a much higher proportion with documented indication. The "no identifiable coded indication" category in a DUS is therefore best interpreted as a lower bound on true off-label use, not as the actual off-label rate. `r unhide()`
 
 ------------------------------------------------------------------------
 
@@ -263,7 +241,11 @@ You can export a summarised result with all the objects that you created from yo
 minCellCount <- 5 
 
 exportSummarisedResult(
-  du_result
+  dus_result,
+  indication_result,
+  pdc_adherence_result,
+  surv_adherence_result,
+  switch_result,
   minCellCount = minCellCount,
   path = here("Results"),
   fileName = "GregonBoard_dus_{cdm_name}_{date}.csv"

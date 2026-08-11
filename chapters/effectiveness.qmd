@@ -9,29 +9,31 @@ library(webexercises)
 
 ## From description to causal inference
 
-All the analyses in previous chapters were descriptive or exploratory — they characterise populations, estimate rates, and describe drug utilisation. An effectiveness (or comparative safety) study takes a fundamentally different step: it attempts to **estimate a causal effect** of one treatment compared to another.
-
-This is harder. Confounding — the systematic difference between who receives each treatment — is the central threat. In a randomised trial, random allocation ensures that confounders are distributed equally between groups. In observational data, we must adjust for confounding analytically, using tools like propensity scores.
-
-The OHDSI approach to causal inference from observational data is the **new-user active-comparator cohort design with propensity score adjustment and negative control calibration**, implemented in the `CohortMethod` R package (part of HADES).
+All the analyses in previous chapters were descriptive or exploratory. They are used to characterise populations, estimate rates, and describe drug utilisation. An effectiveness (or comparative safety) study attempts to **estimate a causal effect** of one treatment compared to another.
 
 ::: callout-note
-## For epidemiologists
-
-This chapter implements what Hernán and Robins call the "target trial emulation" framework: we specify the hypothetical trial that would answer our question (the estimand), and then use the observational data to emulate it as closely as possible.
+The standard is to perform "comparative" studies (one treatment vs. another) instead of comparing to no treatment. This is to more closely reproduce a clinical trial framework and avoid selection bias.
 :::
 
-::: callout-note
-## For regulators and HTA bodies
+Assessing causality is the hardest task in pharmacoepidemiology. Confounding is the central threat. In a randomised trial, random allocation ensures that confounders are distributed equally between groups. In observational data, we must adjust for confounding analytically, using tools like propensity scores, but we are restricted to the variables available in the data.
 
-The methods in this chapter align with the ICH E9(R1) estimand framework and the ENCePP Guide on methodological standards. The negative control calibration step is specifically designed to address the systematic error (residual confounding, outcome misclassification) that EMA flagged as the primary concern in RWE submissions.
+The preferred approach to causal inference from observational data is the **new-user active-comparator cohort design with propensity score adjustment and negative control calibration**.
+
+::: callout-tip
+In your [protocol](study_protocol.qmd), you used the ICH E9(R1) estimand framework to define your research question and objectives. Keep that framework in mind during this chapter!
 :::
 
 ------------------------------------------------------------------------
 
 ## Setup
 
-```{r setup-packages, message=FALSE, warning=FALSE}
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the `omock` package, like the `GiBleed` dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
+
+::: callout-caution
+In this setup section, we present a more realistic construction of cohorts introducing exitAtDeath() and relevant intersections with condition cohorts.
+:::
+
+```{r setup-packages, message=FALSE, warning=FALSE, eval=FALSE}
 library(CohortSurvival)
 library(CohortMethod)
 library(CohortConstructor)
@@ -41,7 +43,6 @@ library(omopgenerics)
 library(omock)
 library(dplyr)
 library(duckdb)
-
 
 requireEunomia()
 db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
@@ -53,6 +54,9 @@ cdm <- cdmFromCon(db,
 
 semaglutide <- getDrugIngredientCodes(cdm = cdm,
                                       name = "semaglutide")
+
+tirzepatide <- getDrugIngredientCodes(cdm = cdm,
+                                      name = "tirzepatide")
 
 t2dm <- getCandidateCodes(
   cdm = cdm,
@@ -70,298 +74,586 @@ acute_pancreatitis <- getCandidateCodes(
   keywords = c("Acute pancreatitis")
 )
 
-# Build drug exposure cohorts (one per GLP-1 agent)
+# Build exposure cohorts (one per GLP-1 agent)
 cdm$semaglutide_cohort <- conceptCohort(
-  cdm         = cdm,
-  conceptSet  = semaglutide,
-  name        = "semaglutide_cohort",   # name of the cohort table in the CDM
+  cdm = cdm,
+  conceptSet = semaglutide,
+  name = "semaglutide_cohort",
   exit = "event_end_date",
-  overlap = "merge")
+  overlap = "merge"
+)
 
+cdm$tirzepatide_cohort <- conceptCohort(
+  cdm = cdm,
+  conceptSet = tirzepatide,
+  name = "tirzepatide_cohort",
+  exit = "event_end_date",
+  overlap = "merge"
+)
 
-# Build condition cohorts
+# Build the T2DM cohort
 cdm$t2dm_cohort <- conceptCohort(
-  cdm         = cdm,
-  conceptSet  = t2dm,
-  name        = "t2dm_cohort"
+  cdm = cdm,
+  conceptSet = t2dm,
+  name = "t2dm_cohort"
 )
 
+# Keep only the first qualifying exposure record for each person.
+cdm$semaglutide_cohort <- requireIsFirstEntry(
+  cdm$semaglutide_cohort,
+  name = "semaglutide_cohort"
+)
+
+cdm$tirzepatide_cohort <- requireIsFirstEntry(
+  cdm$tirzepatide_cohort,
+  name = "tirzepatide_cohort"
+)
+
+# Keep only GLP-1 users who also have T2DM.
+# Each exposure is intersected with T2DM separately.
+cdm$semaglutide_t2dm <- requireCohortIntersect(
+  cohort = cdm$semaglutide_cohort,
+  targetCohortTable = "t2dm_cohort",
+  window = list(c(-Inf, 0)),
+  intersections = c(1, Inf),
+  name = "semaglutide_t2dm"
+)
+
+cdm$tirzepatide_t2dm <- requireCohortIntersect(
+  cohort = cdm$tirzepatide_cohort,
+  targetCohortTable = "t2dm_cohort",
+  window = list(c(-Inf, 0)),
+  intersections = c(1, Inf),
+  name = "tirzepatide_t2dm"
+)
+
+# Build the acute pancreatitis outcome cohort
 cdm$ap_cohort <- conceptCohort(
-  cdm         = cdm,
-  conceptSet  = acute_pancreatitis,
-  name        = "ap_cohort"
+  cdm = cdm,
+  conceptSet = acute_pancreatitis,
+  name = "ap_cohort"
 )
 
-cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "study_cohorts")
+# Exit at death; otherwise keep the existing cohort end date.
+cdm$semaglutide_t2dm <- exitAtDeath(
+  cdm$semaglutide_t2dm,
+  name = "semaglutide_t2dm"
+)
+
+cdm$tirzepatide_t2dm <- exitAtDeath(
+  cdm$tirzepatide_t2dm,
+  name = "tirzepatide_t2dm"
+)
+
+# Combine the two exposure cohorts into one study target table.
+cdm <- bind(
+  cdm$semaglutide_t2dm,
+  cdm$tirzepatide_t2dm,
+  name = "study_cohorts"
+)
+
+
+## We need a special connection for CohortMethod -------------
+library(DatabaseConnector)
+library(FeatureExtraction)
+install.packages("Eunomia")
+library(Eunomia)
+
+data_dir <- file.path(tempdir(), "eunomia")
+dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
+
+Eunomia::downloadEunomiaData(
+  datasetName = "GiBleed",
+  pathToData = data_dir,
+  overwrite = TRUE
+)
+
+list.files(data_dir, recursive = TRUE)
+
+db_file <- tempfile(fileext = ".sqlite")
+
+Eunomia::extractLoadData(
+  from = file.path(data_dir, "GiBleed_5.3.zip"),
+  to = db_file,
+  dbms = "sqlite",
+  verbose = TRUE
+)
+
+
+# Connection information
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "sqlite", server = db_file)
+
+# OMOP CDM schema
+cdmDatabaseSchema <- "cdm"
+cohortDatabaseSchema <- "my_results"
+cohortTable <- "my_cohorts"
+
+library(Capr)
+semaglutideConceptId <- 793143
+tirzepatideConceptId <- 779705
+t2dmConceptId <- 201826
+acutePancreatitisConceptId <- 199074
+
+semaglutide_cl <- cs(descendants(semaglutideConceptId), name = "semaglutide")
+semaglutideCohort <- cohort(entry = entry(drugExposure(semaglutide_cl)),
+                            exit = exit(
+                              endStrategy = drugExit(
+                                semaglutide_cl,
+                                persistenceWindow = 365,
+                                surveillanceWindow = 0
+                              )
+                            ))
+
+tirzepatide_cl <- cs(descendants(tirzepatideConceptId), name = "tirzepatide")
+tirzepatideCohort <- cohort(entry = entry(drugExposure(tirzepatide_cl)),
+                            exit = exit(
+                              endStrategy = drugExit(
+                                tirzepatide_cl,
+                                persistenceWindow = 365,
+                                surveillanceWindow = 0
+                              )
+                            ))
+
+t2dm_cl <- cs(descendants(t2dmConceptId), name = "Type 2 Diabetes")
+t2dmCohort <- cohort(
+  entry = entry(conditionOccurrence(t2dm_cl, firstOccurrence())),
+  exit = exit(endStrategy = observationExit())
+)
+
+acutePancreatitis_cl <- cs(descendants(acutePancreatitisConceptId), name = "Acute Pancreatitis")
+acutePancreatitisCohort <- cohort(
+  entry = entry(conditionOccurrence(acutePancreatitis_cl, firstOccurrence())),
+  exit = exit(endStrategy = observationExit())
+)
+
+exposuresAndIndicationCohorts <- makeCohortSet(semaglutideCohort,
+                                               tirzepatideCohort,
+                                               t2dmCohort,
+                                               acutePancreatitisCohort)
+
+library(CohortGenerator)
+cohortTableNames <- getCohortTableNames(cohortTable = cohortTable)
+createCohortTables(
+  connectionDetails = connectionDetails,
+  cohortDatabaseSchema = cohortDatabaseSchema,
+  cohortTableNames = cohortTableNames
+)
+generateCohortSet(
+  connectionDetails = connectionDetails,
+  cdmDatabaseSchema = cdmDatabaseSchema,
+  cohortDatabaseSchema = cohortDatabaseSchema,
+  cohortTableNames = cohortTableNames,
+  cohortDefinitionSet = exposuresAndIndicationCohorts
+)
 ```
-
-::: callout-tip
-## CohortMethod uses a different connection approach
-
-Unlike the DARWIN EU packages (CDMConnector-based), CohortMethod uses `DatabaseConnector`. Both ultimately connect to the same OMOP CDM, but you need to specify the CDM schema and results schema separately in the CohortMethod functions.
-:::
 
 ------------------------------------------------------------------------
 
 ## Example pipeline
 
-In this tutorial we will provide an example on how to build the concept sets for our study with CodelistGenerator, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CodelistGenerator/), with all available functions in its [reference index](https://darwin-eu.github.io/CodelistGenerator/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/codelistgenerator/#/title-slide).\
-The target estimand
+This chapter uses a single comparative effectiveness question throughout:
 
-Before writing any code, state the estimand precisely (ICH E9(R1)):
+> **Among people with T2DM who initiate semaglutide or tirzepatide, what is the comparative risk of acute pancreatitis?**
 
-> **Population:** Adult T2DM patients initiating a GLP-1 RA for the first time, with 365 days prior observation and no prior GLP-1 RA use
->
-> **Treatment:** Semaglutide vs. liraglutide (one pairwise comparison shown; repeat for all pairs)
->
-> **Variable:** Time to first acute pancreatitis event (inpatient/emergency)
->
-> **Summary measure:** Hazard ratio from Cox proportional hazards regression on propensity-score-matched cohorts
->
-> **Intercurrent event strategy:** Hypothetical — patients censored at treatment discontinuation (gap \>60 days), switch to other GLP-1 RA, or initiation of pancreatitis-associated drug
+The workflow is intentionally short:
 
-------------------------------------------------------------------------
+1.  Build semaglutide and tirzepatide exposure cohorts.
+2.  Intersect each exposure with T2DM.
+3.  Use the first qualifying exposure as the index date.
+4.  Exit follow-up at acute pancreatitis, death, observation end, or 3 years.
+5.  Extract baseline covariates.
+6.  Estimate propensity scores.
+7.  Match on the propensity score.
+8.  Estimate the hazard ratio with Cox regression.
+9.  Repeat with IPTW as a sensitivity analysis.
+10. Plot Kaplan-Meier curves.
+11. Use negative controls to assess systematic error.
+12. Extract the final results.
 
-## Step 1: Define covariates for propensity score
+`CohortSurvival` is used for the descriptive time-to-event/Kaplan-Meier part, while `CohortMethod` is used for propensity scores, matching, IPTW, and Cox regression.
 
-<!-- ```{r covariates, eval=FALSE} -->
-<!-- # FeatureExtraction defines which baseline features go into the PS model -->
-<!-- covariateSettings <- FeatureExtraction::createDefaultCovariateSettings( -->
-<!--   excludedCovariateConceptIds  = c( -->
-<!--     # Exclude concepts that are proxies for treatment assignment -->
-<!--     # (e.g., the drug itself, its class members) -->
-<!--   ), -->
-<!--   addDescendantsToExclude      = TRUE -->
-<!-- ) -->
-<!-- ``` -->
+### Step 1: Define the study population
 
-The default covariate settings extract thousands of binary features from the 365-day pre-index window: all conditions, drugs, procedures, and measurements. The LASSO regression will select the subset that is informative for predicting treatment assignment.
+Our question is:
 
-------------------------------------------------------------------------
+> **Among people with T2DM who newly start semaglutide or tirzepatide, does the risk of acute pancreatitis differ between treatments?**
 
-## Step 2: Specify the CohortMethod analysis
+We use a **new-user, active-comparator cohort design**:
 
-<!-- ```{r cohort-method-spec, eval=FALSE} -->
-<!-- # Build the analysis specification -->
-<!-- cmAnalysis <- CohortMethod::createCmAnalysis( -->
-<!--   analysisId        = 1, -->
-<!--   description       = "Semaglutide vs Liraglutide — AP outcome — PS matching", -->
+- **Target:** semaglutide + T2DM
+- **Comparator:** tirzepatide + T2DM
+- **Outcome:** acute pancreatitis
+- **Index date:** first qualifying exposure date
+- **Prior outcome:** exclude people with previous acute pancreatitis
+- **Follow-up:** from treatment initiation until acute pancreatitis, death, the end of observation, or the end of the study risk window
 
-<!--   # Propensity score model -->
-<!--   createStudyPopArgs = CohortMethod::createCreateStudyPopulationArgs( -->
-<!--     removeSubjectsWithPriorOutcome = TRUE,   # exclude prior AP -->
-<!--     priorOutcomeLookback           = 99999, -->
-<!--     riskWindowStart                = 0, -->
-<!--     startAnchor                    = "cohort start", -->
-<!--     riskWindowEnd                  = 1095,   # 3 years -->
-<!--     endAnchor                      = "cohort start", -->
-<!--     minDaysAtRisk                  = 1 -->
-<!--   ), -->
+The intersection with T2DM was created in the setup section. `exitAtDeath()` makes death an explicit censoring point for the exposure cohorts. `CohortConstructor` supports both cohort intersections and changing cohort end dates at death.
 
-<!--   # Fit propensity score using LASSO logistic regression -->
-<!--   fitOutcomeModelArgs = CohortMethod::createFitOutcomeModelArgs( -->
-<!--     modelType        = "cox", -->
-<!--     stratified       = TRUE    # stratified Cox on matched pairs -->
-<!--   ) -->
-<!-- ) -->
-<!-- ``` -->
+#### CohortSurvival
 
-------------------------------------------------------------------------
+`CohortSurvival` can estimate Kaplan-Meier survival directly from the target and outcome cohorts. The target cohort defines who is at risk and the outcome cohort defines the event.
 
-## Step 3: Propensity score estimation and matching
+```{r step1-survival, eval=FALSE}
+survivalResult <- estimateSingleEventSurvival(
+  cdm = cdm,
+  targetCohortTable = "study_cohorts",
+  outcomeCohortTable = "ap_cohort",
+  outcomeWashout = Inf,       # no previous AP
+  followUpDays = 1095,        # 3 years
+  censorOnCohortExit = TRUE,  # includes death exit
+  strata = list("cohort_definition_id")
+)
+```
 
-# ```{r ps-matching, eval=FALSE}
-# # Extract cohorts and covariates
-# cohortMethodData <- CohortMethod::getDbCohortMethodData(
-#   connectionDetails      = connectionDetails,
-#   cdmDatabaseSchema      = "omop_cdm",
-#   targetId               = 1,    # semaglutide cohort_definition_id
-#   comparatorId           = 2,    # liraglutide cohort_definition_id
-#   outcomeIds             = 3,    # acute pancreatitis outcome cohort
-#   exposureDatabaseSchema = "results",
-#   exposureTable          = "glp1_cohorts",
-#   outcomeDatabaseSchema  = "results",
-#   outcomeTable           = "ap_cohort",
-#   covariateSettings      = covariateSettings
-# )
-# 
-# # Create study population
-# studyPop <- CohortMethod::createStudyPopulation(
-#   cohortMethodData       = cohortMethodData,
-#   outcomeId              = 3,
-#   removeSubjectsWithPriorOutcome = TRUE,
-#   riskWindowStart        = 0,
-#   riskWindowEnd          = 1095
-# )
-# 
-# # Estimate propensity score (LASSO logistic regression via Cyclops)
-# ps <- CohortMethod::createPs(
-#   cohortMethodData = cohortMethodData,
-#   population       = studyPop
-# )
-# 
-# # Plot PS distribution — check for overlap before matching
-# CohortMethod::plotPs(ps,
-#   scale         = "preference",
-#   showCountsLabel = TRUE,
-#   showAucLabel    = TRUE
-# )
-# ```
+#### CohortMethod
 
-::: callout-tip
-## The preference score plot is your most important diagnostic
+For causal estimation, `CohortMethod` creates the study population from the two exposure cohorts and the outcome. It can exclude people with prior outcomes and define the risk window.
 
-Before matching, plot the propensity score distributions of the two cohorts on the **preference score** scale (which re-scales the PS to account for prevalence differences). If the distributions do not overlap substantially, matching is impossible for a large fraction of patients — you have an equipoise problem and your causal estimate will be extrapolating outside the region of common support.
+```{r step1-method, eval=FALSE}
+# Extract the data needed for CohortMethod -----------------------------
+# Define which types of covariates must be constructed:
+covSettings <- createDefaultCovariateSettings(
+  excludedCovariateConceptIds = c(semaglutideConceptId, tirzepatideConceptId),
+  addDescendantsToExclude = TRUE
+)
+
+# Load data:
+cohortMethodData <- getDbCohortMethodData(
+  connectionDetails = connectionDetails,
+  cdmDatabaseSchema = cdmDatabaseSchema,
+  targetId = 1,
+  comparatorId = 2,
+  outcomeIds = 4,
+  exposureDatabaseSchema = cohortDatabaseSchema,
+  exposureTable = cohortTable,
+  outcomeDatabaseSchema = cohortDatabaseSchema,
+  outcomeTable = cohortTable,
+  nestingCohortDatabaseSchema = cohortDatabaseSchema,
+  nestingCohortTable = cohortTable,
+  getDbCohortMethodDataArgs = createGetDbCohortMethodDataArgs(
+    removeDuplicateSubjects = "keep first, truncate to second",
+    firstExposureOnly = TRUE,
+    washoutPeriod = 365,
+    restrictToCommonPeriod = TRUE,
+    nestingCohortId = 3,
+    covariateSettings = covSettings
+  )
+)
+cohortMethodData
+
+studyPop <- createStudyPopulation(
+  cohortMethodData = cohortMethodData,
+  removeSubjectsWithPriorOutcome = TRUE,
+  minDaysAtRisk = 1,
+  riskWindowStart = 0,
+  startAnchor = "cohort start",
+  riskWindowEnd = 1095,
+  endAnchor = "cohort end"
+)
+
+```
+
+For this study, baseline variables should include information such as:
+
+- age and sex
+- T2DM history and duration
+- obesity and related metabolic conditions
+- previous pancreatitis or pancreatic disease
+- gallbladder disease
+- alcohol-related conditions
+- hypertriglyceridaemia
+- renal disease
+- cardiovascular disease
+- diabetes medications and other relevant drugs
+- healthcare utilisation
+
+::: callout-important
+Simple rule for covariates: **use information measured before treatment starts**.
 :::
 
-<!-- ```{r matching, eval=FALSE} -->
-<!-- # 1:1 nearest-neighbour matching on log PS -->
-<!-- matchedPop <- CohortMethod::matchOnPs( -->
-<!--   population      = ps, -->
-<!--   caliper         = 0.2,           # 0.2 SD of log PS -->
-<!--   caliperScale    = "standardized logit", -->
-<!--   maxRatio        = 1              # 1:1 matching -->
-<!-- ) -->
+### Step 2: Estimate the propensity score
 
-<!-- # Check balance after matching -->
-<!-- bal <- CohortMethod::computeCovariateBalance(matchedPop, cohortMethodData) -->
-<!-- CohortMethod::plotCovariateBalanceScatterPlot(bal, -->
-<!--   showCovariateCountLabel = TRUE, -->
-<!--   showMaxLabel            = TRUE -->
-<!-- ) -->
-<!-- ``` -->
+The propensity score summarises the probability of receiving treatment A (semaglutide) rather than treatment B (tirzepatide), given measured baseline covariates. `CohortMethod::createPs()` fits the propensity model. In current versions of `CohortMethod`, IPTW is also derived from the propensity scores.
 
-> **Our study:** After 1:1 matching, we expect the Love plot to show all covariates with SMD below 0.1. If several covariates remain above 0.1 after matching, consider switching to IPTW or adding interaction terms to the propensity score model.
+#### CohortSurvival
 
-------------------------------------------------------------------------
+`CohortSurvival` uses a weight column when estimating the Kaplan-Meier curve to account for the Propensity Score, so you obtained the weighted survival directly.
 
-## Step 4: Outcome model (Cox regression)
+```{r step3-survival-weight, eval=FALSE}
+weightedSurvival <- estimateSingleEventSurvival(
+  cdm = cdm,
+  targetCohortTable = "study_cohorts",
+  outcomeCohortTable = "ap_cohort",
+  weight = "iptw",
+  outcomeWashout = Inf,
+  followUpDays = 1095,
+  censorOnCohortExit = TRUE
+)
+```
 
-<!-- ```{r cox, eval=FALSE} -->
-<!-- # Fit stratified Cox model on matched pairs -->
-<!-- outcomeModel <- CohortMethod::fitOutcomeModel( -->
-<!--   population       = matchedPop, -->
-<!--   cohortMethodData = cohortMethodData, -->
-<!--   outcomeId        = 3, -->
-<!--   modelType        = "cox", -->
-<!--   stratified       = TRUE    # condition on matched pairs -->
-<!-- ) -->
+#### CohortMethod
 
-<!-- summary(outcomeModel) -->
-<!-- # Key output: HR (95% CI), p-value -->
-<!-- ``` -->
+```{r step3-ps, eval=FALSE}
+ps <- createPs(
+  cohortMethodData = cohortMethodData,
+  population = studyPop
+)
 
-------------------------------------------------------------------------
+computePsAuc(ps)
 
-## Step 5: Negative control calibration
+plotPs(ps,
+targetLabel = "semaglutide",
+comparatorLabel = "tirzepatide",
+showCountsLabel = TRUE,
+showAucLabel = TRUE,
+showEquipoiseLabel = TRUE)
+```
 
-This is the step that distinguishes a rigorous OHDSI analysis from a conventional pharmacoepidemiology study. Negative controls are outcomes where we know (from clinical reasoning) that the exposure has no causal effect. If our analysis pipeline has systematic error (residual confounding, outcome misclassification, time-at-risk misspecification), the negative control estimates will not be centred on a HR of 1.0.
-
-<!-- ```{r negative-controls, eval=FALSE} -->
-<!-- # Negative control outcomes (conditions causally unrelated to GLP-1 RAs) -->
-<!-- # e.g. ingrown toenail, ankle sprain, foreign body in ear -->
-<!-- negativeControlIds <- c( -->
-<!--   440448,  # ingrown nail -->
-<!--   81151,   # ankle sprain -->
-<!--   374914   # foreign body in ear -->
-<!--   # ... typically 50-100 negative controls -->
-<!-- ) -->
-
-<!-- # Run the same analysis pipeline on all negative controls -->
-<!-- ncResults <- CohortMethod::runCmAnalyses( -->
-<!--   connectionDetails = connectionDetails, -->
-<!--   # ... same settings as primary analysis -->
-<!--   # ... but with outcomeIds = negativeControlIds -->
-<!-- ) -->
-
-<!-- # Fit calibration model -->
-<!-- nullDist <- EmpiricalCalibration::fitMcmcNull( -->
-<!--   logRr   = ncResults$logRr, -->
-<!--   seLogRr = ncResults$seLogRr -->
-<!-- ) -->
-
-<!-- # Plot the null distribution -->
-<!-- EmpiricalCalibration::plotCalibrationEffect( -->
-<!--   logRrNegatives  = ncResults$logRr, -->
-<!--   seLogRrNegatives = ncResults$seLogRr, -->
-<!--   logRrPositives  = log(outcomeModel$outcomeModelTreatmentEstimate$estimate), -->
-<!--   seLogRrPositives = outcomeModel$outcomeModelTreatmentEstimate$logRrSe -->
-<!-- ) -->
-
-<!-- # Apply calibration to the primary estimate -->
-<!-- calibratedEstimate <- EmpiricalCalibration::calibrateP( -->
-<!--   null    = nullDist, -->
-<!--   logRr   = log(outcomeModel$outcomeModelTreatmentEstimate$estimate), -->
-<!--   seLogRr = outcomeModel$outcomeModelTreatmentEstimate$logRrSe -->
-<!-- ) -->
-<!-- calibratedEstimate -->
-<!-- ``` -->
-
-> **Our study:** If the negative control estimates are systematically shifted above HR = 1.0 (suggesting our analysis over-estimates risk), this means there is residual confounding — semaglutide users are sicker than liraglutide users in ways our propensity score did not fully capture. The calibrated HR corrects for this bias empirically. A calibrated p-value above the threshold after this correction means the primary finding is not robust to systematic error.
+::: callout-tip
+Look for **substantial overlap** in the propensity-score distributions. Poor overlap means that some patients are very unlikely to receive one of the two treatments, so the comparison becomes dependent on extrapolation.
+:::
 
 ```{r q1, echo=FALSE, results='asis'}
 cat(
-  "**Quick check:** After running 75 negative control outcomes through the same pipeline",
-  "as your primary analysis, you find that the median HR for negative controls is 1.28",
-  "(rather than the expected 1.0). What does this tell you?\n\n",
+  "**Quick check:** If the two propensity-score distributions have almost no overlap, what problem does this create for a causal comparison?\n\n",
   mcq(c(
-    "GLP-1 RAs increase risk of most conditions by 28%, which is a class effect",
-    "Your negative control outcomes were not truly negative controls",
-    answer = "There is systematic positive bias in your analysis — likely residual confounding — which is inflating all HRs by approximately 28%; the calibration step will correct for this",
-    "The propensity score model is perfectly calibrated"
+    "You can do the Cox regression without adjustment for confounding because there is no confounding if the populations are too different.",
+    answer = "The causal effect estimate will be unreliable because the treatment groups are not comparable.",
+    "The causal effect estimate is unreliable because the propensity scores were calculated incorrectly."
   )), "\n\n"
 )
 ```
 
-`r hide("Explanation")` A systematic shift in negative control estimates away from HR = 1.0 is the definition of systematic error in your analytical pipeline. Since negative controls are chosen specifically because GLP-1 RAs should have no causal effect on them, any deviation from 1.0 must be due to bias in the analysis — most commonly residual confounding (sicker patients in one group), differential observation (one group has more healthcare contacts and therefore more coded diagnoses), or immortal time bias. The `EmpiricalCalibration` package uses the distribution of negative control estimates to model this systematic error and correct the primary estimate and its p-value accordingly. `r unhide()`
+### Step 3: Adjust for confounding
 
-------------------------------------------------------------------------
+Here we show two simple approaches:
 
-## Step 6: Kaplan-Meier plot
+1.  **Propensity-score matching**
+2.  **Inverse probability of treatment weighting (IPTW)**
 
-<!-- ```{r km-plot, eval=FALSE} -->
-<!-- CohortMethod::plotKaplanMeier( -->
-<!--   population  = matchedPop, -->
-<!--   outcomeId   = 3, -->
-<!--   confidenceIntervals = TRUE -->
-<!-- ) -->
-<!-- ``` -->
+#### Propensity-score matching
 
-------------------------------------------------------------------------
+```{r step4-matching, eval=FALSE}
+matchedPop <- matchOnPs(
+  population = ps,
+  matchOnPsArgs = createMatchOnPsArgs(
+    maxRatio = 1,
+    caliper = 0.2, # adjust at convenience
+    caliperScale = "standardized logit"
+  )
+)
 
-## Interpreting the hazard ratio
+balance <- computeCovariateBalance(
+  population = matchedPop,
+  cohortMethodData = cmData
+)
 
-```{r q2, echo=FALSE, results='asis'}
-cat(
-  "**Quick check:** Your calibrated HR for acute pancreatitis comparing",
-  "semaglutide vs. liraglutide is 0.87 (95% CI: 0.71–1.06, calibrated p = 0.18).",
-  "What is the correct conclusion?\n\n",
-  mcq(c(
-    "Semaglutide is significantly safer than liraglutide for pancreatitis",
-    "Liraglutide is significantly safer than semaglutide for pancreatitis",
-    answer = "There is no statistically significant difference in acute pancreatitis risk between semaglutide and liraglutide; the point estimate suggests a possible 13% lower risk with semaglutide but the confidence interval includes 1.0",
-    "The study is underpowered and should be repeated with a larger sample"
-  )), "\n\n"
+plotCovariateBalanceScatterPlot(
+  balance,
+  showMaxLabel = TRUE
 )
 ```
 
-`r hide("Explanation")` A HR of 0.87 with a 95% CI of 0.71–1.06 means the confidence interval includes 1.0 (no difference). The calibrated p-value of 0.18 is above any conventional threshold for statistical significance. The correct conclusion is that we found no statistically significant difference in acute pancreatitis risk between the two agents. The point estimate is directionally consistent with a small advantage for semaglutide, but the evidence is insufficient to conclude a true difference exists. This is a clinically important null finding — it provides reassurance that both agents carry similar pancreatitis risk in real-world T2DM populations. `r unhide()`
+::: callout-note
+After matching, baseline covariates should be reasonably balanced between semaglutide and tirzepatide.
+:::
+
+`matchOnPs()` performs propensity-score matching and removes people who cannot be matched within the specified criteria.
+
+#### IPTW
+
+```{r step4-iptw, eval=FALSE}
+iptwPop <- truncateIptw(
+  population = ps,
+  truncateIptwArgs = createTruncateIptwArgs(
+    maxWeight = 10
+  )
+)
+```
+
+Truncation reduces the influence of very large weights. `CohortMethod` supports IPTW directly in the outcome model.
+
+```{r tf, echo=FALSE, results='asis'}
+cat("Why might matching and IPTW give slightly different estimates even when both use the same propensity score?")
+cat("They must produce exactly the same estimate because they use the same propensity score.", torf(FALSE))
+cat("Matching focuses on creating comparable treated-control pairs, whereas IPTW uses the propensity score to weight the entire sample, so the resulting target populations can differ.", torf(TRUE))
+cat("IPTW can give very large weights to patients with propensity scores near 0 or 1, while matching may exclude patients who lack suitable counterparts.", torf(TRUE))
+cat("Any difference between matching and IPTW proves that the propensity-score model was incorrectly specified.", torf(FALSE))
+```
+
+### Step 4: Estimate the effect of treatment with Cox regression
+
+The main outcome is time to first acute pancreatitis.
+
+#### CohortMethod: Cox regression after matching
+
+```{r step5-cox, eval=FALSE}
+outcomeModel <- fitOutcomeModel(
+  population = matchedPop,
+  fitOutcomeModelArgs = createFitOutcomeModelArgs(
+    modelType = "cox",
+    stratified = TRUE
+  )
+)
+
+```
+
+::: callout-note
+The main result is the **hazard ratio (HR)** for semaglutide versus tirzepatide.
+
+- HR \< 1: lower instantaneous risk with semaglutide
+- HR = 1: no difference
+- HR \> 1: higher instantaneous risk with semaglutide
+:::
+
+`CohortMethod` uses Cox regression for time-to-event analyses and can fit the model after propensity-score matching.
+
+#### IPTW Cox regression
+
+```{r step5-iptw-cox, eval=FALSE}
+iptwOutcomeModel <- fitOutcomeModel(
+  population = iptwPop,
+  fitOutcomeModelArgs = createFitOutcomeModelArgs(
+    modelType = "cox",
+    inversePtWeighting = TRUE,
+    bootstrapCi = TRUE
+  )
+)
+
+```
+
+::: callout-important
+A hazard ratio is a relative measure. It does not tell us the absolute probability of acute pancreatitis. The Kaplan-Meier analysis in the next step helps describe the absolute event experience over time.
+:::
+
+```{r tf2, echo=FALSE, results='asis'}
+cat("Suppose the HR for semaglutide versus tirzepatide is 0.80 with a 95% CI of 0.60-1.07. Is it correct to say that semaglutide reduces acute pancreatitis risk?")
+cat("Yes because the average effect is under 1.", torf(FALSE))
+cat("No, because the confidence interval crosses 1, the threshold for signifcant difference of effect.", torf(TRUE))
+cat("No, but because you need to add that reduces the comparative risk of pancreatitis.", torf(FALSE))
+```
+
+`r hide("Explanation")` Although you do need to word it as "comparative risk" because you are not obtaining a measure of the absolute risk of acute pancreatitis but the comparative risk of suffering from acute pancreatitis depending on the treatment you take! `r unhide()`
+
+### Step 5: Kaplan-Meier curves
+
+Kaplan-Meier curves provide a simple visual description of time to acute pancreatitis.
+
+#### CohortSurvival
+
+```{r step6-km-survival, eval=FALSE}
+survivalResult <- estimateSingleEventSurvival(
+  cdm = cdm,
+  targetCohortTable = "study_cohorts",
+  outcomeCohortTable = "ap_cohort",
+  outcomeWashout = Inf,
+  followUpDays = 1095,
+  censorOnCohortExit = TRUE,
+  strata = list("cohort_definition_id")
+)
+
+# or, as you saw before!
+
+weightedSurvival <- estimateSingleEventSurvival(
+  cdm = cdm,
+  targetCohortTable = "study_cohorts",
+  outcomeCohortTable = "ap_cohort",
+  weight = "iptw",
+  outcomeWashout = Inf,
+  followUpDays = 1095,
+  censorOnCohortExit = TRUE,
+  strata = list("cohort_definition_id")
+)
+
+```
+
+The result contains survival estimates and event information that can be used to produce Kaplan-Meier displays.
+
+::: callout-note
+`CohortSurvival` also supports weighting and stratification.
+:::
+
+#### CohortMethod
+
+```{r step6-km-method, eval=FALSE}
+plotKaplanMeier(
+  population = matchedPop,
+  outcomeId = acutePancreatitisId,
+  confidenceIntervals = TRUE
+)
+```
+
+The two curves should be interpreted together with the Cox estimate. A small visual separation does not necessarily imply a clinically important difference.
+
+### Negative controls
+
+A negative control is an outcome that you include in the analysis for which there is **no plausible causal effect of the treatment**, but which is recorded in the same healthcare data. Including negative control outcomes is good praxis to look for evidence of systematic error such as residual confounding.
+
+::: callout-warning
+Do not choose negative controls just because they are easy to find. They should be clinically unrelated to the exposure and outcome, while still being recorded often enough to be informative.
+:::
+
+### Extracting the results
+
+The final extraction should contain only the results needed to report this study:
+
+- number of semaglutide users
+- number of tirzepatide users
+- number with acute pancreatitis
+- follow-up time
+- matched Cox HR and 95% CI
+- IPTW Cox HR and 95% CI
+- Kaplan-Meier estimates
+- negative-control estimates
+
+For the survival results, `CohortSurvival` returns a `summarised_result` object that can be inspected or converted with `asSurvivalResult()`.
+
+```{r extract-results, eval=FALSE}
+# Survival results
+survivalTable <- asSurvivalResult(
+  survivalResult
+)
+
+# Main Cox estimate
+mainEstimate <- data.frame(
+  analysis = "PS matched Cox",
+  estimate = coef(outcomeModel),
+  lower_95 = confint(outcomeModel)[1],
+  upper_95 = confint(outcomeModel)[2]
+)
+
+# IPTW sensitivity estimate
+iptwEstimate <- data.frame(
+  analysis = "IPTW Cox",
+  estimate = coef(iptwOutcomeModel),
+  lower_95 = confint(iptwOutcomeModel)[1],
+  upper_95 = confint(iptwOutcomeModel)[2]
+)
+
+mainEstimate
+iptwEstimate
+survivalTable
+```
+
+::: callout-tip
+For a study report, keep the extraction step separate from the analysis code. This makes it easier to rerun the analysis without changing how results are reported.
+:::
 
 ## Exporting the results
 
 You can export a summarised result with all the objects that you created from your different calculations, and then read that file in a Shiny App to show the results. The package for that is [OmopViewer](https://ohdsi.github.io/OmopViewer/) but [visOmopResults](https://darwin-eu.github.io/visOmopResults/) and each package own functions allow for it too.
 
-<!-- ```{r export, eval=FALSE} -->
-<!-- # Suppress small cell counts before sharing -->
-<!-- minCellCount <- 5  -->
+```{r export, eval=FALSE}
+# Suppress small cell counts before sharing
+minCellCount <- 5 
 
-<!-- exportSummarisedResult( -->
-<!--   inc, -->
-<!--   prev, -->
-<!--   pointPrev, -->
-<!--   minCellCount = minCellCount, -->
-<!--   path = here("Results"), -->
-<!--   fileName = "GregonBoard_incprev_{cdm_name}_{date}.csv" -->
-<!-- ) -->
+exportSummarisedResult(
+  mainEstimate,
+  iptwEstimate,
+  survivalTable,
+  minCellCount = minCellCount,
+  path = here("Results"),
+  fileName = "GregonBoard_survival_{cdm_name}_{date}.csv"
+)
 
-<!-- ``` -->
+```

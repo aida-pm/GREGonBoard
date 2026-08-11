@@ -29,7 +29,7 @@ You can check what are SQL databases [here](https://cloud.google.com/discover/wh
 The packages covered across these tutorial chapters are:
 
 | Package | Purpose |
-|------------------------------------|------------------------------------|
+|----|----|
 | [`CDMConnector`](https://darwin-eu.github.io/CDMConnector/index.html) | Connect to any OMOP CDM database |
 | [`omopgenerics`](https://darwin-eu.github.io/omopgenerics/) | Shared data structures and utilities |
 | [`omock`](https://ohdsi.github.io/omock/) | Generate synthetic OMOP data for testing |
@@ -222,6 +222,7 @@ library(omopgenerics)
 library(omock)
 library(CDMConnector)
 library(dplyr)
+library(duckdb)
 
 # Create a synthetic CDM with 1000 people
 cdm <- omock::mockCdmReference() |>
@@ -231,6 +232,16 @@ cdm <- omock::mockCdmReference() |>
   omock::mockDrugExposure() |>
   omock::mockDeath()
 
+# Download mock datasets from omock
+downloadMockDataset(datasetName = "GiBleed", path = NULL, overwrite = NULL)
+
+# With Eunomia
+requireEunomia()
+db <- DBI::dbConnect(duckdb::duckdb(), dbdir = eunomiaDir())
+cdm <- cdmFromCon(db, 
+                  cdmSchema = "main", 
+                  writeSchema = "main", 
+                  writePrefix = "greg_") # change the prefix at your convenience
 cdm
 ```
 

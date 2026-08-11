@@ -104,6 +104,11 @@ cdm <- bind(cdm$semaglutide_cohort, cdm$t2dm_cohort, cdm$ap_cohort, name = "stud
 
 ```
 
+::: callout-note
+If the CDM you use does not have the `concept id` that allow you to do the exercises, please, try another CDM or use another substance/disease! 
+:::
+
+
 ------------------------------------------------------------------------
 
 ## Example pipeline
@@ -112,14 +117,14 @@ In this tutorial we will provide an example on how to do a descriptive/character
 
 ### 1. Cohort counts
 
-```{r counts, message=FALSE, warning=FALSE}
+```{r counts, message=FALSE, warning=FALSE, eval=FALSE}
 counts <- summariseCohortCount(cdm$study_cohorts)
 tableCohortCount(counts)
 ```
 
 ### 2. Basic demographics
 
-```{r demographics, message=FALSE, warning=FALSE}
+```{r demographics, message=FALSE, warning=FALSE, eval=FALSE}
 resultsBlc <- summariseCharacteristics(
   cohort   = cdm$study_cohorts,
   ageGroup = list(c(18, 44), c(45, 64), c(65, 150))
@@ -130,7 +135,7 @@ resultsBlc <- summariseCharacteristics(
 
 Large-scale characterisation reports the prevalence of *every* domain (condition, drug, procedure...) in a specified time window around the index date. This produces potentially thousands of features. We can also look for the most common ones in our cohorts!
 
-```{r lsc, message=FALSE, warning=FALSE}
+```{r lsc, message=FALSE, warning=FALSE, eval=FALSE}
 resultsLsc <- cdm$study_cohorts |>
   summariseLargeScaleCharacteristics(
     window           = list(c(-365, -1), c(0, 0), c(1, 30)), # We usually add multiple time windows in which to assess ls characteristics
@@ -151,7 +156,7 @@ resultsLsc <- cdm$study_cohorts |>
 
 When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD) [@Nguyen2024] for each covariate. Any covariate with SMD $\ge$ 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characte
 
-```{r smd, message=FALSE, warning=FALSE}
+```{r smd, message=FALSE, warning=FALSE, eval=FALSE}
 resultsSmd <- resultsLsc |>
   plotComparedLargeScaleCharacteristics(
     reference = "semaglutide",
@@ -159,7 +164,7 @@ resultsSmd <- resultsLsc |>
   )
 ```
 
-```{r q1, echo=FALSE, results='asis'}
+```{r q1, echo=FALSE, results='asis', eval=FALSE}
 cat(
   "**Quick check:** You are characterising the five GLP-1 RA cohorts.",
   "You find that 28% of exenatide users have a prior record of cholelithiasis,",
@@ -177,7 +182,7 @@ cat(
 
 ### 5. Cohort overlap
 
-```{r overlap, message=FALSE, warning=FALSE}
+```{r overlap, message=FALSE, warning=FALSE, eval=FALSE}
 resultsOverlap <- summariseCohortOverlap(cdm$study_cohorts)
 ```
 
