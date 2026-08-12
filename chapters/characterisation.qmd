@@ -114,14 +114,14 @@ If the CDM you use does not have the `concept id` that allow you to do the exerc
 
 In this tutorial we will provide an example on how to do a descriptive/characterisation study with `CohortCharacteristics`, but further documentation can be found in the [package documentation](https://darwin-eu.github.io/CohortCharacteristics/), with all available functions in its [reference index](https://darwin-eu.github.io/CohortCharacteristics/reference/index.html) and in [this other tutorial](https://dpa-pde-oxford.quarto.pub/cohortcharacteristics-team-training/#/title-slide).
 
-### 1. Cohort counts
+### Cohort counts
 
 ```{r counts, message=FALSE, warning=FALSE, eval=FALSE}
 counts <- summariseCohortCount(cdm$study_cohorts)
 tableCohortCount(counts)
 ```
 
-### 2. Basic demographics
+### Basic demographics
 
 ```{r demographics, message=FALSE, warning=FALSE, eval=FALSE}
 resultsBlc <- summariseCharacteristics(
@@ -130,7 +130,7 @@ resultsBlc <- summariseCharacteristics(
 )
 ```
 
-### 3. Large-scale characteristics
+### Large-scale characteristics
 
 Large-scale characterisation reports the prevalence of *every* domain (condition, drug, procedure...) in a specified time window around the index date. This produces potentially thousands of features. We can also look for the most common ones in our cohorts!
 
@@ -151,9 +151,9 @@ resultsLsc <- cdm$study_cohorts |>
 - `c(1, 30)` or the 30 days after index: captures early treatment patterns and complications (not used for baseline characterisation, but useful for drug utilisation analyses)
 :::
 
-### 4. Comparing cohorts: the SMD
+### Comparing cohorts: the SMD
 
-When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD) [@Nguyen2024] for each covariate. Any covariate with SMD $\ge$ 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characte
+When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD) [@Nguyen2024] for each covariate. Any covariate with SMD $\ge$ 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characterisation.
 
 ```{r smd, message=FALSE, warning=FALSE, eval=FALSE}
 resultsSmd <- resultsLsc |>
@@ -163,23 +163,22 @@ resultsSmd <- resultsLsc |>
   )
 ```
 
-```{r q1, echo=TRUE}
+Let's do a quick check now!
+
+```{r q1, echo=F, , results='asis'}
 cat(
-  "**Quick check:** You are characterising the five GLP-1 RA cohorts.",
-  "You find that 28% of exenatide users have a prior record of cholelithiasis,",
-  "compared to 11% of semaglutide users. This is an SMD of 0.47. What should you do?\n",
-  mcq(c(
+  "**Quick check:** You are characterising the five GLP-1 RA cohorts. You find that 28% of exenatide users have a prior record of cholelithiasis compared to 11% of semaglutide users. This is an SMD of 0.47. What should you do?\n\n",
+mcq(c(
     "Borderline, can be ignored if the outcome is not hepatobiliary",
     "Borderline, adjust in the outcome model only",
     answer = "SLarge imbalance, include cholelithiasis in the propensity score model since it is a strong confounder for AP",
     "Large imbalance, exclude all patients with cholelithiasis from both cohorts"
-  )), "\n\n"
-)
+  )), "\n\n")
 ```
 
 `r hide("Explanation")` The SMD ≈ 0.47, this is a large imbalance. Since cholelithiasis (gallstones) is the most common cause of acute pancreatitis worldwide, this is a strong confounder, because not only it is differentially distributed between the cohorts but also directly causes the outcome. It must be included in the propensity score model. Excluding patients with cholelithiasis would change the target population and invalidate generalisation of the results. `r unhide()`
 
-### 5. Cohort overlap
+### Cohort overlap
 
 ```{r overlap, message=FALSE, warning=FALSE, eval=FALSE}
 resultsOverlap <- summariseCohortOverlap(cdm$study_cohorts)

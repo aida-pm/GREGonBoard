@@ -474,11 +474,11 @@ iptwPop <- truncateIptw(
 Truncation reduces the influence of very large weights. `CohortMethod` supports IPTW directly in the outcome model.
 
 ```{r tf, echo=FALSE, results='asis'}
-cat("Why might matching and IPTW give slightly different estimates even when both use the same propensity score?")
-cat("They must produce exactly the same estimate because they use the same propensity score.", torf(FALSE))
-cat("Matching focuses on creating comparable treated-control pairs, whereas IPTW uses the propensity score to weight the entire sample, so the resulting target populations can differ.", torf(TRUE))
-cat("IPTW can give very large weights to patients with propensity scores near 0 or 1, while matching may exclude patients who lack suitable counterparts.", torf(TRUE))
-cat("Any difference between matching and IPTW proves that the propensity-score model was incorrectly specified.", torf(FALSE))
+cat("Why might matching and IPTW give slightly different estimates even when both use the same propensity score?\n\n")
+cat("They must produce exactly the same estimate because they use the same propensity score.", torf(FALSE), "\n\n")
+cat("Matching focuses on creating comparable treated-control pairs, whereas IPTW uses the propensity score to weight the entire sample, so the resulting target populations can differ.", torf(TRUE), "\n\n")
+cat("IPTW can give very large weights to patients with propensity scores near 0 or 1, while matching may exclude patients who lack suitable counterparts.", torf(TRUE), "\n\n")
+cat("Any difference between matching and IPTW proves that the propensity-score model was incorrectly specified.", torf(FALSE), "\n\n")
 ```
 
 ### Step 4: Estimate the effect of treatment with Cox regression
@@ -527,10 +527,10 @@ A hazard ratio is a relative measure. It does not tell us the absolute probabili
 :::
 
 ```{r tf2, echo=FALSE, results='asis'}
-cat("Suppose the HR for semaglutide versus tirzepatide is 0.80 with a 95% CI of 0.60-1.07. Is it correct to say that semaglutide reduces acute pancreatitis risk?")
-cat("Yes because the average effect is under 1.", torf(FALSE))
-cat("No, because the confidence interval crosses 1, the threshold for signifcant difference of effect.", torf(TRUE))
-cat("No, but because you need to add that reduces the comparative risk of pancreatitis.", torf(FALSE))
+cat("Suppose the HR for semaglutide versus tirzepatide is 0.80 with a 95% CI of 0.60-1.07. Is it correct to say that semaglutide reduces acute pancreatitis risk?\n\n")
+cat("Yes because the average effect is under 1.", torf(FALSE), "\n\n")
+cat("No, because the confidence interval crosses 1, the threshold for signifcant difference of effect.", torf(TRUE), "\n\n")
+cat("No, but because you need to add that reduces the comparative risk of pancreatitis.", torf(FALSE), "\n\n")
 ```
 
 `r hide("Explanation")` Although you do need to word it as "comparative risk" because you are not obtaining a measure of the absolute risk of acute pancreatitis but the comparative risk of suffering from acute pancreatitis depending on the treatment you take! `r unhide()`

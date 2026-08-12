@@ -1061,7 +1061,11 @@ Note
 </details>
 </div>
 <p>Truncation reduces the influence of very large weights. <code>CohortMethod</code> supports IPTW directly in the outcome model.</p>
-<p>Why might matching and IPTW give slightly different estimates even when both use the same propensity score?They must produce exactly the same estimate because they use the same propensity score. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select>Matching focuses on creating comparable treated-control pairs, whereas IPTW uses the propensity score to weight the entire sample, so the resulting target populations can differ. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select>IPTW can give very large weights to patients with propensity scores near 0 or 1, while matching may exclude patients who lack suitable counterparts. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select>Any difference between matching and IPTW proves that the propensity-score model was incorrectly specified. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
+<p>Why might matching and IPTW give slightly different estimates even when both use the same propensity score?</p>
+<p>They must produce exactly the same estimate because they use the same propensity score. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
+<p>Matching focuses on creating comparable treated-control pairs, whereas IPTW uses the propensity score to weight the entire sample, so the resulting target populations can differ. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></p>
+<p>IPTW can give very large weights to patients with propensity scores near 0 or 1, while matching may exclude patients who lack suitable counterparts. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></p>
+<p>Any difference between matching and IPTW proves that the propensity-score model was incorrectly specified. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
 </section>
 </section>
 <section id="step-4-estimate-the-effect-of-treatment-with-cox-regression" class="level3" data-number="3.4">
@@ -1129,7 +1133,10 @@ Important
 <p>A hazard ratio is a relative measure. It does not tell us the absolute probability of acute pancreatitis. The Kaplan-Meier analysis in the next step helps describe the absolute event experience over time.</p>
 </div>
 </div>
-<p>Suppose the HR for semaglutide versus tirzepatide is 0.80 with a 95% CI of 0.60-1.07. Is it correct to say that semaglutide reduces acute pancreatitis risk?Yes because the average effect is under 1. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select>No, because the confidence interval crosses 1, the threshold for signifcant difference of effect. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select>No, but because you need to add that reduces the comparative risk of pancreatitis. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
+<p>Suppose the HR for semaglutide versus tirzepatide is 0.80 with a 95% CI of 0.60-1.07. Is it correct to say that semaglutide reduces acute pancreatitis risk?</p>
+<p>Yes because the average effect is under 1. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
+<p>No, because the confidence interval crosses 1, the threshold for signifcant difference of effect. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></p>
+<p>No, but because you need to add that reduces the comparative risk of pancreatitis. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></p>
 <div class="webex-solution">
 <button>
 Explanation

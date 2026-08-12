@@ -193,10 +193,10 @@ indication_result |>
 ```
 
 ```{r tf, echo=FALSE, results='asis'}
-cat("**Quick check:** You run the summarise indication function for semaglutide and most of the indications are `unknown`. What is the most plausible cause?")
-cat("Semaglutide is being used off-label more than what we thought", torf(FALSE))
-cat("Indication is not well-recorded in the database", torf(TRUE))
-cat("We have not created a good enough indications cohort", torf(FALSE))
+cat("**Quick check:** You run the summarise indication function for semaglutide and most of the indications are `unknown`. What is the most plausible cause?\n\n")
+cat("- Semaglutide is being used off-label more than what we thought:", torf(FALSE), "\n\n")
+cat("- Indication is not well-recorded in the database:", torf(TRUE), "\n\n")
+cat("- We have not created a good enough indications cohort:", torf(FALSE), "\n\n")
 ```
 
 ### Step 4: Treatment adherence

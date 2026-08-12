@@ -555,11 +555,11 @@ window.Quarto = {
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
   <li><a href="#example-pipeline" id="toc-example-pipeline" class="nav-link" data-scroll-target="#example-pipeline"><span class="header-section-number">3</span> Example pipeline</a>
   <ul class="collapse">
-  <li><a href="#cohort-counts" id="toc-cohort-counts" class="nav-link" data-scroll-target="#cohort-counts"><span class="header-section-number">3.1</span> 1. Cohort counts</a></li>
-  <li><a href="#basic-demographics" id="toc-basic-demographics" class="nav-link" data-scroll-target="#basic-demographics"><span class="header-section-number">3.2</span> 2. Basic demographics</a></li>
-  <li><a href="#large-scale-characteristics" id="toc-large-scale-characteristics" class="nav-link" data-scroll-target="#large-scale-characteristics"><span class="header-section-number">3.3</span> 3. Large-scale characteristics</a></li>
-  <li><a href="#comparing-cohorts-the-smd" id="toc-comparing-cohorts-the-smd" class="nav-link" data-scroll-target="#comparing-cohorts-the-smd"><span class="header-section-number">3.4</span> 4. Comparing cohorts: the SMD</a></li>
-  <li><a href="#cohort-overlap" id="toc-cohort-overlap" class="nav-link" data-scroll-target="#cohort-overlap"><span class="header-section-number">3.5</span> 5. Cohort overlap</a></li>
+  <li><a href="#cohort-counts" id="toc-cohort-counts" class="nav-link" data-scroll-target="#cohort-counts"><span class="header-section-number">3.1</span> Cohort counts</a></li>
+  <li><a href="#basic-demographics" id="toc-basic-demographics" class="nav-link" data-scroll-target="#basic-demographics"><span class="header-section-number">3.2</span> Basic demographics</a></li>
+  <li><a href="#large-scale-characteristics" id="toc-large-scale-characteristics" class="nav-link" data-scroll-target="#large-scale-characteristics"><span class="header-section-number">3.3</span> Large-scale characteristics</a></li>
+  <li><a href="#comparing-cohorts-the-smd" id="toc-comparing-cohorts-the-smd" class="nav-link" data-scroll-target="#comparing-cohorts-the-smd"><span class="header-section-number">3.4</span> Comparing cohorts: the SMD</a></li>
+  <li><a href="#cohort-overlap" id="toc-cohort-overlap" class="nav-link" data-scroll-target="#cohort-overlap"><span class="header-section-number">3.5</span> Cohort overlap</a></li>
   </ul></li>
   <li><a href="#exporting-the-results" id="toc-exporting-the-results" class="nav-link" data-scroll-target="#exporting-the-results"><span class="header-section-number">4</span> Exporting the results</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography"><span class="header-section-number">5</span> Bibliography</a></li>
@@ -689,7 +689,7 @@ Note
 <h2 data-number="3" class="anchored" data-anchor-id="example-pipeline"><span class="header-section-number">3</span> Example pipeline</h2>
 <p>In this tutorial we will provide an example on how to do a descriptive/characterisation study with <code>CohortCharacteristics</code>, but further documentation can be found in the <a href="https://darwin-eu.github.io/CohortCharacteristics/">package documentation</a>, with all available functions in its <a href="https://darwin-eu.github.io/CohortCharacteristics/reference/index.html">reference index</a> and in <a href="https://dpa-pde-oxford.quarto.pub/cohortcharacteristics-team-training/#/title-slide">this other tutorial</a>.</p>
 <section id="cohort-counts" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="cohort-counts"><span class="header-section-number">3.1</span> 1. Cohort counts</h3>
+<h3 data-number="3.1" class="anchored" data-anchor-id="cohort-counts"><span class="header-section-number">3.1</span> Cohort counts</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -699,7 +699,7 @@ Note
 </div>
 </section>
 <section id="basic-demographics" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="basic-demographics"><span class="header-section-number">3.2</span> 2. Basic demographics</h3>
+<h3 data-number="3.2" class="anchored" data-anchor-id="basic-demographics"><span class="header-section-number">3.2</span> Basic demographics</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -711,7 +711,7 @@ Note
 </div>
 </section>
 <section id="large-scale-characteristics" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="large-scale-characteristics"><span class="header-section-number">3.3</span> 3. Large-scale characteristics</h3>
+<h3 data-number="3.3" class="anchored" data-anchor-id="large-scale-characteristics"><span class="header-section-number">3.3</span> Large-scale characteristics</h3>
 <p>Large-scale characterisation reports the prevalence of <em>every</em> domain (condition, drug, procedure…) in a specified time window around the index date. This produces potentially thousands of features. We can also look for the most common ones in our cohorts!</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -743,8 +743,8 @@ Note
 </div>
 </section>
 <section id="comparing-cohorts-the-smd" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="comparing-cohorts-the-smd"><span class="header-section-number">3.4</span> 4. Comparing cohorts: the SMD</h3>
-<p>When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD)<span class="citation" data-cites="Nguyen2024"><sup><a href="#ref-Nguyen2024" role="doc-biblioref">1</a></sup></span> for each covariate. Any covariate with SMD <span class="math inline">\(\ge\)</span> 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characte</p>
+<h3 data-number="3.4" class="anchored" data-anchor-id="comparing-cohorts-the-smd"><span class="header-section-number">3.4</span> Comparing cohorts: the SMD</h3>
+<p>When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD)<span class="citation" data-cites="Nguyen2024"><sup><a href="#ref-Nguyen2024" role="doc-biblioref">1</a></sup></span> for each covariate. Any covariate with SMD <span class="math inline">\(\ge\)</span> 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characterisation.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -755,26 +755,9 @@ Note
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"**Quick check:** You are characterising the five GLP-1 RA cohorts."</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"You find that 28% of exenatide users have a prior record of cholelithiasis,"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"compared to 11% of semaglutide users. This is an SMD of 0.47. What should you do?</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcq</span>(<span class="fu">c</span>(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Borderline, can be ignored if the outcome is not hepatobiliary"</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Borderline, adjust in the outcome model only"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">answer =</span> <span class="st">"SLarge imbalance, include cholelithiasis in the propensity score model since it is a strong confounder for AP"</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Large imbalance, exclude all patients with cholelithiasis from both cohorts"</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  )), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>**Quick check:** You are characterising the five GLP-1 RA cohorts. You find that 28% of exenatide users have a prior record of cholelithiasis, compared to 11% of semaglutide users. This is an SMD of 0.47. What should you do?
- &lt;select class='webex-select'&gt;&lt;option value='blank'&gt;&lt;/option&gt;&lt;option value=''&gt;Borderline, can be ignored if the outcome is not hepatobiliary&lt;/option&gt;&lt;option value=''&gt;Borderline, adjust in the outcome model only&lt;/option&gt;&lt;option value='answer'&gt;SLarge imbalance, include cholelithiasis in the propensity score model since it is a strong confounder for AP&lt;/option&gt;&lt;option value=''&gt;Large imbalance, exclude all patients with cholelithiasis from both cohorts&lt;/option&gt;&lt;/select&gt; </code></pre>
-</div>
-</div>
+<p>Let’s do a quick check now!</p>
+<p><strong>Quick check:</strong> You are characterising the five GLP-1 RA cohorts. You find that 28% of exenatide users have a prior record of cholelithiasis compared to 11% of semaglutide users. This is an SMD of 0.47. What should you do?</p>
+<p><select class="webex-select"><option value="blank"></option><option value="">Borderline, can be ignored if the outcome is not hepatobiliary</option><option value="">Borderline, adjust in the outcome model only</option><option value="answer">SLarge imbalance, include cholelithiasis in the propensity score model since it is a strong confounder for AP</option><option value="">Large imbalance, exclude all patients with cholelithiasis from both cohorts</option></select></p>
 <div class="webex-solution">
 <button>
 Explanation
@@ -783,11 +766,11 @@ Explanation
 </div>
 </section>
 <section id="cohort-overlap" class="level3" data-number="3.5">
-<h3 data-number="3.5" class="anchored" data-anchor-id="cohort-overlap"><span class="header-section-number">3.5</span> 5. Cohort overlap</h3>
+<h3 data-number="3.5" class="anchored" data-anchor-id="cohort-overlap"><span class="header-section-number">3.5</span> Cohort overlap</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>resultsOverlap <span class="ot">&lt;-</span> <span class="fu">summariseCohortOverlap</span>(cdm<span class="sc">$</span>study_cohorts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>resultsOverlap <span class="ot">&lt;-</span> <span class="fu">summariseCohortOverlap</span>(cdm<span class="sc">$</span>study_cohorts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <hr>
@@ -799,18 +782,18 @@ Explanation
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress small cell counts before sharing</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>minCellCount <span class="ot">&lt;-</span> <span class="dv">5</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">exportSummarisedResult</span>(</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  resultsBlc,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  resultsLsc,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  resultsSmd,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  resultsOverlap,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">minCellCount =</span> minCellCount,</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">here</span>(<span class="st">"Results"</span>),</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileName =</span> <span class="st">"GregonBoard_charact_{cdm_name}_{date}.csv"</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress small cell counts before sharing</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>minCellCount <span class="ot">&lt;-</span> <span class="dv">5</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">exportSummarisedResult</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  resultsBlc,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  resultsLsc,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  resultsSmd,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  resultsOverlap,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">minCellCount =</span> minCellCount,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">here</span>(<span class="st">"Results"</span>),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileName =</span> <span class="st">"GregonBoard_charact_{cdm_name}_{date}.csv"</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>

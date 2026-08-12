@@ -60,8 +60,9 @@ cdm <- cdmFromCon(db,
                   writeSchema = "main", 
                   writePrefix = "greg_") # change the prefix at your convenience
 ```
+
 ::: callout-note
-If the CDM you use does not have the `concept id` that allow you to do the exercises, please, try another CDM or use another substance/disease! 
+If the CDM you use does not have the `concept id` that allow you to do the exercises, please, try another CDM or use another substance/disease!
 :::
 
 ## Example pipeline
