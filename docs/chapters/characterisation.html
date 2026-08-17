@@ -558,7 +558,7 @@ window.Quarto = {
   <li><a href="#cohort-counts" id="toc-cohort-counts" class="nav-link" data-scroll-target="#cohort-counts"><span class="header-section-number">3.1</span> Cohort counts</a></li>
   <li><a href="#basic-demographics" id="toc-basic-demographics" class="nav-link" data-scroll-target="#basic-demographics"><span class="header-section-number">3.2</span> Basic demographics</a></li>
   <li><a href="#large-scale-characteristics" id="toc-large-scale-characteristics" class="nav-link" data-scroll-target="#large-scale-characteristics"><span class="header-section-number">3.3</span> Large-scale characteristics</a></li>
-  <li><a href="#comparing-cohorts-the-smd" id="toc-comparing-cohorts-the-smd" class="nav-link" data-scroll-target="#comparing-cohorts-the-smd"><span class="header-section-number">3.4</span> Comparing cohorts: the SMD</a></li>
+  <li><a href="#comparing-cohorts-the-standardised-mean-difference" id="toc-comparing-cohorts-the-standardised-mean-difference" class="nav-link" data-scroll-target="#comparing-cohorts-the-standardised-mean-difference"><span class="header-section-number">3.4</span> Comparing cohorts: the standardised mean difference</a></li>
   <li><a href="#cohort-overlap" id="toc-cohort-overlap" class="nav-link" data-scroll-target="#cohort-overlap"><span class="header-section-number">3.5</span> Cohort overlap</a></li>
   </ul></li>
   <li><a href="#exporting-the-results" id="toc-exporting-the-results" class="nav-link" data-scroll-target="#exporting-the-results"><span class="header-section-number">4</span> Exporting the results</a></li>
@@ -742,8 +742,8 @@ Note
 </div>
 </div>
 </section>
-<section id="comparing-cohorts-the-smd" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="comparing-cohorts-the-smd"><span class="header-section-number">3.4</span> Comparing cohorts: the SMD</h3>
+<section id="comparing-cohorts-the-standardised-mean-difference" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="comparing-cohorts-the-standardised-mean-difference"><span class="header-section-number">3.4</span> Comparing cohorts: the standardised mean difference</h3>
 <p>When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD)<span class="citation" data-cites="Nguyen2024"><sup><a href="#ref-Nguyen2024" role="doc-biblioref">1</a></sup></span> for each covariate. Any covariate with SMD <span class="math inline">\(\ge\)</span> 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characterisation.</p>
 <div class="cell">
 <details open="" class="code-fold">

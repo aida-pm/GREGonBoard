@@ -151,7 +151,7 @@ resultsLsc <- cdm$study_cohorts |>
 - `c(1, 30)` or the 30 days after index: captures early treatment patterns and complications (not used for baseline characterisation, but useful for drug utilisation analyses)
 :::
 
-### Comparing cohorts: the SMD
+### Comparing cohorts: the standardised mean difference
 
 When the goal is to compare two cohorts (as in our head-to-head GLP-1 RA safety study), we compute the standardised mean difference (SMD) [@Nguyen2024] for each covariate. Any covariate with SMD $\ge$ 0.1 is a candidate for inclusion in the propensity score model. We can do this with the CohortCharacterisation package using the compared large scale characterisation.
 

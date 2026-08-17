@@ -29,9 +29,9 @@ website:
       - chapters/standard_procedure.qmd
     - section: Design & Execution
       contents:
-      - chapters/phenotyping.qmd
       - chapters/atlas.qmd
       - chapters/using_R.qmd
+      - chapters/phenotyping.qmd
       - chapters/codelistgenerator.qmd
       - chapters/cohortconstruction.qmd
       - chapters/diagnostics.qmd

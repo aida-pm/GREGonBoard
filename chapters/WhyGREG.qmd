@@ -18,7 +18,7 @@ This is the gap that GREG was designed to address. GREG is the acronym for the p
 ::: callout-caution
 Let's take the example of medical devices:
 
-- The EMA, as a regulatory body, evaluates the safety and efficacy of a health technology; the question it asks is, broadly, does this work and is it safe?
+- The EMA, as a regulatory body, evaluates the safety and efficacy of a medicine/vaccine/device/drug-device combination; the question it asks is, broadly, does this work and is it safe?
 - HTA bodies, such as NICE in England, the Haute Autorité de Santé in France, or the G-BA in Germany ask a fundamentally different question: is this better than what we already have, and is it worth the cost?
 
 These are not the same question, and they do not require the same evidence. A medical device manufacturer may successfully obtain CE (European Conformity) marking following EMA-aligned regulatory requirements, only to face entirely different, and sometimes contradictory, evidentiary demands from each national HTA body when seeking reimbursement. The evidence generated for one purpose must then be reframed, supplemented, or entirely duplicated to satisfy another. The requirement for an active comparator arm, and the use of surrogate endpoints are areas where regulators and HTA bodies frequently disagree. Furthermore, while some HTA bodies such as NICE have established frameworks receptive to real-world evidence, many others either lack a formal policy entirely or restrict acceptable evidence to traditional clinical studies, creating a fragmented landscape where the same device, supported by the same data, may be reimbursed in one European country and rejected in another.

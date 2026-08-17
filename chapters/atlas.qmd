@@ -89,6 +89,15 @@ Cohort definitions in ATLAS are built using a drag-and-drop interface that trans
 
 ::: callout-important
 A concept set is just a list of concept IDs, it has no temporal logic and no patient-level criteria. A cohort uses concept sets as building blocks but adds the *when*, the *how long*, and the *who else qualifies*. You can think of concept sets as vocabulary and cohorts as grammar.
+
+| | **Concept Set** | **Cohort** | **Phenotype** |
+|---|---|---|---|
+| **What it is** | A named list of OMOP standard concept IDs representing a clinical entity | A set of patients who satisfy defined criteria for a period of time | An algorithm that classifies whether a patient has a clinical state, based on their recorded data |
+| **What it contains** | Concept IDs + include/exclude descendants rules | Entry event, inclusion criteria, cohort exit rule | One or more concept sets + temporal logic + validation evidence |
+| **Temporal logic?** | ❌ No, just a vocabulary list | ✅ Yes, patient entry and exit | ✅ Can but not mandatory |
+| **Patient-level?** | ❌ Not linked to any patient | ✅ Yes, table of person IDs and dates | ✅ Yes |
+| **Built in** | ATLAS Search / CodelistGenerator | ATLAS Cohort Definition / CohortConstructor | ATLAS Cohort Definition / CohortConstructor + CohortDiagnostics/PhenotypeR |
+| **Analogy** | The dictionary definition of "acute pancreatitis" | The list of patients admitted with acute pancreatitis this year | The clinical algorithm a doctor uses to decide if a patient has acute pancreatitis |
 :::
 
 #### Example of our cohort of interest:

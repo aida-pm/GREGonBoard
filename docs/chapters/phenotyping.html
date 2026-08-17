@@ -472,10 +472,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#evaluating-a-phenotype" id="toc-evaluating-a-phenotype" class="nav-link" data-scroll-target="#evaluating-a-phenotype"><span class="header-section-number">2</span> Evaluating a phenotype</a></li>
   <li><a href="#tools-for-phenotyping-and-evaluating-phenotypes" id="toc-tools-for-phenotyping-and-evaluating-phenotypes" class="nav-link" data-scroll-target="#tools-for-phenotyping-and-evaluating-phenotypes"><span class="header-section-number">3</span> Tools for phenotyping and evaluating phenotypes</a>
   <ul class="collapse">
-  <li><a href="#building-the-phenotype-atlascodelistgeneratorcohortconstructor" id="toc-building-the-phenotype-atlascodelistgeneratorcohortconstructor" class="nav-link" data-scroll-target="#building-the-phenotype-atlascodelistgeneratorcohortconstructor"><span class="header-section-number">3.1</span> 1. Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor</a></li>
-  <li><a href="#diagnosing-the-phenotype-cohortdiagnosticsphenotyper" id="toc-diagnosing-the-phenotype-cohortdiagnosticsphenotyper" class="nav-link" data-scroll-target="#diagnosing-the-phenotype-cohortdiagnosticsphenotyper"><span class="header-section-number">3.2</span> 2. Diagnosing the phenotype: CohortDiagnostics/PhenotypeR</a></li>
-  <li><a href="#evaluating-sensitivity-and-specificity-with-phevaluator" id="toc-evaluating-sensitivity-and-specificity-with-phevaluator" class="nav-link" data-scroll-target="#evaluating-sensitivity-and-specificity-with-phevaluator"><span class="header-section-number">3.3</span> 3. Evaluating sensitivity and specificity with PheValuator</a></li>
-  <li><a href="#the-ohdsi-phenotype-library" id="toc-the-ohdsi-phenotype-library" class="nav-link" data-scroll-target="#the-ohdsi-phenotype-library"><span class="header-section-number">3.4</span> 4. The OHDSI Phenotype Library</a></li>
+  <li><a href="#the-ohdsi-phenotype-library" id="toc-the-ohdsi-phenotype-library" class="nav-link" data-scroll-target="#the-ohdsi-phenotype-library"><span class="header-section-number">3.1</span> The OHDSI Phenotype Library</a></li>
+  <li><a href="#building-the-phenotype-atlascodelistgeneratorcohortconstructor" id="toc-building-the-phenotype-atlascodelistgeneratorcohortconstructor" class="nav-link" data-scroll-target="#building-the-phenotype-atlascodelistgeneratorcohortconstructor"><span class="header-section-number">3.2</span> Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor</a></li>
+  <li><a href="#diagnosing-the-phenotype-cohortdiagnosticsphenotyper" id="toc-diagnosing-the-phenotype-cohortdiagnosticsphenotyper" class="nav-link" data-scroll-target="#diagnosing-the-phenotype-cohortdiagnosticsphenotyper"><span class="header-section-number">3.3</span> Diagnosing the phenotype: CohortDiagnostics/PhenotypeR</a></li>
+  <li><a href="#evaluating-sensitivity-and-specificity-with-phevaluator" id="toc-evaluating-sensitivity-and-specificity-with-phevaluator" class="nav-link" data-scroll-target="#evaluating-sensitivity-and-specificity-with-phevaluator"><span class="header-section-number">3.4</span> Evaluating sensitivity and specificity with PheValuator</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">3.5</span> </a></li>
   </ul></li>
   </ul>
 </nav>
@@ -520,7 +521,7 @@ Caution
 <p>A phenotype is not a direct observation of clinical reality, but a <strong>computational inference</strong> <strong>about clinical reality</strong> based on whatever was recorded in the database!</p>
 </div>
 </div>
-<p>This distinction matters. A patient coded as having type 2 diabetes mellitus in an EHR may have been coded that way because a clinician confirmed the diagnosis after laboratory testing, because a coding clerk assigned a default code, or because the diagnosis was carried forward from a previous admission without review. The code is the same in all three cases but the clinical reality is not. <strong>Phenotyping is the discipline of navigating this uncertainty systematically</strong>. In OMOP studies, phenotyping applies to all three core building blocks of a cohort study: the <strong>exposure</strong> (who received the drug?), the <strong>outcome</strong> (who experienced the event?), and the <strong>population</strong> (who has the condition of interest?). You will need to consider all of these elements when building the phenotype for your population of interest, and it is essential that you consider all the domains in which the exposure or outcome that you want to describe might be captured in a relevant way for your study. Do you want to include ejection fraction (of the left ventricle of the heart, for instance) in your study? Then, you might need conditions (reduced ejection fraction, preserved ejection fraction) as well as measurements (ejection fraction of X%) or observations.</p>
+<p>This distinction matters. A patient coded as having type 2 diabetes mellitus in an EHR may have been coded that way because a clinician confirmed the diagnosis after laboratory testing, because a coding clerk assigned a default code, or because the diagnosis was carried forward from a previous admission without review. The code is the same in all three cases but the clinical reality is not. <strong>Phenotyping is the discipline of navigating this uncertainty systematically</strong>. In OMOP studies, phenotyping applies to all three core building blocks of a cohort study: the <strong>exposure</strong> (who received the drug?), the <strong>outcome</strong> (who experienced the event?), and the <strong>population</strong> (who has the condition of interest?). You will need to consider all of these elements when building the phenotype for your population of interest, and it is essential that you consider all the domains in which the exposure or outcome that you want to describe might be captured in a relevant way for your study. Do you want to include the concept hyperglycemia in your diabetes study? Then, you might need conditions (hyperglycemia due to type 2 diabetes mellitus) as well as measurements (blood glucose) or observations.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -531,7 +532,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Remember:</strong> In the feasibility stage, you will need to provide 5 phenotypes. You can ask for help to WP6 in case you need it, both for clinical and programming assistance, since you will need to think of the clinical, sociodemographic, etc. characteristics that your population might have, as well as how to implement it with ATLAS (see the <a href="../chapters/atlas.html">ATLAS</a> section) or CohortConstructor (see the <a href="../chapters/cohortconstruction.html">Cohort construction</a> section).</p>
+<p><strong>Remember:</strong> In the feasibility stage, you will need to provide up to 5 phenotypes. You can ask for help to WP6 in case you need it, both for clinical and programming assistance, since you will need to think of the clinical, sociodemographic, etc. characteristics that your population might have, as well as how to implement it with ATLAS (see the <a href="../chapters/atlas.html">ATLAS</a> section) or CohortConstructor (see the <a href="../chapters/cohortconstruction.html">Cohort construction</a> section).</p>
 </div>
 </div>
 </section>
@@ -603,8 +604,12 @@ Explanation
 <section id="tools-for-phenotyping-and-evaluating-phenotypes" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="tools-for-phenotyping-and-evaluating-phenotypes"><span class="header-section-number">3</span> Tools for phenotyping and evaluating phenotypes</h2>
 <p>The OHDSI ecosystem provides a structured, layered set of tools that cover the full phenotyping workflow: from building concept sets and cohort definitions, to diagnosing their performance, to formally evaluating their sensitivity and specificity, to sharing validated definitions with the global community.</p>
-<section id="building-the-phenotype-atlascodelistgeneratorcohortconstructor" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="building-the-phenotype-atlascodelistgeneratorcohortconstructor"><span class="header-section-number">3.1</span> 1. Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor</h3>
+<section id="the-ohdsi-phenotype-library" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="the-ohdsi-phenotype-library"><span class="header-section-number">3.1</span> The OHDSI Phenotype Library</h3>
+<p>The <a href="https://ohdsi.github.io/PhenotypeLibrary/">OHDSI Phenotype Library</a> is the community’s shared repository of cohort definitions, subject to version control, open peer review, and regular quality checks across the OHDSI network. Each entry includes not only the cohort definition JSON (from ATLAS) but also clinical descriptions, evaluation results from CohortDiagnostics and PheValuator, contributor attribution, and a stable DOI that can be cited in publications.</p>
+</section>
+<section id="building-the-phenotype-atlascodelistgeneratorcohortconstructor" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="building-the-phenotype-atlascodelistgeneratorcohortconstructor"><span class="header-section-number">3.2</span> Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor</h3>
 <p><a href="../chapters/atlas.html">ATLAS</a> is a web tool where you can build your concept sets and cohort definitions. The cohort definition is the phenotype algorithm in its executable form (a JSON specification that can be run against any OMOP CDM database). If you are using R instead of ATLAS, you can use the packages <a href="../chapters/codelistgenerator.html">CodelistGenerator</a> and <a href="../chapters/cohortconstruction.html">CohortConstructor</a>, which will be explained in the following sections. The executable form is then the R script itself since you create the cohorts in your OMOP CDM database, and you do not need the JSON file.</p>
 <p>The key decisions at this stage are:</p>
 <ul>
@@ -628,13 +633,13 @@ Tip
 </div>
 <p>This section is further developed in the <a href="../chapters/atlas.html">ATLAS</a>, <a href="../chapters/codelistgenerator.html">CodelistGenerator</a> and <a href="../chapters/cohortconstruction.html">CohortConstructor</a> chapters.</p>
 </section>
-<section id="diagnosing-the-phenotype-cohortdiagnosticsphenotyper" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="diagnosing-the-phenotype-cohortdiagnosticsphenotyper"><span class="header-section-number">3.2</span> 2. Diagnosing the phenotype: CohortDiagnostics/PhenotypeR</h3>
+<section id="diagnosing-the-phenotype-cohortdiagnosticsphenotyper" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="diagnosing-the-phenotype-cohortdiagnosticsphenotyper"><span class="header-section-number">3.3</span> Diagnosing the phenotype: CohortDiagnostics/PhenotypeR</h3>
 <p><a href="https://ohdsi.github.io/CohortDiagnostics/">CohortDiagnostics</a> and <a href="https://ohdsi.github.io/PhenotypeR/">PhenotypeR</a> are R packages that produce a standardised battery of diagnostics for any cohort definition, without sharing patient-level data. It is the essential next step after building a cohort and before running any analysis. They help ascertain whether you have created your cohort properly or you might be missing something (or someone).</p>
 <p>This section is further developed in the <a href="../chapters/diagnostics.html">Diagnostics</a> chapter.</p>
 </section>
-<section id="evaluating-sensitivity-and-specificity-with-phevaluator" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="evaluating-sensitivity-and-specificity-with-phevaluator"><span class="header-section-number">3.3</span> 3. Evaluating sensitivity and specificity with PheValuator</h3>
+<section id="evaluating-sensitivity-and-specificity-with-phevaluator" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="evaluating-sensitivity-and-specificity-with-phevaluator"><span class="header-section-number">3.4</span> Evaluating sensitivity and specificity with PheValuator</h3>
 <p><a href="https://ohdsi.github.io/PheValuator/">PheValuator</a> is an R package that provides a semi-automated method for estimating the sensitivity, specificity, and positive predictive value (PPV) of a phenotype algorithm without requiring manual chart review. It does this by building a diagnostic prediction model using a cohort of patients very likely to be true positives (the <em>xSpec</em> — extremely specific cohort — defined by requiring multiple diagnostic codes over time) and applying it to a large random sample of the database to generate a predicted probability of the condition for every patient. These probabilities are then used as a probabilistic gold standard against which the rule-based phenotype algorithm is evaluated.</p>
 <p>The key outputs of PheValuator are:</p>
 <ul>
@@ -657,9 +662,8 @@ Note
 </div>
 </div>
 </section>
-<section id="the-ohdsi-phenotype-library" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="the-ohdsi-phenotype-library"><span class="header-section-number">3.4</span> 4. The OHDSI Phenotype Library</h3>
-<p>The <a href="https://ohdsi.github.io/PhenotypeLibrary/">OHDSI Phenotype Library</a> is the community’s shared repository of cohort definitions, subject to version control, open peer review, and regular quality checks across the OHDSI network. Each entry includes not only the cohort definition JSON (from ATLAS) but also clinical descriptions, evaluation results from CohortDiagnostics and PheValuator, contributor attribution, and a stable DOI that can be cited in publications.</p>
+<section id="section" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="section"><span class="header-section-number">3.5</span> </h3>
 
 
 </section>

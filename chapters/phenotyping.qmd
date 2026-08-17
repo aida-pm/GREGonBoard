@@ -13,10 +13,10 @@ In practice, when we talk about phenotyping in an OMOP study, we mean the proces
 A phenotype is not a direct observation of clinical reality, but a **computational inference** **about clinical reality** based on whatever was recorded in the database!
 :::
 
-This distinction matters. A patient coded as having type 2 diabetes mellitus in an EHR may have been coded that way because a clinician confirmed the diagnosis after laboratory testing, because a coding clerk assigned a default code, or because the diagnosis was carried forward from a previous admission without review. The code is the same in all three cases but the clinical reality is not. **Phenotyping is the discipline of navigating this uncertainty systematically**. In OMOP studies, phenotyping applies to all three core building blocks of a cohort study: the **exposure** (who received the drug?), the **outcome** (who experienced the event?), and the **population** (who has the condition of interest?). You will need to consider all of these elements when building the phenotype for your population of interest, and it is essential that you consider all the domains in which the exposure or outcome that you want to describe might be captured in a relevant way for your study. Do you want to include ejection fraction (of the left ventricle of the heart, for instance) in your study? Then, you might need conditions (reduced ejection fraction, preserved ejection fraction) as well as measurements (ejection fraction of X%) or observations.
+This distinction matters. A patient coded as having type 2 diabetes mellitus in an EHR may have been coded that way because a clinician confirmed the diagnosis after laboratory testing, because a coding clerk assigned a default code, or because the diagnosis was carried forward from a previous admission without review. The code is the same in all three cases but the clinical reality is not. **Phenotyping is the discipline of navigating this uncertainty systematically**. In OMOP studies, phenotyping applies to all three core building blocks of a cohort study: the **exposure** (who received the drug?), the **outcome** (who experienced the event?), and the **population** (who has the condition of interest?). You will need to consider all of these elements when building the phenotype for your population of interest, and it is essential that you consider all the domains in which the exposure or outcome that you want to describe might be captured in a relevant way for your study. Do you want to include the concept hyperglycemia in your diabetes study? Then, you might need conditions (hyperglycemia due to type 2 diabetes mellitus) as well as measurements (blood glucose) or observations.
 
 ::: callout-important
-**Remember:** In the feasibility stage, you will need to provide 5 phenotypes. You can ask for help to WP6 in case you need it, both for clinical and programming assistance, since you will need to think of the clinical, sociodemographic, etc. characteristics that your population might have, as well as how to implement it with ATLAS (see the [ATLAS](atlas.qmd) section) or CohortConstructor (see the [Cohort construction](cohortconstruction.qmd) section).
+**Remember:** In the feasibility stage, you will need to provide up to 5 phenotypes. You can ask for help to WP6 in case you need it, both for clinical and programming assistance, since you will need to think of the clinical, sociodemographic, etc. characteristics that your population might have, as well as how to implement it with ATLAS (see the [ATLAS](atlas.qmd) section) or CohortConstructor (see the [Cohort construction](cohortconstruction.qmd) section).
 :::
 
 ## Evaluating a phenotype
@@ -58,7 +58,11 @@ cat(
 
 The OHDSI ecosystem provides a structured, layered set of tools that cover the full phenotyping workflow: from building concept sets and cohort definitions, to diagnosing their performance, to formally evaluating their sensitivity and specificity, to sharing validated definitions with the global community.
 
-### 1. Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor
+### The OHDSI Phenotype Library
+
+The [OHDSI Phenotype Library](https://ohdsi.github.io/PhenotypeLibrary/) is the community's shared repository of cohort definitions, subject to version control, open peer review, and regular quality checks across the OHDSI network. Each entry includes not only the cohort definition JSON (from ATLAS) but also clinical descriptions, evaluation results from CohortDiagnostics and PheValuator, contributor attribution, and a stable DOI that can be cited in publications.
+
+### Building the phenotype: ATLAS/CodelistGenerator+CohortConstructor
 
 [ATLAS](atlas.qmd) is a web tool where you can build your concept sets and cohort definitions. The cohort definition is the phenotype algorithm in its executable form (a JSON specification that can be run against any OMOP CDM database). If you are using R instead of ATLAS, you can use the packages [CodelistGenerator](codelistgenerator.qmd) and [CohortConstructor](cohortconstruction.qmd), which will be explained in the following sections. The executable form is then the R script itself since you create the cohorts in your OMOP CDM database, and you do not need the JSON file.
 
@@ -75,13 +79,13 @@ Before designing a phenotype from scratch, always search the [OHDSI Phenotype Li
 
 This section is further developed in the [ATLAS](atlas.qmd), [CodelistGenerator](codelistgenerator.qmd) and [CohortConstructor](cohortconstruction.qmd) chapters.
 
-### 2. Diagnosing the phenotype: CohortDiagnostics/PhenotypeR
+### Diagnosing the phenotype: CohortDiagnostics/PhenotypeR
 
 [CohortDiagnostics](https://ohdsi.github.io/CohortDiagnostics/) and [PhenotypeR](https://ohdsi.github.io/PhenotypeR/) are R packages that produce a standardised battery of diagnostics for any cohort definition, without sharing patient-level data. It is the essential next step after building a cohort and before running any analysis. They help ascertain whether you have created your cohort properly or you might be missing something (or someone).
 
 This section is further developed in the [Diagnostics](diagnostics.qmd) chapter.
 
-### 3. Evaluating sensitivity and specificity with PheValuator
+### Evaluating sensitivity and specificity with PheValuator
 
 [PheValuator](https://ohdsi.github.io/PheValuator/) is an R package that provides a semi-automated method for estimating the sensitivity, specificity, and positive predictive value (PPV) of a phenotype algorithm without requiring manual chart review. It does this by building a diagnostic prediction model using a cohort of patients very likely to be true positives (the *xSpec* — extremely specific cohort — defined by requiring multiple diagnostic codes over time) and applying it to a large random sample of the database to generate a predicted probability of the condition for every patient. These probabilities are then used as a probabilistic gold standard against which the rule-based phenotype algorithm is evaluated.
 
@@ -96,6 +100,4 @@ The key outputs of PheValuator are:
 This is a nice addition to the phenotyping process, but it is **not a required** **step**.
 :::
 
-### 4. The OHDSI Phenotype Library
-
-The [OHDSI Phenotype Library](https://ohdsi.github.io/PhenotypeLibrary/) is the community's shared repository of cohort definitions, subject to version control, open peer review, and regular quality checks across the OHDSI network. Each entry includes not only the cohort definition JSON (from ATLAS) but also clinical descriptions, evaluation results from CohortDiagnostics and PheValuator, contributor attribution, and a stable DOI that can be cited in publications.
+### 

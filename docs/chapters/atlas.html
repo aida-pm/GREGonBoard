@@ -611,6 +611,60 @@ Important
 </div>
 <div class="callout-body-container callout-body">
 <p>A concept set is just a list of concept IDs, it has no temporal logic and no patient-level criteria. A cohort uses concept sets as building blocks but adds the <em>when</em>, the <em>how long</em>, and the <em>who else qualifies</em>. You can think of concept sets as vocabulary and cohorts as grammar.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Concept Set</strong></th>
+<th><strong>Cohort</strong></th>
+<th><strong>Phenotype</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>What it is</strong></td>
+<td>A named list of OMOP standard concept IDs representing a clinical entity</td>
+<td>A set of patients who satisfy defined criteria for a period of time</td>
+<td>An algorithm that classifies whether a patient has a clinical state, based on their recorded data</td>
+</tr>
+<tr class="even">
+<td><strong>What it contains</strong></td>
+<td>Concept IDs + include/exclude descendants rules</td>
+<td>Entry event, inclusion criteria, cohort exit rule</td>
+<td>One or more concept sets + temporal logic + validation evidence</td>
+</tr>
+<tr class="odd">
+<td><strong>Temporal logic?</strong></td>
+<td>❌ No, just a vocabulary list</td>
+<td>✅ Yes, patient entry and exit</td>
+<td>✅ Can but not mandatory</td>
+</tr>
+<tr class="even">
+<td><strong>Patient-level?</strong></td>
+<td>❌ Not linked to any patient</td>
+<td>✅ Yes, table of person IDs and dates</td>
+<td>✅ Yes</td>
+</tr>
+<tr class="odd">
+<td><strong>Built in</strong></td>
+<td>ATLAS Search / CodelistGenerator</td>
+<td>ATLAS Cohort Definition / CohortConstructor</td>
+<td>ATLAS Cohort Definition / CohortConstructor + CohortDiagnostics/PhenotypeR</td>
+</tr>
+<tr class="even">
+<td><strong>Analogy</strong></td>
+<td>The dictionary definition of “acute pancreatitis”</td>
+<td>The list of patients admitted with acute pancreatitis this year</td>
+<td>The clinical algorithm a doctor uses to decide if a patient has acute pancreatitis</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <section id="example-of-our-cohort-of-interest" class="level4" data-number="3.2.1">

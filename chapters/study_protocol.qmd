@@ -139,7 +139,7 @@ A structured research question should follow the [**PECO framework**](#0). The [
 
 In recent years, two complementary frameworks have substantially extended the PICO(T) approach:
 
-1.  The **estimand framework**, formalised in the [ICH E9(R1)](https://doi.org/10.1136/bmj-2023-076316) addendum published in 2019. It introduces the concept of *estimand*: a precise definition of the treatment effect of interest. An estimand is defined by [five attributes]{.underline}: the target population, the treatment or exposure, the variable (endpoint), the population-level summary measure, and the strategies for handling intercurrent events. A good estimand ensures alignment among the study objective, design, data collection, analysis, and interpretation [@ICH2021].
+1.  The **estimand framework**, formalised in the [ICH E9(R1)](https://doi.org/10.1136/bmj-2023-076316) addendum published in 2019. It introduces the concept of *estimand*: a precise definition of the treatment effect of interest. An estimand is defined by [five attributes]{.underline}: the target population, the treatment or exposure, the variable (endpoint), the population-level summary measure, and the strategies for handling intercurrent events. A good estimand ensures alignment among the study objective, design, data collection, analysis, and interpretation [@ICH2021]. It is also the basis of any properly formulated causal research question.
 
     ::: callout-note
     Intercurrent events are events that occur after treatment initiation that affect either the interpretation or the existence of the measurements associated with the clinical question of interest [@Lynggaard2024].
@@ -201,7 +201,9 @@ When writing the methods section, try to think "Would someone from a different s
 
 To decide your study design, you need to bear in mind your study objectives. Do you want to do a characterisation study? Drug utilisation? Incidence/prevalence? Or are you going to answer a causal question? All of these might need different study designs.
 
-In the [**ENCePP Guide on Methodological Standards in Pharmacoepidemiology**](https://encepp.europa.eu/encepp-toolkit/methodological-guide_en)you will find a description of the most common study designs used to generate RWE. Most of the times, you will do a cohort study design for characterisation, and an active comparator, target trial emulation for causal inference. Nevertheless, even these designs can be further specified, for example explicitly stating whether you will use a new-user or prevalent-user approach.
+![Figure. Scheme of some study designs.](/images/study_designs.png){fig-align="center"}
+
+In the [**ENCePP Guide on Methodological Standards in Pharmacoepidemiology**](https://encepp.europa.eu/encepp-toolkit/methodological-guide_en) you will find a description of the most common study designs used to generate RWE. Most of the times, you will do a cohort study design for characterisation, and an active comparator, target trial emulation for causal inference. Nevertheless, even these designs can be further specified, for example explicitly stating whether you will use a new-user or prevalent-user approach.
 
 > For our GLP-1 comparative risk of pancreatitis study, a good study design could be:\
 > - New user cohort study (for characterisation)
@@ -252,7 +254,7 @@ You should consider all the variables that are relevant to define the eligibilit
 
 If you are doing a characterisation study, sample size calculation is not applicable. You can say that you are using information from all patients available in the corresponding databases, and provide some counts on the number of patients of each database, if relevant. For effectiveness and safety studies, you should provide a calculation of estimated sample size needed to observe an effect.
 
-To do a sample size calculation, you need to define your statistical test, set your acceptable error margins (typically α=0.05, power =0.80), and estimate the effect size (the difference you expect to find between cohorts). These parameters are then plugged into formulas or software to determine the required participant count. Some of these variables might be obtained from published literature, like previous incidence or prevalence of disease before intervention (e.g. for vaccines) or the expected effect of the intervention or treatment (from clinical studies or previous observational studies).
+To do a sample size calculation, you need to define your statistical test, set your acceptable error margins (typically α=0.05, power =0.80), and estimate the effect size (the difference you expect to find between cohorts). These parameters are then plugged into formulas or [software](https://powerandsamplesize.com/) to determine the required participant count. Some of these variables might be obtained from published literature, like previous incidence or prevalence of disease before intervention (e.g. for vaccines) or the expected effect of the intervention or treatment (from clinical studies or previous observational studies).
 
 #### Analysis {data-link="Analysis"}
 

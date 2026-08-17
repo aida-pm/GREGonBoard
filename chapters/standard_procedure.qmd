@@ -5,15 +5,19 @@ format: html
 
 ## Feasibility steps in GREG
 
-1.  The feasibility of your UC proposal will already be explored before the UCPTF. From your study outline, WP6 will gather the relevant information for a first-step feasibility exploration to inform the UCPTF before proceeding with a UC. This first feasibility assessment, named **landscaping**, includes:
+1.  The feasibility of your UC proposal will already be explored before the UCPTF. From your study outline, WP6 will gather the relevant information for a first-step feasibility exploration of resources and methods (in collaboration with WP4 and WP5) to inform the UCPTF before proceeding with a UC.
+
+2.  Once a UC is prioritised, the first proper feasibility assessment, named **landscaping**, includes:
 
     - **Potential database information**: national/regional, primary care/secondary care, etc.
 
     - **Codelist with 40 concept ids**: an Excel file with \~40 *concept id*s that will be relevant for your study. Tools that will help you build this codelist are [Athena](https://athena.ohdsi.org/search-terms/start) and [ATLAS](https://atlas-demo.ohdsi.org/#/home), that will be better explained in the [ATLAS section](atlas.qmd).
 
-2.  Once your study is already ongoing and you are finishing the study protocol, you will need to prepare for the final feasibility exploration report. You will need to define 5 different phenotypes for your study (see [Phenotyping section](phenotyping.qmd)). These 5 phenotypes will be run in the available databases, from the GREG consortium and the [EHDEN portal](https://portal.ehden.eu/). Counts for all different *concept id*s included in your phenotypes' concept sets, will be reported in an exploration report, along with attrition tables.
+    - With this landscaping, data partners will be selected among the GREG consortium, the [EHDEN portal](https://portal.ehden.eu/) or other particularly relevant data holders.
 
-    - Once you have the exploration report with feasibility results, you can select up to 10 databases for your study.
+3.  Once your study is already ongoing and you are finishing the study protocol, you will need to prepare for the final feasibility exploration report. You will need to define *up to* 5 different phenotypes for your study's feasibility assessment (see [Phenotyping section](#0)). [Please, notice that these phenotypes do not necessarily need to be the same as the cohorts that you will create for your study.]{.underline} These 5 phenotypes will be run in the available databases, selected from landscaping. Counts for all different *concept id*s included in your phenotypes' concept sets, will be reported in an exploration report, along with attrition tables.
+
+    - Once you have the exploration report with feasibility results, you can select up to 10 databases for your study. This is the step when data partners are hired to join the project.
 
       ::: callout-note
       Please, provide a rule or quantitative way (score) for deciding your final 10 databases. You will need to justify your choices.

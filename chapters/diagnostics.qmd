@@ -76,7 +76,7 @@ In the OHDSI ecosystem, the diagnostic workflow centres on two tools: **CohortDi
 
 ## Setup
 
-In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the omock package, like the GiBleed dataset. The documentation of the package is here.
+In this example, we better work with the Eunomia dataset as an example instead of the omock data, because the number and variety of drug exposures available in the synthetic data are more broad in the Eunomia dataset. You can also download example datasets from the `omock` package, like the `GiBleed` dataset. The documentation of the package is [here](https://ohdsi.github.io/omock/index.html).
 
 ```{r setup-packages, message=FALSE, warning=FALSE}
 library(CohortConstructor)

@@ -5,7 +5,7 @@ format: html
 
 # Welcome
 
-Whether you are a passionate data scientist, stakeholder, clinician, epidemiologist, patient or regulator, we welcome you on board to the GREG project! The GREG project creates, tests, and shares practical, evidence-based guidance and tools to help generate and use Real-World Evidence (RWE). By improving how RWE informs the development and evaluation of medicines, medical devices, and drug-device combinations, GREG supports better decision-making for regulators and Health Technology Assessment (HTA) bodies.
+Whether you are a passionate stakeholder, data scientist, clinician, epidemiologist, patient or regulator, we welcome you on board to the GREG project! The GREG project creates, tests, and shares practical, evidence-based guidance and tools to help generate and use Real-World Evidence (RWE). By improving how RWE informs the development and evaluation of medicines, medical devices, and drug-device combinations, GREG supports better decision-making for regulators and Health Technology Assessment (HTA) bodies.
 
 Every one has their role on GREG. In this tutorial, we will go through the main steps from study planning to study execution and report. Each section will have a brief summary of what will be explained on it. Feel free to only go through those lessons that are relevant for your work!
 
@@ -35,9 +35,9 @@ Every one has their role on GREG. In this tutorial, we will go through the main 
 ::: {.callout-note icon="false"}
 ## 4. Study design & execution
 
-- [Phenotyping](chapters/phenotyping.qmd)
 - [The webtool ATLAS](chapters/atlas.qmd)
 - [CDM using R](chapters/using_R.qmd)
+- [Phenotyping](chapters/phenotyping.qmd)
 - [Codelists generation](chapters/codelistgenerator.qmd)
 - [Cohort construction](chapters/cohortconstruction.qmd)
 - [Diagnostic tools](chapters/diagnostics.qmd)
