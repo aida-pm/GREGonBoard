@@ -100,4 +100,3 @@ The key outputs of PheValuator are:
 This is a nice addition to the phenotyping process, but it is **not a required** **step**.
 :::
 
-### 
