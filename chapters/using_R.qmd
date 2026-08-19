@@ -29,11 +29,11 @@ You can check what are SQL databases [here](https://cloud.google.com/discover/wh
 The packages covered across these tutorial chapters are:
 
 | Package | Purpose |
-|----|----|
+|------------------------------------|------------------------------------|
 | [`CDMConnector`](https://darwin-eu.github.io/CDMConnector/index.html) | Connect to any OMOP CDM database |
 | [`omopgenerics`](https://darwin-eu.github.io/omopgenerics/) | Shared data structures and utilities |
 | [`omock`](https://ohdsi.github.io/omock/) | Generate synthetic OMOP data for testing |
-| [`CohortDiagnostics`](https://ohdsi.github.io/CohortDiagnostics/index.html) | Generate a set of diagnostic features for cohorts |
+| [`CohortDiagnostics`](https://ohdsi.github.io/CohortDiagnostics/index.html) | Generate a set of diagnostic features for cohorts \*Not available in this tutorial |
 | [`PhenotypeR`](https://ohdsi.github.io/PhenotypeR/index.html) | Generate a set of diagnostic features for cohorts |
 | [`CodelistGenerator`](https://darwin-eu.github.io/CodelistGenerator/) | Create concept sets to build cohorts in R |
 | [`CohortConstructor`](https://ohdsi.github.io/CohortConstructor/) | Build and manipulate cohorts in R |
@@ -71,7 +71,6 @@ install.packages(c(
   "CDMConnector",
   "omopgenerics",
   "omock",
-  "CohortDiagnostics",
   "PhenotypeR",
   "CodelistGenerator",
   "CohortConstructor",
