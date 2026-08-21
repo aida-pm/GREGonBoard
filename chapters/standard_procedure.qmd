@@ -7,7 +7,7 @@ format: html
 
 1.  The feasibility of your UC proposal will already be explored before the UCPTF. From your study outline, WP6 will gather the relevant information for a first-step feasibility exploration of resources and methods (in collaboration with WP4 and WP5) to inform the UCPTF before proceeding with a UC.
 
-2.  Once a UC is prioritised, the first proper feasibility assessment, named **landscaping**, includes:
+2.  Once a UC is prioritised, the [first phase]{.underline} of the proper feasibility assessment, named **landscaping**, includes:
 
     - **Potential database information**: national/regional, primary care/secondary care, etc.
 
@@ -15,7 +15,15 @@ format: html
 
     - With this landscaping, data partners will be selected among the GREG consortium, the [EHDEN portal](https://portal.ehden.eu/) or other particularly relevant data holders.
 
-3.  Once your study is already ongoing and you are finishing the study protocol, you will need to prepare for the final feasibility exploration report. You will need to define *up to* 5 different phenotypes for your study's feasibility assessment (see [Phenotyping section](#0)). [Please, notice that these phenotypes do not necessarily need to be the same as the cohorts that you will create for your study.]{.underline} These 5 phenotypes will be run in the available databases, selected from landscaping. Counts for all different *concept id*s included in your phenotypes' concept sets, will be reported in an exploration report, along with attrition tables.
+3.  Once your study is already ongoing and you are finishing the study protocol, you will need to prepare for the final feasibility exploration report. You will need to define **up to** **5 different phenotypes** for your study's feasibility assessment (see [Phenotyping section](#0)). [Please, notice that these phenotypes do not necessarily need to be the same as the cohorts that you will create for your study.]{.underline} These *up to* 5 phenotypes will be run in the available databases, selected from landscaping. Counts for all different *concept id*s included in your phenotypes' concept sets, will be reported in an exploration report, along with attrition tables.
+
+    - Rules:
+
+      - You can combine concept sets.
+
+      - Outcomes cannot be included.
+
+      - They can be adapted to the study requirements within a reasonable limit (remember that this is a exploratory step, not a characterisation).
 
     - Once you have the exploration report with feasibility results, you can select up to 10 databases for your study. This is the step when data partners are hired to join the project.
 
