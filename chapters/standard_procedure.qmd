@@ -11,7 +11,7 @@ The feasibility Standard Operational Procedure (SOP) can be found [here](https:/
 
 In particular:
 
-1.  The feasibility of your UC proposal will already be explored during the UCPTF (use case prioritization task force). After a pre-selection of potentially proritized UC, from your study outline, WP6 will gather the relevant information for a first-step **feasibility exploration of resources and methods** (in collaboration with WP4 and WP5) to inform the UCPTF before proceeding with a UC.
+1.  The feasibility of your UC proposal will already be explored during the UCPTF (use case prioritization task force). After a pre-selection of potentially proritized UC, from your study outline, WP4 and WP5 will gather the relevant information for a first-step **feasibility exploration of resources and methods** (in collaboration with WP6) to inform the UCPTF before proceeding with a UC.
 
 2.  Once a UC is prioritised, the [first step]{.underline} of the current data feasibility assessment, named **landscaping**, includes:
 
